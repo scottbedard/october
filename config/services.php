@@ -30,8 +30,9 @@ return [
     ],
 
     'stripe' => [
+        'key' => env('STRIPE_KEY', ''),
         'model'  => 'User',
-        'secret' => '',
+        'secret' => env('STRIPE_SECRET', ''),
     ],
 
 ];
