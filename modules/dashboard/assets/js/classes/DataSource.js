@@ -17,6 +17,7 @@ class Dashboard_Classes_DataSource
             return oc.ajax(this.delegate.getEventHandler('onGetWidgetData'), {
                 progressBar: false,
                 async: true,
+                handleErrorMessage: function(message) {},
                 data: {
                     _dash_definition: this.delegate.getCurrentDashboard().code,
                     widget_config: widgetConfig,

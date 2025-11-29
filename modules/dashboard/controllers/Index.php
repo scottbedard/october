@@ -63,9 +63,6 @@ class Index extends WildcardController
             return $redirect;
         }
 
-        // Reverse the BackendController::parseAction
-        $otherCode = kebab_case(camel_case((string) $code));
-
         $this->bodyClass = 'compact-container sidenav-responsive';
         $this->pageTitle = 'backend::lang.dashboard.menu_label';
 
@@ -74,7 +71,7 @@ class Index extends WildcardController
         $dashboards = $this->listAllDashboards();
         $this->vars['dashboards'] = $dashboards;
         $this->vars['dashboard'] = $code
-            ? $dashboards->whereIn('code', [$code, $otherCode])->first()
+            ? $dashboards->where('code', $code)->first()
             : $dashboards->first();
 
         $this->initDash();
