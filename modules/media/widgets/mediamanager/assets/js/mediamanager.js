@@ -6,8 +6,13 @@
  */
 +function ($) { "use strict";
 
-    if ($.oc.mediaManager === undefined)
+    if ($.oc.mediaManager === undefined) {
         $.oc.mediaManager = {}
+    }
+
+    if (oc.mediaManager === undefined) {
+        oc.mediaManager = {}
+    }
 
     var Base = $.oc.foundation.base,
         BaseProto = Base.prototype
@@ -882,7 +887,7 @@
 
         var path = selectedItems[0].getAttribute('data-path');
 
-        new $.oc.mediaManager.imageCropPopup(path, {
+        new oc.mediaManager.imageCropPopup(path, {
             alias: this.options.alias,
             onDone: callback
         });

@@ -1,5 +1,4 @@
 <?php
-
     $selectionModes = [
         Media\Widgets\MediaManager::SELECTION_MODE_NORMAL => trans('backend::lang.media.selection_mode_normal'),
         Media\Widgets\MediaManager::SELECTION_MODE_FIXED_RATIO => trans('backend::lang.media.selection_mode_fixed_ratio'),
@@ -18,11 +17,13 @@
                 <button type="button" class="btn btn-primary standalone" data-command="resize"
                 ><?= e(trans('backend::lang.media.resize')) ?></button>
 
-                <button type="button" class="btn btn-primary oc-icon-undo empty" data-command="undo-resizing"></button>
+                <button type="button" class="btn btn-secondary empty" data-command="undo-resizing">
+                    <i class="icon-text-undo"></i>
+                </button>
             </div>
 
             <label for="mmcropimagewidth"><?= e(trans('backend::lang.media.selection_mode')) ?></label>
-            <select name="selectionMode" class="form-control custom-select w-150" data-control="selection-mode">
+            <select name="selectionMode" class="form-control custom-select w-150" data-media-selection-mode>
                 <?php foreach ($selectionModes as $mode=>$name): ?>
                     <option <?= $mode == $currentSelectionMode ? 'selected="selected"' : null ?> value="<?= $mode ?>"><?= e($name) ?></option>
                 <?php endforeach ?>
