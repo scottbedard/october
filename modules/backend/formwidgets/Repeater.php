@@ -503,7 +503,7 @@ class Repeater extends FormWidgetBase
      */
     protected function getNextIndex(): int
     {
-        $data = $this->getLoadValue();
+        $data = $this->getLoadedValueFromPost();
 
         if (is_array($data) && count($data)) {
             return max(array_keys($data)) + 1;
