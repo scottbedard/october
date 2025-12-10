@@ -43,6 +43,11 @@ class ReportMetric
     private $intlFormatOptions;
 
     /**
+     * @var ?callable Server-side formatter for human-readable display values.
+     */
+    private $displayFormatter;
+
+    /**
      * __construct a new metric instance.
      * @param string $code Specifies the metric referral code.
      * @param string $databaseColumnName Specifies the column name in the data source table.
@@ -129,6 +134,43 @@ class ReportMetric
     public function getIntlFormatOptions(): ?array
     {
         return $this->intlFormatOptions;
+    }
+
+    /**
+     * Sets a server-side display formatter callback for human-readable display strings.
+     * The callback receives the raw value and should return a formatted string.
+     * Used for non-graph displays (tables, indicators) where custom formatting is needed (e.g., durations).
+     * @param callable $formatter The formatter callback
+     * @return static
+     */
+    public function setDisplayFormatter(callable $formatter): static
+    {
+        $this->displayFormatter = $formatter;
+        return $this;
+    }
+
+    /**
+     * Returns whether this metric has a custom display formatter.
+     * @return bool
+     */
+    public function hasDisplayFormatter(): bool
+    {
+        return $this->displayFormatter !== null;
+    }
+
+    /**
+     * Formats a value using the display formatter callback.
+     * Returns null if no formatter is set.
+     * @param mixed $value The raw value to format
+     * @return ?string The formatted display string or null
+     */
+    public function formatDisplayValue($value): ?string
+    {
+        if ($this->displayFormatter === null) {
+            return null;
+        }
+
+        return ($this->displayFormatter)($value);
     }
 
     /**

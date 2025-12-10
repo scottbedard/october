@@ -33,11 +33,16 @@ trait HasWidgetData
         $dimensionData = $this->getDataSourceDimensionAndFields($dataSource, $fetchData->dimensionCode);
         $dimensionFieldsData = $this->getDataSourceDimensionFieldsData($dataSource, $fetchData->dimensionCode);
 
+        $currentMetricTotals = $fetchDataResult->getMetricTotals();
+        $formattedTotals = $this->formatMetricTotals($dataSource, $fetchData->dimensionCode, $currentMetricTotals);
+        $formattedRows = $this->formatRowMetricValues($dataSource, $fetchData->dimensionCode, $fetchDataResult->getRows());
+
         $result = [
             'current' => [
-                'widget_data' => $fetchDataResult->getRows(),
+                'widget_data' => $formattedRows,
                 'total_records' => $fetchDataResult->getTotalRecords(),
-                'metric_totals' => $fetchDataResult->getMetricTotals(),
+                'metric_totals' => $currentMetricTotals,
+                'metric_totals_formatted' => $formattedTotals,
             ],
             'metrics_data' => $metricsData,
             'dimension_fields_data' => $dimensionFieldsData,
@@ -45,10 +50,12 @@ trait HasWidgetData
         ];
 
         if ($prevIntervalFetchDataResult) {
+            $prevMetricTotals = $prevIntervalFetchDataResult->getMetricTotals();
             $result['previous'] = [
                 // 'widget_data' => $prevIntervalFetchDataResult->getRows(), // Not yet supported
                 'total_records' => $prevIntervalFetchDataResult->getTotalRecords(),
-                'metric_totals' => $prevIntervalFetchDataResult->getMetricTotals(),
+                'metric_totals' => $prevMetricTotals,
+                'metric_totals_formatted' => $this->formatMetricTotals($dataSource, $fetchData->dimensionCode, $prevMetricTotals),
             ];
 
             $result['prev_date_start'] = $fetchData->compareDateStart->toDateString();
@@ -181,11 +188,61 @@ trait HasWidgetData
         foreach ($allMetrics as $metric) {
             $result[$metric->getCode()] = [
                 'label' => Lang::get($metric->getDisplayName()),
-                'format_options' => $metric->getIntlFormatOptions()
+                'format_options' => $metric->getIntlFormatOptions(),
+                'has_display_formatter' => $metric->hasDisplayFormatter()
             ];
         }
 
         return $result;
+    }
+
+    /**
+     * formatMetricTotals applies display formatters to metric totals
+     */
+    private function formatMetricTotals(ReportDataSourceBase $dataSource, string $dimensionCode, array $metricTotals): array
+    {
+        $result = [];
+        $allMetrics = $this->listAllMetrics($dataSource, $dimensionCode);
+
+        foreach ($metricTotals as $metricCode => $value) {
+            $metric = \Dashboard\Classes\ReportMetric::findMetricByCode($allMetrics, $metricCode);
+            if ($metric && $metric->hasDisplayFormatter() && $value !== null) {
+                $result[$metricCode] = $metric->formatDisplayValue($value);
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * formatRowMetricValues adds formatted display values to rows for metrics with display formatters
+     */
+    private function formatRowMetricValues(ReportDataSourceBase $dataSource, string $dimensionCode, array $rows): array
+    {
+        $allMetrics = $this->listAllMetrics($dataSource, $dimensionCode);
+        $metricsWithFormatter = [];
+
+        foreach ($allMetrics as $metric) {
+            if ($metric->hasDisplayFormatter()) {
+                $metricsWithFormatter[$metric->getCode()] = $metric;
+            }
+        }
+
+        if (empty($metricsWithFormatter)) {
+            return $rows;
+        }
+
+        foreach ($rows as $row) {
+            foreach ($metricsWithFormatter as $metricCode => $metric) {
+                $columnName = 'oc_metric_' . $metricCode;
+                if (property_exists($row, $columnName) && $row->$columnName !== null) {
+                    $formattedColumnName = $columnName . '_formatted';
+                    $row->$formattedColumnName = $metric->formatDisplayValue($row->$columnName);
+                }
+            }
+        }
+
+        return $rows;
     }
 
     /**
