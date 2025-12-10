@@ -93,11 +93,6 @@ class ReportFetchData
     public $dimensionFilters;
 
     /**
-     * @var string aggregationInterval specifies the aggregation interval.
-     */
-    public $aggregationInterval;
-
-    /**
      * @var string groupInterval specifies the group interval.
      * One of the GROUP_INTERVAL_* constants.
      * Only applies if the dimension is a date dimension.
@@ -153,7 +148,7 @@ class ReportFetchData
 
         $this->dimensionCode = post('dimension');
         $this->metricCodes = post('metrics');
-        $this->aggregationInterval = post('aggregation_interval');
+        $this->groupInterval = post('aggregation_interval');
         $this->resetCache = (bool) post('reset_cache');
 
         $this->limit = isset($this->widgetConfig['limit']) ? (int) $this->widgetConfig['limit'] : null;

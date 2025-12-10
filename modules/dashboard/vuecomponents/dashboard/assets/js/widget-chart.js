@@ -88,6 +88,7 @@ Vue.component('dashboard-component-dashboard-widget-chart', {
                             fill: true,
                             pointRadius: 2,
                             borderWidth: 2,
+                            spanGaps: false,
                         },
                         bar: {
                             borderRadius: 5,
@@ -282,7 +283,7 @@ Vue.component('dashboard-component-dashboard-widget-chart', {
                 this.chart.data,
                 this.loadedValue,
                 this.getRequestMetrics(),
-                true, // Null as zero
+                false, // Keep null values to create gaps in the chart
                 oc.lang.get('dashboard.value_not_set')
             );
             this.chart.update();
