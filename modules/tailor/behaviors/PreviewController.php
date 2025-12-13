@@ -1,5 +1,6 @@
 <?php namespace Tailor\Behaviors;
 
+use Cms;
 use Event;
 use Cache;
 use System;
@@ -80,7 +81,9 @@ class PreviewController extends ControllerBehavior
         // Get the URL from the CMS controller
         $controller = new Controller(Theme::getEditTheme());
 
-        $url = $controller->pageUrl($pageName, $model->makePageUrlParams());
+        $url = Cms::fullUrl(
+            $controller->pageUrl($pageName, $model->makePageUrlParams())
+        );
 
         // Generate preview token
         $token = PreviewToken::createTokenForUrl($url, [
