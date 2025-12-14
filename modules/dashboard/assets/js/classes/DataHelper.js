@@ -19,7 +19,14 @@ class Dashboard_Classes_DataHelper
             const metricName = metricNames[metricIndex];
             const dataset = data.datasets[metricIndex];
             const fullMetricName = 'oc_metric_' + metricName;
+            const formattedMetricName = fullMetricName + '_formatted';
             dataset.data.splice(0, dataset.data.length);
+
+            // Initialize array for formatted values (used by tooltips)
+            if (!dataset.formattedData) {
+                dataset.formattedData = [];
+            }
+            dataset.formattedData.splice(0, dataset.formattedData.length);
 
             loadedData.forEach(dataPoint => {
                 let value = dataPoint[fullMetricName];
@@ -46,6 +53,9 @@ class Dashboard_Classes_DataHelper
                 }
 
                 dataset.data.push(value);
+
+                // Store formatted value if available (from server-side displayFormatter)
+                dataset.formattedData.push(dataPoint[formattedMetricName] ?? null);
             });
         }
     }

@@ -131,9 +131,13 @@ Vue.component('dashboard-component-dashboard-widget-chart', {
                                     }
                                     if (context.parsed.y !== null) {
                                         const valueAxis = indexAxis === 'x' ? 'y' : 'x';
+                                        const formattedValue = context.dataset.formattedData
+                                            ? context.dataset.formattedData[context.dataIndex]
+                                            : null;
 
-                                        label += dataHelper.formatValue(
+                                        label += dataHelper.formatDisplayValue(
                                             context.parsed[valueAxis],
+                                            formattedValue,
                                             context.dataset.formatting,
                                             this.store.state.locale
                                         )
