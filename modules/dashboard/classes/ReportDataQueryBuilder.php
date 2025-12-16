@@ -551,9 +551,18 @@ class ReportDataQueryBuilder
             if ($dimensionLabelColumnName !== null) {
                 $dimensionLabelColumnName = $this->evalDbObjectName($dimensionLabelColumnName);
 
-                $columns[] = Db::raw(
-                    $dimensionLabelColumnName . ' AS oc_dimension_label'
-                );
+                // For date dimensions with interval grouping, wrap in MAX() to avoid
+                // ONLY_FULL_GROUP_BY error since the label column isn't in GROUP BY
+                if ($this->dimension->isDate() && $this->groupInterval !== ReportDataSourceBase::GROUP_INTERVAL_FULL) {
+                    $columns[] = Db::raw(
+                        'MAX(' . $dimensionLabelColumnName . ') AS oc_dimension_label'
+                    );
+                }
+                else {
+                    $columns[] = Db::raw(
+                        $dimensionLabelColumnName . ' AS oc_dimension_label'
+                    );
+                }
             }
         }
 
