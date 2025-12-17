@@ -151,7 +151,7 @@ class ReportFetchData
         $this->groupInterval = post('aggregation_interval');
         $this->resetCache = (bool) post('reset_cache');
 
-        $this->limit = isset($this->widgetConfig['limit']) ? (int) $this->widgetConfig['limit'] : null;
+        $this->limit = !empty($this->widgetConfig['limit']) ? (int) $this->widgetConfig['limit'] : null;
         $this->hideEmptyDimensionValues = $this->widgetConfig['empty_dimension_values'] ?? null === 'hide';
 
         [$this->dateStart, $this->dateEnd, $this->startTimestamp] = $this->getRequestedDateInterval(post('date_start'), post('date_end'));
@@ -286,7 +286,7 @@ class ReportFetchData
      */
     protected function getRequestedPaginationParams(): ?ReportDataPaginationParams
     {
-        if (!isset($this->widgetConfig['records_per_page']) || !strlen($this->widgetConfig['records_per_page'])) {
+        if (empty($this->widgetConfig['records_per_page'])) {
             return null;
         }
 
