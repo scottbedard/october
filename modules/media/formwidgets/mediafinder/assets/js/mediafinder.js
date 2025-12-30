@@ -324,7 +324,7 @@
 
         // Set value and trigger change event, so that wrapping implementations
         // like mlmediafinder can listen for changes.
-        this.$dataLocker.trigger('change');
+        this.$dataLocker.find('input:first').trigger('change');
     }
 
     MediaFinder.prototype.addValueToLocker = function(val) {

@@ -125,23 +125,28 @@ Vue.component('dashboard-component-dashboard-widget-chart', {
                                     };
                                 },
                                 label: (context) => {
+                                    // Never display a label for null values.
+                                    if (!context.parsed.y) {
+                                        return null
+                                    }
+
                                     let label = context.dataset.label || '';
                                     if (label) {
                                         label += ': ';
                                     }
-                                    if (context.parsed.y !== null) {
-                                        const valueAxis = indexAxis === 'x' ? 'y' : 'x';
-                                        const formattedValue = context.dataset.formattedData
-                                            ? context.dataset.formattedData[context.dataIndex]
-                                            : null;
 
-                                        label += dataHelper.formatDisplayValue(
-                                            context.parsed[valueAxis],
-                                            formattedValue,
-                                            context.dataset.formatting,
-                                            this.store.state.locale
-                                        )
-                                    }
+                                    const valueAxis = indexAxis === 'x' ? 'y' : 'x';
+                                    const formattedValue = context.dataset.formattedData
+                                        ? context.dataset.formattedData[context.dataIndex]
+                                        : null;
+
+                                    label += dataHelper.formatDisplayValue(
+                                        context.parsed[valueAxis],
+                                        formattedValue,
+                                        context.dataset.formatting,
+                                        this.store.state.locale
+                                    )
+                                    
                                     return label;
                                 }
                             }
