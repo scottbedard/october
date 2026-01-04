@@ -551,7 +551,7 @@ class Controller extends Extendable implements AjaxControllerInterface
             }
         }
 
-        if (Flash::check()) {
+        if (!$response->isRedirect() && Flash::check()) {
             $response->update([
                 '#layout-flash-messages' => $this->makeLayoutPartial('flash_messages')
             ]);

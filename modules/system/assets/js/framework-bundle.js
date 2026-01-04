@@ -5,18 +5,18 @@
 /*!*********************************************************!*\
   !*** ./modules/system/assets/vendor/larajax/migrate.js ***!
   \*********************************************************/
-(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
+() {
 
-/* provided dependency */ var __webpack_provided_window_dot_jQuery = __webpack_require__(/*! jquery */ "jquery");
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 // Set oc namespace from jax
 window.oc = window.jax;
 window.oc.serializeJSON = window.oc.values;
 
 // jQuery compatibility layer
-// Plus native deprecations
-(function ($) {
-  if (!$) {
+(function () {
+  // Avoid detection from webpack
+  var $ = window['jQ' + 'uery'];
+  if ($ === undefined) {
     return;
   }
   bindRequestFunc();
@@ -139,7 +139,7 @@ window.oc.serializeJSON = window.oc.values;
       throw new Error('Error parsing the ' + name + ' attribute value. ' + e);
     }
   }
-})(__webpack_provided_window_dot_jQuery);
+})();
 
 /***/ },
 
@@ -5234,10 +5234,12 @@ var DomPatcher = /*#__PURE__*/function () {
           element.insertAdjacentHTML('beforeend', content);
           runScriptsOnFragment(element, content);
           break;
+        case 'after':
         case 'afterend':
           element.insertAdjacentHTML('afterend', content);
           runScriptsOnFragment(element, content);
           break;
+        case 'before':
         case 'beforebegin':
           element.insertAdjacentHTML('beforebegin', content);
           runScriptsOnFragment(element, content);
@@ -10107,17 +10109,6 @@ function domReady() {
     }
   });
 }
-
-/***/ },
-
-/***/ "jquery"
-/*!*************************!*\
-  !*** external "jQuery" ***!
-  \*************************/
-(module) {
-
-"use strict";
-module.exports = jQuery;
 
 /***/ }
 

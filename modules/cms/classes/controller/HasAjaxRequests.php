@@ -129,7 +129,6 @@ trait HasAjaxRequests
 
             // Validates the handler partial list
             $partialList = $this->getAjaxHandlerPartialList();
-            $responseContents = [];
 
             // Execute the handler
             $result = null;
@@ -178,8 +177,8 @@ trait HasAjaxRequests
             }
         }
 
-        // Look for any flash messages
-        if ($this->ajaxRequest->wantsFlash && Flash::check()) {
+        // Look for any flash messages, only if response is not redirecting
+        if ($this->ajaxRequest->wantsFlash && !$response->isRedirect() && Flash::check()) {
             foreach (Flash::all() as $level => $text) {
                 $response->flash($level, $text);
             }
