@@ -1,4 +1,4 @@
-<script type="text/template" data-control="new-folder-template">
+<script type="text/template" data-media-new-folder-template>
     <?= Form::open() ?>
         <div class="modal-header">
             <h4 class="modal-title"><?= e(trans('backend::lang.media.new_folder_title')) ?></h4>

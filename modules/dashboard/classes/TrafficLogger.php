@@ -4,6 +4,7 @@ namespace Dashboard\Classes;
 
 use App;
 use Str;
+use Site;
 use Event;
 use Config;
 use Cookie;
@@ -142,6 +143,11 @@ class TrafficLogger
         $pageview->page_path = Str::substr((string) Request::path(), 0, 255);
         $pageview->referral_domain = Str::substr((string) parse_url($referrer ?: '', PHP_URL_HOST), 0, 255);
         $pageview->ev_timestamp = gmdate('Y-m-d H:i:s', time());
+
+        if (Site::hasFeature('dashboard_traffic_statistics')) {
+            $pageview->site_id = Site::getActiveSite()?->id;
+        }
+
         $pageview->save();
 
         if (rand(1, 100) === 1) {

@@ -122,6 +122,7 @@ trait ManagesModules
         $version = null;
 
         try {
+            // Locate version from october/system package
             $versions = ComposerManager::instance()->getPackageVersions(['october/system']);
             $version = $versions['october/system'] ?? null;
         }
@@ -129,9 +130,8 @@ trait ManagesModules
         }
 
         try {
-            // Locate version from october/system package
+            // Locate version from seed file
             if ($version === null) {
-                // Locate version from seed file
                 if (
                     File::exists($seedFile = storage_path('cms/version.json')) &&
                     ($contents = json_decode(File::get($seedFile), true)) &&
@@ -140,6 +140,16 @@ trait ManagesModules
                     $version = $contents['version'] ?? null;
                     File::delete($seedFile);
                 }
+            }
+        }
+        catch (Exception $ex) {
+        }
+
+        try {
+            // Locate version from october/rain package
+            if ($version === null) {
+                $versions = ComposerManager::instance()->getPackageVersions(['october/rain']);
+                $version = $versions['october/rain'] ?? null;
             }
         }
         catch (Exception $ex) {

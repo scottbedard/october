@@ -5,6 +5,7 @@ use Twig\Environment;
 use Twig\Node\Expression\GetAttrExpression;
 use Twig\NodeVisitor\NodeVisitorInterface;
 use Twig\Node\Expression\SupportDefinedTestInterface;
+use Cms\Twig\Node\GetAttrNode;
 
 /**
  * GetAttrAdjuster tweaks the get attribute functionality.

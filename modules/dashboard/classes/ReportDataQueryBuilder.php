@@ -9,16 +9,24 @@ use SystemException;
 /**
  * ReportDataQueryBuilder helps building queries for report data sources.
  *
- * The report query builder doesn't load any extra dimension fields.
- * They must be loaded by the report data source itself. However,
- * the report query builder manages sorting and filtering by dimension
- * fields, so they are expected to be loaded to the query by the data source.
+ * @deprecated Use ReportQueryBuilder instead, which provides a cleaner fluent interface.
  *
- * The report data query builder doesn’t apply the group interval. It always
- * groups data by the dimension field, irrespective of the group interval. However,
- * for ReportDataSourceBase::GROUP_INTERVAL_FULL, grouping is not applied.
- * This exception is because for the FULL group interval, the entire data set
- * is considered as a single group.
+ * Example migration:
+ *
+ * Before:
+ *     $builder = new ReportDataQueryBuilder(
+ *         'table', $dimension, $metrics, $orderRule, $filters, $limit,
+ *         $pagination, $interval, $hideEmpty, $dateStart, $dateEnd,
+ *         $timestamp, 'date_col', null, $totalsOnly
+ *     );
+ *     return $builder->getFetchDataResult($config);
+ *
+ * After:
+ *     return ReportQueryBuilder::fromFetchData($data, 'table')
+ *         ->dateColumn('date_col')
+ *         ->get($config);
+ *
+ * @see ReportQueryBuilder
  */
 class ReportDataQueryBuilder
 {
@@ -178,6 +186,39 @@ class ReportDataQueryBuilder
         $this->totalsOnly = $totalsOnly;
         $this->startTimestamp = $startTimestamp;
         $this->timestampColumnName = $timestampColumnName;
+    }
+
+    /**
+     * fromFetchData creates a new instance from ReportFetchData.
+     * @param ReportFetchData $data The fetch data containing dimension, metrics, and query parameters.
+     * @param string $tableName Specifies the data source table name.
+     * @param ?string $dateColumnName Specifies the date column name in $tableName to apply the date interval filter.
+     * @param ?string $timestampColumnName Specifies the timestamp column name in $tableName to apply the relative time filter.
+     * @return static
+     */
+    public static function fromFetchData(
+        ReportFetchData $data,
+        string $tableName,
+        ?string $dateColumnName = null,
+        ?string $timestampColumnName = null
+    ): static {
+        return new static(
+            $tableName,
+            $data->dimension,
+            $data->metrics,
+            $data->orderRule,
+            $data->dimensionFilters,
+            $data->limit,
+            $data->paginationParams,
+            $data->groupInterval,
+            $data->hideEmptyDimensionValues,
+            $data->dateStart,
+            $data->dateEnd,
+            $data->startTimestamp,
+            $dateColumnName,
+            $timestampColumnName,
+            $data->totalsOnly
+        );
     }
 
     /**

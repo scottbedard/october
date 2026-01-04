@@ -262,9 +262,9 @@ SQL;
     protected function cleanSqlSample($sql)
     {
         $sql = trim($sql);
+        $sql = str_replace("\r\n", ' ', $sql);
         $sql = str_replace("\n", ' ', $sql);
-        $sql = str_replace('  ', ' ', $sql);
-        $sql = str_replace('  ', ' ', $sql);
+        $sql = preg_replace('/\s+/', ' ', $sql);
         return $sql;
     }
 

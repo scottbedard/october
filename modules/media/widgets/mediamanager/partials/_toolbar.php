@@ -4,7 +4,7 @@
             <div data-control="toolbar">
                 <?php if ($this->checkHasPermission('mediaCreate')): ?>
                     <div class="btn-group offset-right">
-                        <button type="button" class="btn btn-primary oc-icon-upload" data-control="upload"
+                        <button type="button" class="btn btn-primary oc-icon-upload" data-media-upload
                             ><?= e(trans('backend::lang.media.upload')) ?></button>
                         <button type="button" class="btn btn-primary oc-icon-folder" data-command="create-folder"><?= e(trans('backend::lang.media.add_folder')) ?></button>
                     </div>
@@ -35,7 +35,7 @@
                         value="<?= e($searchTerm) ?>"
                         class="form-control is-growable is-searchable"
                         placeholder="<?= e(trans('backend::lang.media.search')) ?>"
-                        data-control="search"
+                        data-media-search
                         autocomplete="off"
                         data-load-indicator
                         data-load-indicator-opaque

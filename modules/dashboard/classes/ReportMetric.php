@@ -232,8 +232,16 @@ class ReportMetric
      * Returns a query column name corresponding to this metric.
      * @return string
      */
-    public function getDataSetColumName(): string
+    public function getDataSetColumnName(): string
     {
         return 'oc_metric_' . $this->getCode();
+    }
+
+    /**
+     * @deprecated Use getDataSetColumnName() instead
+     */
+    public function getDataSetColumName(): string
+    {
+        return $this->getDataSetColumnName();
     }
 }

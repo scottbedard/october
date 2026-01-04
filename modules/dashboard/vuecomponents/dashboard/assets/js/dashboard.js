@@ -18,7 +18,6 @@ Vue.component('dashboard-component-dashboard', {
             try {
                 await oc.ajax(this.store.getEventHandler('onSaveDashboard'), {
                     progressBar: true,
-                    async: true,
                     data: {
                         _dash_definition: this.currentDashboard.code,
                         definition: JSON.stringify(this.currentDashboard.rows)

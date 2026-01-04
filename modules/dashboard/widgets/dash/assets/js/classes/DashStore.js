@@ -215,7 +215,6 @@ class Dashboard_Widgets_Dash_Classes_DashStore
         const currentDashboard = this.getCurrentDashboard();
         const response = await oc.ajax(this.getEventHandler('onResetDashboard'), {
             progressBar: true,
-            async: true,
             data: {
                 _dash_definition: currentDashboard.code
             }
@@ -238,7 +237,6 @@ class Dashboard_Widgets_Dash_Classes_DashStore
         const currentDashboard = this.getCurrentDashboard();
         await oc.ajax(this.getEventHandler('onCommitDashboard'), {
             progressBar: true,
-            async: true,
             data: {
                 _dash_definition: currentDashboard.code,
                 definition: JSON.stringify(currentDashboard.rows)

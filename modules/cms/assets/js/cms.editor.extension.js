@@ -77,18 +77,24 @@ oc.Modules.register('editor.extension.cms.main', function() {
 
             if (commandString === 'global:application-tab-selected') {
                 if (!payload) {
-                    componentListInstance.hide();
+                    if (componentListInstance) {
+                        componentListInstance.hide();
+                    }
                     return;
                 }
 
                 const uri = DocumentUri.parse(payload);
                 if (uri.namespace !== 'cms') {
-                    componentListInstance.hide();
+                    if (componentListInstance) {
+                        componentListInstance.hide();
+                    }
                 }
 
                 const documentsSupportingComponents = ['cms-page', 'cms-partial', 'cms-layout'];
                 if (documentsSupportingComponents.indexOf(uri.documentType) === -1) {
-                    componentListInstance.hide();
+                    if (componentListInstance) {
+                        componentListInstance.hide();
+                    }
                 }
 
                 return;
@@ -105,7 +111,9 @@ oc.Modules.register('editor.extension.cms.main', function() {
             }
 
             if (commandString === 'cms:show-component-list') {
-                componentListInstance.show();
+                if (componentListInstance) {
+                    componentListInstance.show();
+                }
             }
 
             const editorCommand = new EditorCommand(commandString);

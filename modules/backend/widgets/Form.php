@@ -1077,6 +1077,16 @@ class Form extends WidgetBase implements FormElement
     }
 
     /**
+     * getFieldTooltipValue looks up the field tooltip value
+     * @param \Backend\Classes\FormField $field
+     * @return string
+     */
+    public function getFieldTooltipValue($field)
+    {
+        return Lang::get($field->tooltip['title'] ?? $field->tooltip);
+    }
+
+    /**
      * getSaveData returns post data from a submitted form.
      * @return array
      */

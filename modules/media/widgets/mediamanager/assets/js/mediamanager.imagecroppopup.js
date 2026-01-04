@@ -107,7 +107,7 @@ class MediaManagerImageCropPopup
     }
 
     initRulers() {
-        const $cropToolRoot = this.$popupElement.find('[data-control=media-manager-crop-tool]');
+        const $cropToolRoot = this.$popupElement.find('[data-media-crop-tool]');
         let width = $cropToolRoot.data('image-width');
         let height = $cropToolRoot.data('image-height');
 
@@ -126,8 +126,8 @@ class MediaManagerImageCropPopup
         $cropToolRoot.find('.ruler-container').removeClass('oc-hide');
         $cropToolRoot.addClass('has-rulers');
 
-        const $hRuler = $cropToolRoot.find('[data-control=h-ruler]');
-        const $vRuler = $cropToolRoot.find('[data-control=v-ruler]');
+        const $hRuler = $cropToolRoot.find('[data-media-h-ruler]');
+        const $vRuler = $cropToolRoot.find('[data-media-v-ruler]');
         const hTicks = width / 40 + 1;
         const vTicks = height / 40 + 1;
 
@@ -176,11 +176,11 @@ class MediaManagerImageCropPopup
     }
 
     getWidthInput() {
-        return this.$popupElement.find('[data-control="crop-width-input"]');
+        return this.$popupElement.find('[data-media-crop-width-input]');
     }
 
     getHeightInput() {
-        return this.$popupElement.find('[data-control="crop-height-input"]');
+        return this.$popupElement.find('[data-media-crop-height-input]');
     }
 
     getImageElement() {
@@ -255,7 +255,7 @@ class MediaManagerImageCropPopup
 
     showResizePopup() {
         this.$popupElement.find('button[data-command=resize]').popup({
-            content: this.$popupElement.find('[data-control="resize-template"]').html(),
+            content: this.$popupElement.find('[data-media-resize-template]').html(),
             zIndex: 1220
         });
     }
@@ -264,8 +264,8 @@ class MediaManagerImageCropPopup
         const $popup = $(popup);
         const $widthControl = $popup.find('input[name=width]');
         const $heightControl = $popup.find('input[name=height]');
-        const imageWidth = this.fixDimensionValue(this.$popupElement.find('input[data-control=dimension-width]').val());
-        const imageHeight = this.fixDimensionValue(this.$popupElement.find('input[data-control=dimension-height]').val());
+        const imageWidth = this.fixDimensionValue(this.$popupElement.find('input[data-media-dimension-width]').val());
+        const imageHeight = this.fixDimensionValue(this.$popupElement.find('input[data-media-dimension-height]').val());
 
         $widthControl.val(imageWidth);
         $heightControl.val(imageHeight);
@@ -295,7 +295,7 @@ class MediaManagerImageCropPopup
         const targetValue = this.fixDimensionValue($target.val());
         const otherDimensionName = $target.attr('name') == 'width' ? 'height' : 'width';
         const $otherInput = $target.closest('form').find('input[name=' + otherDimensionName + ']');
-        const ratio = this.$popupElement.find('[data-control=original-ratio]').val();
+        const ratio = this.$popupElement.find('[data-media-original-ratio]').val();
         const value = otherDimensionName == 'height' ? targetValue / ratio : targetValue * ratio;
 
         $otherInput.val(Math.round(value));
@@ -334,8 +334,8 @@ class MediaManagerImageCropPopup
         this.$popupElement.find('span[data-label=width]').text(width);
         this.$popupElement.find('span[data-label=height]').text(height);
 
-        this.$popupElement.find('input[data-control=dimension-width]').val(width);
-        this.$popupElement.find('input[data-control=dimension-height]').val(height);
+        this.$popupElement.find('input[data-media-dimension-width]').val(width);
+        this.$popupElement.find('input[data-media-dimension-height]').val(height);
 
         const $imageArea = $(this.imageArea);
         $imageArea.find('img').remove();
@@ -352,9 +352,9 @@ class MediaManagerImageCropPopup
 
     undoResizing() {
         this.updateImage(
-            this.$popupElement.find('input[data-control=original-url]').val(),
-            this.$popupElement.find('input[data-control=original-width]').val(),
-            this.$popupElement.find('input[data-control=original-height]').val()
+            this.$popupElement.find('input[data-media-original-url]').val(),
+            this.$popupElement.find('input[data-media-original-width]').val(),
+            this.$popupElement.find('input[data-media-original-height]').val()
         );
     }
 
@@ -390,7 +390,7 @@ class MediaManagerImageCropPopup
         this.$popupElement.on('shown.oc.popup', 'button[data-command=resize]', this.onResizePopupShown);
         this.$popupElement.on('hidden.oc.popup', 'button[data-command=resize]', this.onResizePopupHidden);
 
-        this.imageArea = popup.find('[data-control=media-manager-crop-tool]').get(0).querySelector('.image_area');
+        this.imageArea = popup.find('[data-media-crop-tool]').get(0).querySelector('.image_area');
         this.selectionSizeLabel = popup.find('[data-label="selection-size"]').get(0);
 
         this.getWidthInput().on('change', this.onSizeInputChange);
