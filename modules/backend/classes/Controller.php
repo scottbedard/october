@@ -153,9 +153,9 @@ class Controller extends Extendable implements AjaxControllerInterface
         $this->layoutPath[] = "~/modules/{$relativePath}/layouts";
         $this->layoutPath[] = "~/plugins/{$relativePath}/layouts";
 
-        // Disable turbo router everywhere
-        if (!Config::get('backend.turbo_router', true)) {
-            $this->turboVisitControl = 'disable';
+        // Enable turbo router
+        if (Config::get('backend.turbo_router', false)) {
+            $this->turboVisitControl = 'enable';
         }
 
         // Create a new instance of the admin user

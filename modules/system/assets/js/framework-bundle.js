@@ -4814,13 +4814,13 @@ var AssetManager = /*#__PURE__*/function () {
           while (1) switch (_context.n) {
             case 0:
               collection = _args.length > 0 && _args[0] !== undefined ? _args[0] : {};
-              jsList = ((_collection$js = collection.js) !== null && _collection$js !== void 0 ? _collection$js : []).filter(function (asset) {
+              jsList = ((_collection$js = collection.js) !== null && _collection$js !== void 0 ? _collection$js : []).map(normalizeAsset).filter(function (asset) {
                 return !document.querySelector("head script[src=\"".concat(htmlEscape(asset.url), "\"]"));
               });
-              cssList = ((_collection$css = collection.css) !== null && _collection$css !== void 0 ? _collection$css : []).filter(function (asset) {
+              cssList = ((_collection$css = collection.css) !== null && _collection$css !== void 0 ? _collection$css : []).map(normalizeAsset).filter(function (asset) {
                 return !document.querySelector("head link[href=\"".concat(htmlEscape(asset.url), "\"]"));
               });
-              imgList = (_collection$img = collection.img) !== null && _collection$img !== void 0 ? _collection$img : [];
+              imgList = ((_collection$img = collection.img) !== null && _collection$img !== void 0 ? _collection$img : []).map(normalizeAsset);
               if (!(!jsList.length && !cssList.length && !imgList.length)) {
                 _context.n = 1;
                 break;
@@ -4940,7 +4940,7 @@ var AssetManager = /*#__PURE__*/function () {
     value:
     /**
      * Load a collection of assets.
-     * @param {{js?: Array<{url: string, attributes?: object}>, css?: Array<{url: string, attributes?: object}>, img?: Array<{url: string, attributes?: object}>}} collection
+     * @param {{js?: Array<string|{url: string, attributes?: object}>, css?: Array<string|{url: string, attributes?: object}>, img?: Array<string|{url: string, attributes?: object}>}} collection
      * @param {(err?: Error) => void} [callback]  // optional; called on success or with error
      * @returns {Promise<void>}
      */
@@ -4958,6 +4958,13 @@ var AssetManager = /*#__PURE__*/function () {
     }
   }]);
 }();
+
+// Normalize asset entry: string -> { url }, object -> as-is
+function normalizeAsset(asset) {
+  return typeof asset === 'string' ? {
+    url: asset
+  } : asset;
+}
 
 // Minimal escaping for querySelector
 function htmlEscape(value) {
@@ -5188,7 +5195,7 @@ var DomPatcher = /*#__PURE__*/function () {
     }
 
     // Should patch the dom using the envelope.getPartials()
-    // which is expected to be { partialName: html contents }
+    // which is expected to be { name: partialName, html: contents }
   }, {
     key: "applyPartialUpdates",
     value: function applyPartialUpdates() {
@@ -5200,11 +5207,11 @@ var DomPatcher = /*#__PURE__*/function () {
 
         // If the update options has a _self, values like true and '^' will resolve to the partial element,
         // these values are also used to make AJAX partial handlers available without performing an update
-        if (_this.partialMap['_self'] && partial == _this.options.partial && _this.options.partialEl) {
+        if (_this.partialMap['_self'] && partial.name == _this.options.partial && _this.options.partialEl) {
           selector = _this.partialMap['_self'];
           selectedEl = [_this.options.partialEl];
         } else if (selector) {
-          selectedEl = resolveSelectorResponse(selector, '[data-ajax-partial="' + partial + '"]');
+          selectedEl = resolveSelectorResponse(selector, '[data-ajax-partial="' + partial.name + '"]');
         }
         selectedEl.forEach(function (el) {
           _this.patchDom(el, partial.html, getSelectorUpdateMode(selector, el));
