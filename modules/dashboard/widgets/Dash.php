@@ -319,9 +319,9 @@ class Dash extends WidgetBase
     }
 
     /**
-     * removeField programmatically
+     * removeReport programmatically
      */
-    public function removeField($name): bool
+    public function removeReport($name): bool
     {
         if (!isset($this->allReports[$name])) {
             return false;
@@ -329,7 +329,40 @@ class Dash extends WidgetBase
 
         unset($this->allReports[$name]);
 
+        // Also remove from allRows for custom dashboards
+        if ($this->allRows !== null) {
+            foreach ($this->allRows as $rowIndex => &$row) {
+                if (!isset($row['widgets']) || !is_array($row['widgets'])) {
+                    continue;
+                }
+
+                foreach ($row['widgets'] as $widgetIndex => $widget) {
+                    $widgetName = $widget['reportName'] ?? null;
+                    if ($widgetName === $name) {
+                        unset($this->allRows[$rowIndex]['widgets'][$widgetIndex]);
+                    }
+                }
+
+                // Re-index widgets array
+                $this->allRows[$rowIndex]['widgets'] = array_values($this->allRows[$rowIndex]['widgets']);
+            }
+
+            // Remove empty rows
+            $this->allRows = array_values(array_filter($this->allRows, function ($row) {
+                return !empty($row['widgets']);
+            }));
+        }
+
         return true;
+    }
+
+    /**
+     * removeField programmatically
+     * @deprecated Use removeReport() instead
+     */
+    public function removeField($name): bool
+    {
+        return $this->removeReport($name);
     }
 
     /**

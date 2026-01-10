@@ -709,10 +709,10 @@ var Trigger = /*#__PURE__*/function () {
   }, {
     key: "getDefaultTrigger",
     value: function getDefaultTrigger() {
-      var _el$type;
+      var _el$getAttribute;
       var el = this.element;
       var tag = el.tagName.toLowerCase();
-      var type = (_el$type = el.type) === null || _el$type === void 0 ? void 0 : _el$type.toLowerCase();
+      var type = (_el$getAttribute = el.getAttribute('type')) === null || _el$getAttribute === void 0 ? void 0 : _el$getAttribute.toLowerCase();
       if (tag === 'form') return 'submit';
       if (tag === 'a') return 'click';
       if (tag === 'button') return 'click';
@@ -1155,6 +1155,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _dom_patcher__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./dom-patcher */ "./vendor/larajax/larajax/resources/src/request/dom-patcher.js");
 /* harmony import */ var _util_referrer__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../util/referrer */ "./vendor/larajax/larajax/resources/src/util/referrer.js");
 /* harmony import */ var _util_promise__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../util/promise */ "./vendor/larajax/larajax/resources/src/util/promise.js");
+/* harmony import */ var _util_turbo__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../util/turbo */ "./vendor/larajax/larajax/resources/src/util/turbo.js");
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 function _regeneratorValues(e) { if (null != e) { var t = e["function" == typeof Symbol && Symbol.iterator || "@@iterator"], r = 0; if (t) return t.call(e); if ("function" == typeof e.next) return e; if (!isNaN(e.length)) return { next: function next() { return e && r >= e.length && (e = void 0), { value: e && e[r++], done: !e }; } }; } throw new TypeError(_typeof(e) + " is not iterable"); }
 function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
@@ -1176,6 +1177,7 @@ function _defineProperties(e, r) { for (var t = 0; t < r.length; t++) { var o = 
 function _createClass(e, r, t) { return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", { writable: !1 }), e; }
 function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
 function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
+
 
 
 
@@ -1604,8 +1606,8 @@ var Actions = /*#__PURE__*/function () {
       if (this.options.browserRedirectBack) {
         href = (0,_util_referrer__WEBPACK_IMPORTED_MODULE_2__.getReferrerUrl)() || href;
       }
-      if (jax.useTurbo && jax.useTurbo()) {
-        jax.visit(href);
+      if ((0,_util_turbo__WEBPACK_IMPORTED_MODULE_4__.isTurboEnabled)()) {
+        (0,_util_turbo__WEBPACK_IMPORTED_MODULE_4__.turboVisit)(href);
       } else {
         location.assign(href);
       }
@@ -1800,8 +1802,8 @@ var Actions = /*#__PURE__*/function () {
       if (queryStr) {
         newUrl += '?' + queryStr.replaceAll('%5B%5D=', '[]=');
       }
-      if (jax.useTurbo && jax.useTurbo()) {
-        jax.visit(newUrl, {
+      if ((0,_util_turbo__WEBPACK_IMPORTED_MODULE_4__.isTurboEnabled)()) {
+        (0,_util_turbo__WEBPACK_IMPORTED_MODULE_4__.turboVisit)(newUrl, {
           action: 'swap',
           scroll: false
         });
@@ -4715,11 +4717,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   getReferrerUrl: () => (/* binding */ getReferrerUrl)
 /* harmony export */ });
+/* harmony import */ var _turbo__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./turbo */ "./vendor/larajax/larajax/resources/src/util/turbo.js");
+
+
 /**
  * getReferrerUrl returns the last visited URL
  */
 function getReferrerUrl() {
-  var url = jax.useTurbo && jax.useTurbo() ? jax.AjaxTurbo.controller.getLastVisitUrl() : getReferrerFromSameOrigin();
+  var url = (0,_turbo__WEBPACK_IMPORTED_MODULE_0__.isTurboEnabled)() ? (0,_turbo__WEBPACK_IMPORTED_MODULE_0__.getTurboController)().getLastVisitUrl() : getReferrerFromSameOrigin();
   if (!url || isSameBaseUrl(url)) {
     return null;
   }
@@ -4747,6 +4752,42 @@ function isSameBaseUrl(url) {
   var givenUrl = new URL(url, window.location.origin),
     currentUrl = new URL(window.location.href);
   return givenUrl.origin === currentUrl.origin && givenUrl.pathname === currentUrl.pathname;
+}
+
+/***/ },
+
+/***/ "./vendor/larajax/larajax/resources/src/util/turbo.js"
+/*!************************************************************!*\
+  !*** ./vendor/larajax/larajax/resources/src/util/turbo.js ***!
+  \************************************************************/
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   getTurboController: () => (/* binding */ getTurboController),
+/* harmony export */   isTurboEnabled: () => (/* binding */ isTurboEnabled),
+/* harmony export */   registerTurbo: () => (/* binding */ registerTurbo),
+/* harmony export */   turboVisit: () => (/* binding */ turboVisit)
+/* harmony export */ });
+var _turboProvider = null;
+function registerTurbo(turbo) {
+  _turboProvider = turbo;
+}
+function isTurboEnabled() {
+  var _turboProvider$isEnab, _turboProvider2;
+  return (_turboProvider$isEnab = (_turboProvider2 = _turboProvider) === null || _turboProvider2 === void 0 ? void 0 : _turboProvider2.isEnabled()) !== null && _turboProvider$isEnab !== void 0 ? _turboProvider$isEnab : false;
+}
+function turboVisit(url, options) {
+  if (_turboProvider) {
+    _turboProvider.visit(url, options);
+    return true;
+  }
+  return false;
+}
+function getTurboController() {
+  var _turboProvider$contro, _turboProvider3;
+  return (_turboProvider$contro = (_turboProvider3 = _turboProvider) === null || _turboProvider3 === void 0 ? void 0 : _turboProvider3.controller) !== null && _turboProvider$contro !== void 0 ? _turboProvider$contro : null;
 }
 
 /***/ },

@@ -177,7 +177,8 @@ class RecordFinderField extends FallbackField
         if ($isSingular) {
             $model->belongsTo[$this->fieldName] = [
                 $relatedModel::class,
-                'key' => $this->getSingularKeyName()
+                'key' => $this->getSingularKeyName(),
+                'otherKey' => $relatedMultisite ? 'site_root_id' : 'id'
             ];
         }
         elseif ($isNested) {

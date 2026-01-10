@@ -37,6 +37,7 @@ class Dashboard_Classes_DataSource
         return this.queue.add(() => {
             return oc.ajax(this.delegate.getEventHandler('onGetWidgetCustomData'), {
                 progressBar: false,
+                handleErrorMessage: function(message) {},
                 data: {
                     _dash_definition: this.delegate.getCurrentDashboard().code,
                     widget_config: widgetConfig,
@@ -55,6 +56,7 @@ class Dashboard_Classes_DataSource
         return this.queue.add(() => {
             return oc.ajax(this.delegate.getEventHandler('onGetWidgetStaticContent'), {
                 progressBar: false,
+                handleErrorMessage: function(message) {},
                 data: {
                     _dash_definition: this.delegate.getCurrentDashboard().code,
                     widget_config: widgetConfig,
