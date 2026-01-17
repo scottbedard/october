@@ -156,6 +156,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _util_events__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../util/events */ "./vendor/larajax/larajax/resources/src/util/events.js");
 /* harmony import */ var _trigger__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./trigger */ "./vendor/larajax/larajax/resources/src/core/trigger.js");
+/* harmony import */ var _util_turbo__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../util/turbo */ "./vendor/larajax/larajax/resources/src/util/turbo.js");
+/* harmony import */ var _util_wait__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../util/wait */ "./vendor/larajax/larajax/resources/src/util/wait.js");
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 function _classCallCheck(a, n) { if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function"); }
 function _defineProperties(e, r) { for (var t = 0; t < r.length; t++) { var o = r[t]; o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o); } }
@@ -165,10 +167,15 @@ function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" 
 function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
 
 
+
+
 var Controller = /*#__PURE__*/function () {
   function Controller() {
     var _this = this;
     _classCallCheck(this, Controller);
+    _defineProperty(this, "onRender", function () {
+      _this.render();
+    });
     /**
      * Handle delegated trigger events
      */
@@ -194,10 +201,9 @@ var Controller = /*#__PURE__*/function () {
   return _createClass(Controller, [{
     key: "start",
     value: function start() {
-      var _this2 = this;
       if (!this.started) {
         // Track unload event for request lib
-        window.onbeforeunload = this.documentOnBeforeUnload;
+        addEventListener('beforeunload', this.documentOnBeforeUnload);
 
         // Document-level delegation for native events
         _util_events__WEBPACK_IMPORTED_MODULE_0__.Events.on(document, 'click', '[data-request]', this.onTriggerEvent);
@@ -209,19 +215,13 @@ var Controller = /*#__PURE__*/function () {
         _util_events__WEBPACK_IMPORTED_MODULE_0__.Events.on(document, 'ajax:trigger', '[data-request]', this.onTriggerEvent);
 
         // First page load
-        addEventListener('DOMContentLoaded', function () {
-          return _this2.render();
-        });
+        addEventListener('DOMContentLoaded', this.onRender);
 
         // Again, after new scripts load
-        addEventListener('page:updated', function () {
-          return _this2.render();
-        });
+        addEventListener('page:updated', this.onRender);
 
         // Again after AJAX request
-        addEventListener('ajax:update-complete', function () {
-          return _this2.render();
-        });
+        addEventListener('ajax:update-complete', this.onRender);
         this.started = true;
       }
     }
@@ -229,6 +229,15 @@ var Controller = /*#__PURE__*/function () {
     key: "stop",
     value: function stop() {
       if (this.started) {
+        removeEventListener('beforeunload', this.documentOnBeforeUnload);
+        _util_events__WEBPACK_IMPORTED_MODULE_0__.Events.off(document, 'click', '[data-request]', this.onTriggerEvent);
+        _util_events__WEBPACK_IMPORTED_MODULE_0__.Events.off(document, 'submit', '[data-request]', this.onTriggerEvent);
+        _util_events__WEBPACK_IMPORTED_MODULE_0__.Events.off(document, 'change', '[data-request]', this.onTriggerEvent);
+        _util_events__WEBPACK_IMPORTED_MODULE_0__.Events.off(document, 'input', '[data-request]', this.onTriggerEvent);
+        _util_events__WEBPACK_IMPORTED_MODULE_0__.Events.off(document, 'ajax:trigger', '[data-request]', this.onTriggerEvent);
+        removeEventListener('DOMContentLoaded', this.onRender);
+        removeEventListener('page:updated', this.onRender);
+        removeEventListener('ajax:update-complete', this.onRender);
         this.started = false;
       }
     }
@@ -253,9 +262,9 @@ var Controller = /*#__PURE__*/function () {
   }, {
     key: "bindCustomTriggers",
     value: function bindCustomTriggers() {
-      var _this3 = this;
+      var _this2 = this;
       document.querySelectorAll('[data-request]:not([data-trigger-bound])').forEach(function (el) {
-        var trigger = _this3.getTrigger(el);
+        var trigger = _this2.getTrigger(el);
         var eventType = trigger.config.event;
 
         // Only bind directly for custom events
@@ -290,6 +299,17 @@ var Controller = /*#__PURE__*/function () {
     value: function documentOnBeforeUnload(event) {
       window.jaxUnloading = true;
     }
+
+    /**
+     * Wait for the page to be ready.
+     * Uses Turbo's pageReady if available, otherwise falls back to domReady.
+     */
+  }, {
+    key: "pageReady",
+    value: function pageReady() {
+      var _turboPageReady;
+      return (_turboPageReady = (0,_util_turbo__WEBPACK_IMPORTED_MODULE_2__.turboPageReady)()) !== null && _turboPageReady !== void 0 ? _turboPageReady : (0,_util_wait__WEBPACK_IMPORTED_MODULE_3__.domReady)();
+    }
   }]);
 }();
 
@@ -320,6 +340,9 @@ var controller = new _controller__WEBPACK_IMPORTED_MODULE_0__.Controller();
   parseJSON: _util_json_parser__WEBPACK_IMPORTED_MODULE_2__.JsonParser.parseJSON,
   serializeAsJSON: _util_form_serializer__WEBPACK_IMPORTED_MODULE_3__.FormSerializer.serializeAsJSON,
   requestElement: _request_builder__WEBPACK_IMPORTED_MODULE_1__.RequestBuilder.fromElement,
+  pageReady: function pageReady() {
+    return controller.pageReady();
+  },
   start: function start() {
     controller.start();
   },
@@ -1091,6 +1114,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _request_asset_manager__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./request/asset-manager */ "./vendor/larajax/larajax/resources/src/request/asset-manager.js");
 /* harmony import */ var _util_events__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./util/events */ "./vendor/larajax/larajax/resources/src/util/events.js");
 /* harmony import */ var _util_wait__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./util/wait */ "./vendor/larajax/larajax/resources/src/util/wait.js");
+/* harmony import */ var _util_jax_builder__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./util/jax-builder */ "./vendor/larajax/larajax/resources/src/util/jax-builder.js");
 /**
  * --------------------------------------------------------------------------
  * Larajax: Frontend JavaScript Framework
@@ -1105,35 +1129,20 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 if (!window.jax) {
   window.jax = {};
 }
-
-// Request
-window.jax.AjaxRequest = _request_namespace__WEBPACK_IMPORTED_MODULE_1__["default"];
-window.jax.AssetManager = _request_asset_manager__WEBPACK_IMPORTED_MODULE_2__.AssetManager;
-window.jax.ajax = _request_namespace__WEBPACK_IMPORTED_MODULE_1__["default"].send;
-
-// Core
-window.jax.AjaxFramework = _core_namespace__WEBPACK_IMPORTED_MODULE_0__["default"];
-window.jax.request = _core_namespace__WEBPACK_IMPORTED_MODULE_0__["default"].requestElement;
-window.jax.parseJSON = _core_namespace__WEBPACK_IMPORTED_MODULE_0__["default"].parseJSON;
-window.jax.values = _core_namespace__WEBPACK_IMPORTED_MODULE_0__["default"].serializeAsJSON;
-
-// Util
-window.jax.Events = _util_events__WEBPACK_IMPORTED_MODULE_3__.Events;
-window.jax.dispatch = _util_events__WEBPACK_IMPORTED_MODULE_3__.Events.dispatch;
-window.jax.trigger = _util_events__WEBPACK_IMPORTED_MODULE_3__.Events.trigger;
-window.jax.on = _util_events__WEBPACK_IMPORTED_MODULE_3__.Events.on;
-window.jax.off = _util_events__WEBPACK_IMPORTED_MODULE_3__.Events.off;
-window.jax.one = _util_events__WEBPACK_IMPORTED_MODULE_3__.Events.one;
-window.jax.waitFor = _util_wait__WEBPACK_IMPORTED_MODULE_4__.waitFor;
-window.jax.pageReady = _util_wait__WEBPACK_IMPORTED_MODULE_4__.domReady;
-
-// Fallback for turbo
-window.jax.visit = function (url) {
-  return window.location.assign(url);
-};
+Object.assign(window.jax, (0,_util_jax_builder__WEBPACK_IMPORTED_MODULE_5__.buildJaxObject)({
+  AjaxFramework: _core_namespace__WEBPACK_IMPORTED_MODULE_0__["default"],
+  AjaxRequest: _request_namespace__WEBPACK_IMPORTED_MODULE_1__["default"],
+  AssetManager: _request_asset_manager__WEBPACK_IMPORTED_MODULE_2__.AssetManager,
+  Events: _util_events__WEBPACK_IMPORTED_MODULE_3__.Events,
+  waitFor: _util_wait__WEBPACK_IMPORTED_MODULE_4__.waitFor,
+  visit: function visit(url) {
+    return window.location.assign(url);
+  }
+}));
 
 // Auto-start
 _core_namespace__WEBPACK_IMPORTED_MODULE_0__["default"].start();
@@ -1688,15 +1697,23 @@ var Actions = /*#__PURE__*/function () {
     value: function () {
       var _handleUpdateOperations = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee6(data, responseCode, xhr) {
         var _data$$env4, _data$$env5, _data$$env6, _data$$env7, _data$$env8, _data$$env0;
-        var flashMessages, flashMessage, browserEvents, redirectUrl, invalidFields, _data$$env9, loadAssets, _t2;
+        var flashMessages, _iterator2, _step2, flashMessage, browserEvents, redirectUrl, invalidFields, _data$$env9, loadAssets, _t2;
         return _regenerator().w(function (_context7) {
           while (1) switch (_context7.n) {
             case 0:
               // Dispatch flash messages
               flashMessages = this.delegate.options.flash ? (_data$$env4 = data.$env) === null || _data$$env4 === void 0 ? void 0 : _data$$env4.getFlash() : null;
               if (flashMessages) {
-                for (flashMessage in flashMessages) {
-                  this.invoke('handleFlashMessage', [flashMessage.text, flashMessage.level]);
+                _iterator2 = _createForOfIteratorHelper(flashMessages);
+                try {
+                  for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+                    flashMessage = _step2.value;
+                    this.invoke('handleFlashMessage', [flashMessage.text, flashMessage.level]);
+                  }
+                } catch (err) {
+                  _iterator2.e(err);
+                } finally {
+                  _iterator2.f();
                 }
               }
 
@@ -4257,6 +4274,91 @@ function uuid() {
 
 /***/ },
 
+/***/ "./vendor/larajax/larajax/resources/src/util/jax-builder.js"
+/*!******************************************************************!*\
+  !*** ./vendor/larajax/larajax/resources/src/util/jax-builder.js ***!
+  \******************************************************************/
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   buildJaxObject: () => (/* binding */ buildJaxObject)
+/* harmony export */ });
+/* harmony import */ var _turbo__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./turbo */ "./vendor/larajax/larajax/resources/src/util/turbo.js");
+
+
+/**
+ * Builds the jax object from provided modules
+ * Used by framework.js, framework-bundle.js, and index.js to reduce duplication
+ */
+function buildJaxObject(modules) {
+  var AjaxFramework = modules.AjaxFramework,
+    AjaxRequest = modules.AjaxRequest,
+    AssetManager = modules.AssetManager,
+    Events = modules.Events,
+    waitFor = modules.waitFor,
+    visit = modules.visit,
+    AjaxExtras = modules.AjaxExtras,
+    AjaxObserve = modules.AjaxObserve,
+    AjaxTurbo = modules.AjaxTurbo,
+    ControlBase = modules.ControlBase;
+  var jax = {
+    // Request
+    AjaxRequest: AjaxRequest,
+    AssetManager: AssetManager,
+    ajax: AjaxRequest.send,
+    // Core
+    AjaxFramework: AjaxFramework,
+    request: AjaxFramework.requestElement,
+    parseJSON: AjaxFramework.parseJSON,
+    values: AjaxFramework.serializeAsJSON,
+    pageReady: AjaxFramework.pageReady,
+    // Util
+    Events: Events,
+    dispatch: Events.dispatch,
+    trigger: Events.trigger,
+    on: Events.on,
+    off: Events.off,
+    one: Events.one,
+    waitFor: waitFor,
+    visit: visit
+  };
+
+  // Extras (optional)
+  if (AjaxExtras) {
+    jax.AjaxExtras = AjaxExtras;
+    jax.flashMsg = AjaxExtras.flashMsg;
+    jax.progressBar = AjaxExtras.progressBar;
+    jax.attachLoader = AjaxExtras.attachLoader;
+  }
+
+  // Observe (optional)
+  if (AjaxObserve) {
+    jax.AjaxObserve = AjaxObserve;
+    jax.registerControl = AjaxObserve.registerControl;
+    jax.importControl = AjaxObserve.importControl;
+    jax.observeControl = AjaxObserve.observeControl;
+    jax.fetchControl = AjaxObserve.fetchControl;
+    jax.fetchControls = AjaxObserve.fetchControls;
+  }
+
+  // ControlBase (optional)
+  if (ControlBase) {
+    jax.ControlBase = ControlBase;
+  }
+
+  // Turbo (optional)
+  if (AjaxTurbo) {
+    (0,_turbo__WEBPACK_IMPORTED_MODULE_0__.registerTurbo)(AjaxTurbo);
+    jax.AjaxTurbo = AjaxTurbo;
+    jax.useTurbo = AjaxTurbo.isEnabled;
+  }
+  return jax;
+}
+
+/***/ },
+
 /***/ "./vendor/larajax/larajax/resources/src/util/json-parser.js"
 /*!******************************************************************!*\
   !*** ./vendor/larajax/larajax/resources/src/util/json-parser.js ***!
@@ -4768,6 +4870,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   getTurboController: () => (/* binding */ getTurboController),
 /* harmony export */   isTurboEnabled: () => (/* binding */ isTurboEnabled),
 /* harmony export */   registerTurbo: () => (/* binding */ registerTurbo),
+/* harmony export */   turboPageReady: () => (/* binding */ turboPageReady),
 /* harmony export */   turboVisit: () => (/* binding */ turboVisit)
 /* harmony export */ });
 var _turboProvider = null;
@@ -4788,6 +4891,10 @@ function turboVisit(url, options) {
 function getTurboController() {
   var _turboProvider$contro, _turboProvider3;
   return (_turboProvider$contro = (_turboProvider3 = _turboProvider) === null || _turboProvider3 === void 0 ? void 0 : _turboProvider3.controller) !== null && _turboProvider$contro !== void 0 ? _turboProvider$contro : null;
+}
+function turboPageReady() {
+  var _turboProvider$pageRe, _turboProvider4;
+  return (_turboProvider$pageRe = (_turboProvider4 = _turboProvider) === null || _turboProvider4 === void 0 ? void 0 : _turboProvider4.pageReady()) !== null && _turboProvider$pageRe !== void 0 ? _turboProvider$pageRe : null;
 }
 
 /***/ },

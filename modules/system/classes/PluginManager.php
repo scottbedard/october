@@ -79,7 +79,7 @@ class PluginManager
         $this->loadDisabled();
         $this->loadPlugins();
 
-        if ($this->app->runningInBackend()) {
+        if ($this->app->runningInBackend() || $this->app->runningInOctane()) {
             $this->loadDependencies();
         }
     }

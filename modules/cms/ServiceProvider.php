@@ -40,7 +40,7 @@ class ServiceProvider extends ModuleServiceProvider
         CmsObjectCache::flush();
 
         // Backend specific
-        if ($this->app->runningInBackend()) {
+        if ($this->app->runningInBackend() || $this->app->runningInOctane()) {
             $this->registerPageLookupInstance();
         }
     }

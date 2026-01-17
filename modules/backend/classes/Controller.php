@@ -153,7 +153,7 @@ class Controller extends Extendable implements AjaxControllerInterface
 
         // Enable turbo router
         if (Config::get('backend.turbo_router', false)) {
-            $this->turboVisitControl = 'enable';
+            $this->turboVisitControl ??= 'enable';
         }
 
         // Create a new instance of the admin user
