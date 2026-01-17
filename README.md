@@ -11,7 +11,7 @@ October's mission is to show the world that web development is not rocket scienc
 [![Version](https://img.shields.io/packagist/v/october/october)](https://octobercms.com/changelog)
 [![License](https://poser.pugx.org/october/october/license.svg)](./LICENSE.md)
 
-> *Please note*: October CMS is open source and every new project starts with a complimentary license for the first year. After that, a license is required to continue receiving updates and access the Marketplace ecosystem.
+> *Please note*: October CMS is open source and every new account includes a complimentary license for the first year. After that, a license is required to continue receiving updates and access the Marketplace ecosystem.
 
 ## Installing October
 
