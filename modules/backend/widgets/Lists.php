@@ -507,7 +507,6 @@ class Lists extends WidgetBase implements ListElement
 
             // Relation column
             if ($column->relation) {
-                // @todo Find a way...
                 $relationType = $this->model->getRelationType($column->relation);
                 if ($relationType === 'morphTo') {
                     throw new ApplicationException('The relationship morphTo is not supported for list columns.');
@@ -526,13 +525,22 @@ class Lists extends WidgetBase implements ListElement
 
                 $countQuery = $relationObj->getRelationExistenceQuery($relationQuery, $query);
 
-                $joinSql = $this->isColumnRelated($column, true)
+                $isMultiRelation = $this->isColumnRelated($column, true);
+
+                $joinSql = $isMultiRelation
                     ? DbDongle::raw("group_concat(" . $sqlSelect . " separator ', ')")
                     : DbDongle::raw($sqlSelect);
 
-                $joinSql = $countQuery->select($joinSql)->reorder()->toSql();
+                $countQuery->select($joinSql)->reorder();
 
-                $selects[] = Db::raw('('.$joinSql.') as '.$alias);
+                // Singular relations need a limit to prevent subquery errors
+                if (!$isMultiRelation) {
+                    $countQuery->limit(1);
+                }
+
+                $joinSql = $countQuery->toSql();
+
+                $selects[] = Db::raw("({$joinSql}) as {$alias}");
 
                 // If a polymorphic relation, bindings need to be added to the query
                 $bindings = array_merge($bindings, $countQuery->getBindings());

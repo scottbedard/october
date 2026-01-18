@@ -1398,6 +1398,7 @@ var Actions = /*#__PURE__*/function () {
     key: "cancel",
     value: function cancel() {
       this.invokeFunc('cancelFunc');
+      this.delegate.notifyApplicationRequestCancel();
     }
 
     // Custom function, requests confirmation from the user
@@ -2874,9 +2875,12 @@ var Request = /*#__PURE__*/function () {
   return _createClass(Request, [{
     key: "start",
     value: function start() {
+      this.promise = (0,_util_promise__WEBPACK_IMPORTED_MODULE_7__.cancellablePromise)();
+
       // Setup
       if (!this.applicationAllowsSetup()) {
-        return;
+        this.promise.resolve(null);
+        return this.promise;
       }
       this.initOtherElements();
       this.preprocessOptions();
@@ -2884,15 +2888,18 @@ var Request = /*#__PURE__*/function () {
       // Prepare actions
       this.actions = new _actions__WEBPACK_IMPORTED_MODULE_2__.Actions(this, this.context, this.options);
       if (this.actions.invokeFunc('beforeSendFunc') === false) {
-        return;
+        this.promise.resolve(null);
+        return this.promise;
       }
       if (!this.validateClientSideForm() || !this.applicationAllowsRequest()) {
-        return;
+        this.promise.resolve(null);
+        return this.promise;
       }
 
       // Confirm before sending
       if (this.options.confirm && !this.actions.invoke('handleConfirmMessage', [this.options.confirm])) {
-        return;
+        this.promise.resolve(null);
+        return this.promise;
       }
 
       // Send request
@@ -2930,7 +2937,6 @@ var Request = /*#__PURE__*/function () {
         data: data,
         trackAbort: true
       });
-      this.promise = (0,_util_promise__WEBPACK_IMPORTED_MODULE_7__.cancellablePromise)();
       this.isRedirect = this.options.redirect && this.options.redirect.length > 0;
 
       // Lifecycle events
@@ -3130,6 +3136,16 @@ var Request = /*#__PURE__*/function () {
           data: data,
           responseCode: responseCode,
           xhr: xhr
+        }
+      });
+    }
+  }, {
+    key: "notifyApplicationRequestCancel",
+    value: function notifyApplicationRequestCancel() {
+      return (0,_util__WEBPACK_IMPORTED_MODULE_6__.dispatch)('ajax:request-cancel', {
+        target: this.triggerEl,
+        detail: {
+          context: this.context
         }
       });
     }
