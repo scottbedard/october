@@ -38,6 +38,15 @@ return [
             'report' => false,
         ],
 
+        'public' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public'),
+            'url' => rtrim(env('APP_URL'), '/').'/storage/app/public',
+            'visibility' => 'public',
+            'throw' => false,
+            'report' => false,
+        ],
+
         'uploads' => [
             'driver' => 'local',
             'root' => storage_path('app/uploads'),
@@ -89,10 +98,12 @@ return [
     | `storage:link` Artisan command is executed. The array keys should be
     | the locations of the links and the values should be their targets.
     |
+    | For October CMS, we recommend using the `october:mirror` command instead
+    |
     */
 
     'links' => [
-        public_path('storage') => storage_path('app/public'),
+        public_path('storage/app/public') => storage_path('app/public'),
     ],
 
 ];

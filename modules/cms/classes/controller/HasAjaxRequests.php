@@ -164,9 +164,6 @@ trait HasAjaxRequests
                 }
             }
         }
-        catch (ValidationException $ex) {
-            $response = ajax()->error($ex->getMessage())->invalidFields($ex->errors());
-        }
         catch (Exception $ex) {
             $response = ajax()->exception($ex);
         }

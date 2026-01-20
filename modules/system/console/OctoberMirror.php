@@ -51,6 +51,7 @@ class OctoberMirror extends Command
         'app/assets',
         'app/resources',
         'storage/app/uploads/public',
+        'storage/app/public',
         'storage/app/media',
         'storage/app/resources',
         'storage/temp/public',

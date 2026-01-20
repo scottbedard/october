@@ -534,10 +534,10 @@ class Controller extends Extendable implements AjaxControllerInterface
             catch (MassAssignmentException $ex) {
                 throw new ApplicationException(Lang::get('backend::lang.model.mass_assignment_failed', ['attribute' => $ex->getMessage()]));
             }
-            catch (ValidationException $ex) {
-                Flash::error($ex->getMessage());
-                throw $ex;
-            }
+        }
+        catch (ValidationException $ex) {
+            Flash::error($ex->getMessage());
+            $response = ajax()->invalidFields($ex->errors());
         }
         catch (Exception $ex) {
             $response = ajax()->exception($ex);

@@ -18,7 +18,7 @@
 
             <div class="form-group">
                 <span class="form-text pull-right">
-                    <a target="_blank" href="http://octobercms.com/help/site/projects#project-id"><?= __('How to find your License Key') ?></a>
+                    <a target="_blank" href="https://octobercms.com/help/site/projects#project-id"><?= __('How to find your License Key') ?></a>
                 </span>
                 <label class="form-label" for="projectId"><?= __('License Key') ?></label>
                 <input
