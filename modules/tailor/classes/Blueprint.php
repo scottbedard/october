@@ -687,7 +687,7 @@ class Blueprint extends Extendable
             return new $modelClass;
         }
 
-        if (!is_a($customModelClass, $modelClass)) {
+        if (!is_a($customModelClass, $modelClass, true)) {
             throw new SystemException("Blueprint Model class [{$customModelClass}] must extend the [{$modelClass}] base class");
         }
 

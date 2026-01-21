@@ -36,7 +36,7 @@ class ServiceProvider extends ModuleServiceProvider
     {
         $this->app->singleton('backend.helper', \Backend\Helpers\Backend::class);
         $this->app->singleton('backend.roles', \Backend\Classes\RoleManager::class);
-        $this->app->singleton('backend.auth', fn () => \Backend\Classes\AuthManager::instance());
+        $this->app->scoped('backend.auth', fn () => \Backend\Classes\AuthManager::instance());
         $this->app->scoped('backend.menu', \Backend\Classes\NavigationManager::class);
         $this->app->scoped('backend.widgets', \Backend\Classes\WidgetManager::class);
     }
