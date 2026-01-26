@@ -338,22 +338,38 @@ oc.Modules.register('editor.extension.documentcomponent.base', function() {
             handleDocumentSaveError: function handleDocumentSaveError(error, inspectorDocumentData) {
                 this.processing = false;
                 let errorText = error.responseText;
-                if (error.responseJSON && error.responseJSON.validationErrors) {
-                    const validationErrors = error.responseJSON.validationErrors;
-                    const keys = Object.keys(validationErrors);
-                    const firstFieldName = keys[0];
-                    const message = validationErrors[firstFieldName][0];
 
-                    if (message) {
-                        errorText = message;
+                if (error.responseJSON) {
+                    // String error message
+                    if (typeof error.responseJSON === 'string') {
+                        errorText = error.responseJSON;
                     }
+                    // Larajax response format
+                    else if (error.responseJSON.$env) {
+                        const ajax = error.responseJSON.$env;
 
-                    if (
-                        !inspectorDocumentData &&
-                        firstFieldName &&
-                        this.getMainUiDocumentProperties().indexOf(firstFieldName) === -1
-                    ) {
-                        this.openSettingsForm();
+                        // Check for validation errors
+                        if (ajax.invalid && Object.keys(ajax.invalid).length > 0) {
+                            const keys = Object.keys(ajax.invalid);
+                            const firstFieldName = keys[0];
+                            const message = ajax.invalid[firstFieldName][0];
+
+                            if (message) {
+                                errorText = message;
+                            }
+
+                            if (
+                                !inspectorDocumentData &&
+                                firstFieldName &&
+                                this.getMainUiDocumentProperties().indexOf(firstFieldName) === -1
+                            ) {
+                                this.openSettingsForm();
+                            }
+                        }
+                        // Check for general error message
+                        else if (ajax.message) {
+                            errorText = ajax.message;
+                        }
                     }
                 }
 

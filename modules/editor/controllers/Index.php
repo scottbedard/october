@@ -118,16 +118,7 @@ class Index extends Controller
             throw new SystemException('Missing command');
         }
 
-        try {
-            return ExtensionManager::instance()->runCommand($extension, $command, $this);
-        }
-        catch (ValidationException $ex) {
-            if ($fields = $ex->getFields()) {
-                return Response::json(['validationErrors' => $fields], 406);
-            }
-
-            throw $ex;
-        }
+        return ExtensionManager::instance()->runCommand($extension, $command, $this);
     }
 
     /**
