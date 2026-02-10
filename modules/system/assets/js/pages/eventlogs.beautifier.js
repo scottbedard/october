@@ -334,7 +334,7 @@
                 return m.replace(/\r\n|\r|\n/g, '<br>').replace(/ {2}/g, '&nbsp;&nbsp;')
             });
 
-            iframe = $('<iframe id="#beautifier-tab-formatted-iframe" style="width: 100%; height: 500px; padding: 0" frameborder="0"></iframe>');
+            iframe = $('<iframe id="#beautifier-tab-formatted-iframe" sandbox="" style="width: 100%; height: 500px; padding: 0" frameborder="0"></iframe>');
         }
 
         // Build tab content

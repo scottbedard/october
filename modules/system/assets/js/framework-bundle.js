@@ -1146,9 +1146,16 @@ var Controller = /*#__PURE__*/function () {
     // Flash message
     this.flashMessageBind = function (event) {
       var options = event.detail.context.options;
+      var requestContext = event.detail.context;
       if (options.flash) {
-        options.handleErrorMessage = function (message) {
-          if (message && shouldShowFlashMessage(options.flash, 'error') || shouldShowFlashMessage(options.flash, 'validate')) {
+        options.handleErrorMessage = function (message, severity) {
+          // Fatal errors: call default handler (fires event, shows alert)
+          if (severity === 'fatal') {
+            return requestContext.handleErrorMessage(message, severity);
+          }
+
+          // Recoverable errors: show as flash message
+          if (message && (shouldShowFlashMessage(options.flash, 'error') || shouldShowFlashMessage(options.flash, 'validate'))) {
             _this.flashMessage.show({
               message: message,
               type: 'error'
@@ -1269,23 +1276,29 @@ var Controller = /*#__PURE__*/function () {
   }]);
 }();
 function shouldShowFlashMessage(value, type) {
-  // Validation messages are not included by default
-  if (value === true && type !== 'validate') {
+  // Boolean true includes all types
+  if (value === true) {
     return true;
   }
   if (typeof value !== 'string') {
     return false;
   }
-  if (value === '*') {
-    return true;
-  }
-  var result = false;
-  value.split(',').forEach(function (validType) {
-    if (validType.trim() === type) {
-      result = true;
-    }
+  var parts = value.split(',').map(function (p) {
+    return p.trim();
   });
-  return result;
+  var hasNegation = parts.some(function (p) {
+    return p.startsWith('-');
+  });
+  var explicitExclude = parts.includes('-' + type);
+  var explicitInclude = parts.includes(type);
+
+  // Any negation means "start from all, then exclude"
+  if (hasNegation) {
+    return !explicitExclude;
+  }
+
+  // Only positives: explicit include only
+  return explicitInclude;
 }
 
 /***/ },
@@ -4128,6 +4141,7 @@ var Actions = /*#__PURE__*/function () {
     this.context.error = (0,_util_promise__WEBPACK_IMPORTED_MODULE_3__.decoratePromiseProxy)(this.error, this);
     this.context.complete = (0,_util_promise__WEBPACK_IMPORTED_MODULE_3__.decoratePromiseProxy)(this.complete, this);
     this.context.cancel = this.cancel.bind(this);
+    this.context.handleErrorMessage = this.handleErrorMessage.bind(this);
   }
 
   // Options can override all public methods in this class
@@ -4227,7 +4241,7 @@ var Actions = /*#__PURE__*/function () {
     key: "error",
     value: function () {
       var _error = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee2(data, responseCode, xhr) {
-        var _data$$env2, _data$$env3;
+        var _data$$env2, _data$$env3, _data$$env4;
         var errorMsg;
         return _regenerator().w(function (_context2) {
           while (1) switch (_context2.n) {
@@ -4254,15 +4268,17 @@ var Actions = /*#__PURE__*/function () {
               _context2.n = 5;
               break;
             case 4:
-              if (data.constructor === {}.constructor) {
-                if (!errorMsg && data.message) {
-                  errorMsg = data.message;
+              if (!errorMsg) {
+                if (data.constructor === {}.constructor) {
+                  if (data.message) {
+                    errorMsg = data.message;
+                  } else {
+                    errorMsg = "Something went wrong! Check the browser console.";
+                    console.warn(data);
+                  }
                 } else {
-                  errorMsg = "Something went wrong! Check the browser console.";
-                  console.warn(data);
+                  errorMsg = data;
                 }
-              } else {
-                errorMsg = data;
               }
             case 5:
               // Capture the error message on the node
@@ -4283,7 +4299,7 @@ var Actions = /*#__PURE__*/function () {
               }
               return _context2.a(2);
             case 7:
-              this.invoke('handleErrorMessage', [errorMsg]);
+              this.invoke('handleErrorMessage', [errorMsg, (_data$$env4 = data.$env) === null || _data$$env4 === void 0 ? void 0 : _data$$env4.getSeverity()]);
             case 8:
               return _context2.a(2);
           }
@@ -4368,7 +4384,7 @@ var Actions = /*#__PURE__*/function () {
     // Custom function, display an error message to the user
   }, {
     key: "handleErrorMessage",
-    value: function handleErrorMessage(message) {
+    value: function handleErrorMessage(message, severity) {
       var event = this.delegate.notifyApplicationErrorMessage(message);
       if (event.defaultPrevented) {
         return;
@@ -4620,13 +4636,13 @@ var Actions = /*#__PURE__*/function () {
     key: "handleUpdateOperations",
     value: function () {
       var _handleUpdateOperations = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee6(data, responseCode, xhr) {
-        var _data$$env4, _data$$env5, _data$$env6, _data$$env7, _data$$env8, _data$$env0;
-        var flashMessages, _iterator2, _step2, flashMessage, browserEvents, redirectUrl, invalidFields, _data$$env9, loadAssets, _t2;
+        var _data$$env5, _data$$env6, _data$$env7, _data$$env8, _data$$env9, _data$$env1;
+        var flashMessages, _iterator2, _step2, flashMessage, browserEvents, redirectUrl, invalidFields, _data$$env0, loadAssets, _t2;
         return _regenerator().w(function (_context7) {
           while (1) switch (_context7.n) {
             case 0:
               // Dispatch flash messages
-              flashMessages = this.delegate.options.flash ? (_data$$env4 = data.$env) === null || _data$$env4 === void 0 ? void 0 : _data$$env4.getFlash() : null;
+              flashMessages = this.delegate.options.flash ? (_data$$env5 = data.$env) === null || _data$$env5 === void 0 ? void 0 : _data$$env5.getFlash() : null;
               if (flashMessages) {
                 _iterator2 = _createForOfIteratorHelper(flashMessages);
                 try {
@@ -4642,7 +4658,7 @@ var Actions = /*#__PURE__*/function () {
               }
 
               // Handle browser events
-              browserEvents = (_data$$env5 = data.$env) === null || _data$$env5 === void 0 ? void 0 : _data$$env5.getBrowserEvents();
+              browserEvents = (_data$$env6 = data.$env) === null || _data$$env6 === void 0 ? void 0 : _data$$env6.getBrowserEvents();
               _t2 = browserEvents;
               if (!_t2) {
                 _context7.n = 2;
@@ -4660,25 +4676,25 @@ var Actions = /*#__PURE__*/function () {
               return _context7.a(2);
             case 3:
               // Handle redirect
-              redirectUrl = (_data$$env6 = data.$env) === null || _data$$env6 === void 0 ? void 0 : _data$$env6.getRedirectUrl();
+              redirectUrl = (_data$$env7 = data.$env) === null || _data$$env7 === void 0 ? void 0 : _data$$env7.getRedirectUrl();
               if (redirectUrl) {
                 this.delegate.toggleRedirect(redirectUrl);
               }
               if (this.delegate.isRedirect) {
                 this.invoke('handleRedirectResponse', [this.delegate.options.redirect]);
               }
-              if ((_data$$env7 = data.$env) !== null && _data$$env7 !== void 0 && _data$$env7.getReload()) {
+              if ((_data$$env8 = data.$env) !== null && _data$$env8 !== void 0 && _data$$env8.getReload()) {
                 this.invoke('handleReloadResponse');
               }
 
               // Handle validation
-              invalidFields = (_data$$env8 = data.$env) === null || _data$$env8 === void 0 ? void 0 : _data$$env8.getInvalid();
+              invalidFields = (_data$$env9 = data.$env) === null || _data$$env9 === void 0 ? void 0 : _data$$env9.getInvalid();
               if (invalidFields) {
-                this.invoke('handleValidationMessage', [(_data$$env9 = data.$env) === null || _data$$env9 === void 0 ? void 0 : _data$$env9.getMessage(), invalidFields]);
+                this.invoke('handleValidationMessage', [(_data$$env0 = data.$env) === null || _data$$env0 === void 0 ? void 0 : _data$$env0.getMessage(), invalidFields]);
               }
 
               // Handle asset injection
-              loadAssets = (_data$$env0 = data.$env) === null || _data$$env0 === void 0 ? void 0 : _data$$env0.getAssets();
+              loadAssets = (_data$$env1 = data.$env) === null || _data$$env1 === void 0 ? void 0 : _data$$env1.getAssets();
               if (!loadAssets) {
                 _context7.n = 4;
                 break;
@@ -5821,7 +5837,6 @@ var Request = /*#__PURE__*/function () {
 
       // Confirm before sending
       if (this.options.confirm && !this.actions.invoke('handleConfirmMessage', [this.options.confirm])) {
-        this.promise.resolve(null);
         return this.promise;
       }
 
@@ -5869,15 +5884,15 @@ var Request = /*#__PURE__*/function () {
         _this2.request.abort();
       }).then(function (data) {
         if (!_this2.isRedirect) {
-          _this2.notifyApplicationAjaxDone(data, data.$status, data.$xhr);
-          _this2.notifyApplicationAjaxAlways(data, data.$status, data.$xhr);
-          _this2.notifyApplicationSendComplete(data, data.$status, data.$xhr);
+          _this2.notifyApplicationAjaxDone(data, data === null || data === void 0 ? void 0 : data.$status, data === null || data === void 0 ? void 0 : data.$xhr);
+          _this2.notifyApplicationAjaxAlways(data, data === null || data === void 0 ? void 0 : data.$status, data === null || data === void 0 ? void 0 : data.$xhr);
+          _this2.notifyApplicationSendComplete(data, data === null || data === void 0 ? void 0 : data.$status, data === null || data === void 0 ? void 0 : data.$xhr);
         }
       })["catch"](function (data) {
         if (!_this2.isRedirect) {
-          _this2.notifyApplicationAjaxFail(data, data.$status, data.$xhr);
-          _this2.notifyApplicationAjaxAlways(data, data.$status, data.$xhr);
-          _this2.notifyApplicationSendComplete(data, data.$status, data.$xhr);
+          _this2.notifyApplicationAjaxFail(data, data === null || data === void 0 ? void 0 : data.$status, data === null || data === void 0 ? void 0 : data.$xhr);
+          _this2.notifyApplicationAjaxAlways(data, data === null || data === void 0 ? void 0 : data.$status, data === null || data === void 0 ? void 0 : data.$xhr);
+          _this2.notifyApplicationSendComplete(data, data === null || data === void 0 ? void 0 : data.$status, data === null || data === void 0 ? void 0 : data.$xhr);
         }
       });
       this.request.send();
@@ -10105,10 +10120,11 @@ function cancellablePromise(executor) {
       cancelHandler = onCancel;
     });
   });
-  promise.cancel = function () {
+  promise.abort = function () {
     hasCanceled = true;
     cancelHandler();
   };
+  promise.cancel = promise.abort;
   promise.onCancel = function (fn) {
     cancelHandler = typeof fn === 'function' ? fn : cancelHandler;
     return promise;

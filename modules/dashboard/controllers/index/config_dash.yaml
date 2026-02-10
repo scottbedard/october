@@ -6,7 +6,7 @@ system:
     name: System Dashboard
     icon: ph ph-globe
     # canCreateAndEdit: true
-    # showInterval: true
+    # showInterval: false
     reports:
         cms_information:
             row: 2

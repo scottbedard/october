@@ -37,6 +37,11 @@ oc.registerControl('dashwidget', class extends oc.ControlBase
     }
 
     initDefaultQueryParameters() {
+        // Skip interval parameters if interval is hidden
+        if (!this.store.state.showInterval) {
+            return;
+        }
+
         const searchParams = new URLSearchParams(window.location.search);
 
         // Validate and clean parameters
@@ -79,14 +84,26 @@ oc.registerControl('dashwidget', class extends oc.ControlBase
     }
 
     setIntervalRange() {
-        const dateStart = moment(this.store.getQueryParam('start'), this.universalDateFormat, true);
-        const dateEnd = moment(this.store.getQueryParam('end'), this.universalDateFormat, true);
+        let dateStart, dateEnd, interval, compareMode;
+
+        if (this.store.state.showInterval) {
+            dateStart = moment(this.store.getQueryParam('start'), this.universalDateFormat, true);
+            dateEnd = moment(this.store.getQueryParam('end'), this.universalDateFormat, true);
+            interval = this.store.getQueryParam('interval');
+            compareMode = this.store.getQueryParam('compare');
+        }
+        else {
+            dateStart = moment().startOf('month');
+            dateEnd = moment();
+            interval = 'day';
+            compareMode = 'none';
+        }
 
         this.store.state.range.dateStart = dateStart.format(this.universalDateFormat);
         this.store.state.range.dateEnd = dateEnd.format(this.universalDateFormat);
-        this.store.state.range.interval = this.store.getQueryParam('interval');
+        this.store.state.range.interval = interval;
         this.store.state.intervalName = this.makeIntervalName(dateStart.toDate(), dateEnd.toDate());
-        this.store.state.compareMode = this.store.getQueryParam('compare');
+        this.store.state.compareMode = compareMode;
         this.store.resetData();
     }
 

@@ -929,6 +929,9 @@ oc.registerControl('media-manager', class extends oc.ControlBase {
 
     uploadSuccess() {
         this.updateUploadBar('success', 'progress-bar bg-success');
+
+        // Continue processing remaining files in the queue
+        this.dropzone.processQueue();
     }
 
     uploadError(file, message) {
@@ -939,6 +942,9 @@ oc.registerControl('media-manager', class extends oc.ControlBase {
         }
 
         oc.alert(message);
+
+        // Continue processing remaining files in the queue despite error
+        this.dropzone.processQueue();
     }
 
     //

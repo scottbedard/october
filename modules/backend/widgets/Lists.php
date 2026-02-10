@@ -16,6 +16,7 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Pagination\UrlWindow;
 use ApplicationException;
 use Exception;
+use BackedEnum;
 use UnitEnum;
 
 /**
@@ -1275,8 +1276,11 @@ class Lists extends WidgetBase implements ListElement
         }
 
         // Cast enums to scalar
-        if ($value instanceof UnitEnum) {
+        if ($value instanceof BackedEnum) {
             $value = $value->value;
+        }
+        elseif ($value instanceof UnitEnum) {
+            $value = $value->name;
         }
 
         // Apply filters

@@ -10,6 +10,7 @@ use October\Contracts\Element\FormElement;
 use October\Rain\Database\Model;
 use October\Rain\Html\Helper as HtmlHelper;
 use SystemException;
+use BackedEnum;
 use UnitEnum;
 
 /**
@@ -1025,8 +1026,11 @@ class Form extends WidgetBase implements FormElement
         $value = $field->getValueFromData($data, $defaultValue);
 
         // Cast enums to scalar
-        if ($value instanceof UnitEnum) {
+        if ($value instanceof BackedEnum) {
             $value = $value->value;
+        }
+        elseif ($value instanceof UnitEnum) {
+            $value = $value->name;
         }
 
         return $value;

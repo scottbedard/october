@@ -110,11 +110,16 @@ oc.registerControl('scrollbar', class extends oc.ControlBase {
     }
 
     onScrollWheel(event) {
+        if (!this.isScrollable) {
+            return;
+        }
+
         let offset = this.options.vertical
             ? (event.deltaY || 0)
             : (event.deltaX || 0);
 
-        return !this.scrollWheel(offset * this.options.scrollSpeed);
+        this.scrollWheel(offset * this.options.scrollSpeed);
+        event.preventDefault();
     }
 
     startDrag(event) {

@@ -29,7 +29,11 @@ oc.Modules.register('backend.formwidget.repeater.accordion', function() {
             this.$el.on('click', headSelect + ' [data-repeater-expand]', this.proxy(this.toggleCollapse));
             this.$el.on('click', headSelect + ' [data-repeater-collapse]', this.proxy(this.toggleCollapse));
 
-            this.applyExpandedItems();
+            // Next tick to let other controls initialize
+            setTimeout(() => {
+                this.applyExpandedItems();
+            }, 0);
+
             super.connect();
         }
 
