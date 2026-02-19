@@ -782,11 +782,6 @@ var Trigger = /*#__PURE__*/function () {
     key: "handleEvent",
     value: function handleEvent(event) {
       var _this = this;
-      // User already prevented this event, respect it
-      if (event && event.defaultPrevented) {
-        return;
-      }
-
       // Element removed from DOM, ignore
       if (!this.isConnected()) {
         return;
@@ -2882,7 +2877,6 @@ var Request = /*#__PURE__*/function () {
 
       // Setup
       if (!this.applicationAllowsSetup()) {
-        this.promise.resolve(null);
         return this.promise;
       }
       this.initOtherElements();
@@ -2891,11 +2885,9 @@ var Request = /*#__PURE__*/function () {
       // Prepare actions
       this.actions = new _actions__WEBPACK_IMPORTED_MODULE_2__.Actions(this, this.context, this.options);
       if (this.actions.invokeFunc('beforeSendFunc') === false) {
-        this.promise.resolve(null);
         return this.promise;
       }
       if (!this.validateClientSideForm() || !this.applicationAllowsRequest()) {
-        this.promise.resolve(null);
         return this.promise;
       }
 
@@ -2948,15 +2940,15 @@ var Request = /*#__PURE__*/function () {
         _this2.request.abort();
       }).then(function (data) {
         if (!_this2.isRedirect) {
-          _this2.notifyApplicationAjaxDone(data, data === null || data === void 0 ? void 0 : data.$status, data === null || data === void 0 ? void 0 : data.$xhr);
-          _this2.notifyApplicationAjaxAlways(data, data === null || data === void 0 ? void 0 : data.$status, data === null || data === void 0 ? void 0 : data.$xhr);
-          _this2.notifyApplicationSendComplete(data, data === null || data === void 0 ? void 0 : data.$status, data === null || data === void 0 ? void 0 : data.$xhr);
+          _this2.notifyApplicationAjaxDone(data, data.$status, data.$xhr);
+          _this2.notifyApplicationAjaxAlways(data, data.$status, data.$xhr);
+          _this2.notifyApplicationSendComplete(data, data.$status, data.$xhr);
         }
       })["catch"](function (data) {
         if (!_this2.isRedirect) {
-          _this2.notifyApplicationAjaxFail(data, data === null || data === void 0 ? void 0 : data.$status, data === null || data === void 0 ? void 0 : data.$xhr);
-          _this2.notifyApplicationAjaxAlways(data, data === null || data === void 0 ? void 0 : data.$status, data === null || data === void 0 ? void 0 : data.$xhr);
-          _this2.notifyApplicationSendComplete(data, data === null || data === void 0 ? void 0 : data.$status, data === null || data === void 0 ? void 0 : data.$xhr);
+          _this2.notifyApplicationAjaxFail(data, data.$status, data.$xhr);
+          _this2.notifyApplicationAjaxAlways(data, data.$status, data.$xhr);
+          _this2.notifyApplicationSendComplete(data, data.$status, data.$xhr);
         }
       });
       this.request.send();

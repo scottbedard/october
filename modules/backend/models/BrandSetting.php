@@ -6,6 +6,7 @@ use Html;
 use Lang;
 use Cache;
 use Config;
+use System;
 use Backend;
 use Less_Parser;
 use System\Models\SettingModel;
@@ -111,6 +112,10 @@ class BrandSetting extends SettingModel
     {
         if ($this->isDirty('custom_css')) {
             $this->custom_css = Html::clean($this->custom_css);
+
+            if (System::checkSafeMode()) {
+                $this->custom_css = str_ireplace('@import', 'import', $this->custom_css);
+            }
         }
     }
 

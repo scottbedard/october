@@ -4,6 +4,7 @@ use File;
 use Html;
 use Cache;
 use Config;
+use System;
 use Less_Parser;
 use System\Models\SettingModel;
 use Exception;
@@ -177,6 +178,10 @@ class EditorSetting extends SettingModel
     {
         if ($this->isDirty('html_custom_styles')) {
             $this->html_custom_styles = Html::clean($this->html_custom_styles);
+
+            if (System::checkSafeMode()) {
+                $this->html_custom_styles = str_ireplace('@import', 'import', $this->html_custom_styles);
+            }
         }
 
         $this->cleanMarkupClasses();

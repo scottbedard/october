@@ -6,6 +6,7 @@ use Lang;
 use File;
 use Input;
 use Config;
+use System;
 use Request;
 use Response;
 use Exception;
@@ -1697,6 +1698,10 @@ class MediaManager extends WidgetBase
         $allowedFileTypes = FileDefinitions::get('default_extensions');
 
         if (!in_array($extension, $allowedFileTypes)) {
+            return false;
+        }
+
+        if (System::checkSafeMode() && in_array($extension, ['less', 'sass', 'scss'])) {
             return false;
         }
 
