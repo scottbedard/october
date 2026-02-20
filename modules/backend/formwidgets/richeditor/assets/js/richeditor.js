@@ -210,6 +210,7 @@
         this.$textarea.on('froalaEditor.contentChanged', this.proxy(this.onChange));
         this.$textarea.on('froalaEditor.html.get', this.proxy(this.onSyncContent));
         this.$textarea.on('froalaEditor.html.set', this.proxy(this.onSetContent));
+        this.$textarea.on('froalaEditor.image.uploaded', this.proxy(this.onImageUploaded));
         this.$form.on('oc.beforeRequest', this.proxy(this.onFormBeforeRequest));
 
         this.$textarea.froalaEditor(froalaOptions);
@@ -252,6 +253,7 @@
         this.$textarea.off('froalaEditor.contentChanged', this.proxy(this.onChange));
         this.$textarea.off('froalaEditor.html.get', this.proxy(this.onSyncContent));
         this.$textarea.off('froalaEditor.html.set', this.proxy(this.onSetContent));
+        this.$textarea.off('froalaEditor.image.uploaded', this.proxy(this.onImageUploaded));
         this.$form.off('oc.beforeRequest', this.proxy(this.onFormBeforeRequest));
 
         $(window).off('resize', this.proxy(this.updateLayout));
@@ -397,6 +399,20 @@
 
     RichEditor.prototype.onChange = function(ev) {
         this.$form.trigger('change');
+    };
+
+    RichEditor.prototype.onImageUploaded = function(ev, editor, response) {
+        try {
+            var data = JSON.parse(response);
+            if (data.error) {
+                $.oc.flashMsg({ text: data.error, class: 'error' });
+                editor.image.hideProgressBar(true);
+                editor.image.remove();
+                editor.edit.on();
+                return false;
+            }
+        }
+        catch (e) {}
     };
 
     /*

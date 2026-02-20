@@ -148,6 +148,7 @@ oc.Modules.register('backend.component.richeditor', function () {
         $textarea.on('froalaEditor.contentChanged.richeditor', component.onChange);
         $textarea.on('froalaEditor.focus.richeditor', component.onFocus);
         $textarea.on('froalaEditor.blur.richeditor', component.onBlur);
+        $textarea.on('froalaEditor.image.uploaded.richeditor', component.onImageUploaded);
         $textarea.closest('form').on('oc.beforeRequest', component.onFormBeforeRequest);
         $(document).on('vue.beforeRequest', component.onVueFormBeforeRequest);
         // $textarea.on('froalaEditor.html.get.richeditor', this.proxy(this.onSyncContent));
@@ -231,6 +232,20 @@ oc.Modules.register('backend.component.richeditor', function () {
 
             onVueFormBeforeRequest: function onVueFormBeforeRequest() {
                 this.onChange();
+            },
+
+            onImageUploaded: function onImageUploaded(ev, editor, response) {
+                try {
+                    var data = JSON.parse(response);
+                    if (data.error) {
+                        $.oc.flashMsg({ text: data.error, class: 'error' });
+                        editor.image.hideProgressBar(true);
+                        editor.image.remove();
+                        editor.edit.on();
+                        return false;
+                    }
+                }
+                catch (e) {}
             }
         },
         mounted: function onMounted() {
