@@ -1554,6 +1554,10 @@ class MediaManager extends WidgetBase
             return;
         }
 
+        // Set locale early since this runs in the widget constructor,
+        // before the controller applies the user's locale preference
+        \Backend\Models\Preference::setAppLocale();
+
         if (!$this->checkHasPermission('mediaCreate')) {
             throw new ForbiddenException;
         }
@@ -1615,19 +1619,43 @@ class MediaManager extends WidgetBase
                 ? $uploadedFile->getPath() . DIRECTORY_SEPARATOR . $uploadedFile->getFileName()
                 : $uploadedFile->getRealPath();
 
-            // Cannot overwrite files without permission or confirmation
-            $forceOverwrite = (bool) post('force_overwrite', false);
-            $canOverwrite = $this->checkHasPermission('mediaDelete');
-            if (MediaLibrary::instance()->has($filePath) && (!$canOverwrite || !$forceOverwrite)) {
-                throw new ApplicationException(__('A media file already exists at this location, please upload using a different filename.'));
-            }
-
             // Check and clean vector files
             // @todo use streaming like file objects
             $contents = File::get($realPath);
             if ($extension === 'svg' && Config::get('media.clean_vectors', true)) {
                 // @todo File::cleanVector() helper might be helpful here to clean temporary file in place
                 $contents = \Html::cleanVector($contents);
+            }
+
+            // Handle duplicate files
+            $forceOverwrite = (bool) post('force_overwrite', false);
+            $canOverwrite = $this->checkHasPermission('mediaDelete');
+            if (MediaLibrary::instance()->has($filePath)) {
+                if ($quickMode) {
+                    // Compare content: if identical, reuse the existing file
+                    $existingContent = MediaLibrary::instance()->get($filePath);
+                    if (md5($contents) === md5($existingContent)) {
+                        $response = Response::make([
+                            'link' => MediaLibrary::url($filePath),
+                            'result' => 'success'
+                        ]);
+                        $this->controller->setResponse($response);
+                        return;
+                    }
+
+                    // Different content with same filename: return error as
+                    // HTTP 200 JSON so Froala's image.uploaded event can
+                    // intercept and show a meaningful message to the user
+                    $response = Response::make([
+                        'error' => Lang::get('backend::lang.media.folder_or_file_exist')
+                    ]);
+                    $this->controller->setResponse($response);
+                    return;
+                }
+
+                if (!$canOverwrite || !$forceOverwrite) {
+                    throw new ApplicationException(__('A media file already exists at this location, please upload using a different filename.'));
+                }
             }
 
             // Write file to disk
