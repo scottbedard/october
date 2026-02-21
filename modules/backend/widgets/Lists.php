@@ -1219,7 +1219,7 @@ class Lists extends WidgetBase implements ListElement
                 $value = $record->{$countColumnName};
             }
             else {
-                $value = $record->{$columnName};
+                $value = $record->getAttribute($columnName);
             }
         }
 

@@ -16,20 +16,33 @@ Vue.component('dashboard-component-dashboard-interval-selector', {
         },
 
         intervals: function () {
+            const intervalLabels = {
+                'day': oc.t("Day"),
+                'week': oc.t("Week"),
+                'month': oc.t("Month"),
+                'quarter': oc.t("Quarter"),
+                'year': oc.t("Year")
+            };
             const result = {};
             const codes = this.store.getValidIntervalCodes();
             codes.forEach((code) => {
-                result[code] = oc.lang.get('dashboard.interval_' + code.replace(/-/g, "_"));
+                result[code] = intervalLabels[code] || code;
             });
 
             return result;
         },
 
         compareOptions: function() {
+            const compareLabels = {
+                'totals': oc.t("Compare Totals"),
+                'prev-period': oc.t("Prev period"),
+                'prev-year': oc.t("Same period last year"),
+                'none': oc.t("Disabled")
+            };
             const result = {};
             const codes = this.store.getValidCompareCodes();
             codes.forEach((code) => {
-                result[code] = oc.lang.get('dashboard.compare_' + code.replace(/-/g, "_"));
+                result[code] = compareLabels[code] || code;
             });
 
             return result;

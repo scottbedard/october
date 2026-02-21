@@ -15,7 +15,7 @@
             class="edit-widget-button"
             role="button"
             tabindex="0"
-            aria-label="Edit Widget"
+            aria-label="<?= __("Edit Widget") ?>"
             @click.stop="onContextMenu($event)"
             @keyup.enter="onContextMenu($event)"
         >

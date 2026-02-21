@@ -20,14 +20,14 @@ class Dashboard_Classes_InspectorConfigurator
 
     get filterOperations() {
         return {
-            '=': oc.lang.get('dashboard.filter_operation_equal_to'),
-            '>=': oc.lang.get('dashboard.filter_operation_greater_equal'),
-            '<=': oc.lang.get('dashboard.filter_operation_less_equal'),
-            '>': oc.lang.get('dashboard.filter_operation_greater'),
-            '<': oc.lang.get('dashboard.filter_operation_less'),
-            'string_starts_with': oc.lang.get('dashboard.filter_operation_starts_with'),
-            'string_includes': oc.lang.get('dashboard.filter_operation_includes'),
-            'one_of': oc.lang.get('dashboard.filter_operation_one_of'),
+            '=': oc.t("Equal to"),
+            '>=': oc.t("Greater or equal to"),
+            '<=': oc.t("Less or equal to"),
+            '>': oc.t("Greater than"),
+            '<': oc.t("Less than"),
+            'string_starts_with': oc.t("Starts with"),
+            'string_includes': oc.t("Includes"),
+            'one_of': oc.t("One of"),
         }
     }
 
@@ -44,12 +44,12 @@ class Dashboard_Classes_InspectorConfigurator
         configuration.push({
             property: 'dataSource',
             tab: tab,
-            title: oc.lang.get('dashboard.widget_data_source'),
+            title: oc.t("Data source"),
             getDynamicOptionsExtraData: getDynamicOptionsExtraData,
             type: 'dropdown',
             validation: {
                 required: {
-                    message: oc.lang.get('dashboard.widget_data_source_required'),
+                    message: oc.t("Please select a data source"),
                 }
             }
         });
@@ -57,7 +57,7 @@ class Dashboard_Classes_InspectorConfigurator
         configuration.push({
             property: 'dimension',
             tab: tab,
-            title: oc.lang.get('dashboard.widget_dimension'),
+            title: oc.t("Dimension"),
             getDynamicOptionsExtraData: getDynamicOptionsExtraData,
             type: 'dropdown',
             depends: ['dataSource'],
@@ -65,7 +65,7 @@ class Dashboard_Classes_InspectorConfigurator
             dataCacheKeyPropertyNames: ['dataSource'],
             validation: {
                 required: {
-                    message: oc.lang.get('dashboard.widget_dimension_required'),
+                    message: oc.t("Please select a dimension"),
                 }
             }
         });
@@ -90,8 +90,8 @@ class Dashboard_Classes_InspectorConfigurator
     defineDataSourceProperties(configuration, filter = [], suppress = []) {
         this.propVisible(filter, suppress, 'metrics') && configuration.push({
             property: 'metrics',
-            title: oc.lang.get('dashboard.widget_metrics'),
-            tab: oc.lang.get('dashboard.tab_general'),
+            title: oc.t("Metrics"),
+            tab: oc.t("General"),
             type: 'objectList',
             titleProperty: 'metric',
             formatItemTitle: async (item, obj, parentObj) => this.formatMetricItemTitle(item, obj, parentObj),
@@ -100,127 +100,127 @@ class Dashboard_Classes_InspectorConfigurator
             itemProperties: [
                 {
                     property: 'metric',
-                    title: oc.lang.get('dashboard.widget_metric'),
+                    title: oc.t("Metric"),
                     type: 'dropdown',
                     dataCacheKeyName: this.metricsCacheKey,
                     dataCacheKeyPropertyNames: this.metricsCachePropertyNames,
                     validation: {
                         required: {
-                            message: oc.lang.get('dashboard.widget_metric_required'),
+                            message: oc.t("Please select metric(s)."),
                         }
                     }
                 },
                 {
                     property: 'color',
-                    title: oc.lang.get('dashboard.prop_color'),
+                    title: oc.t("Color"),
                     type: 'dropdown',
                     options: this.store.state.colors,
                     useValuesAsColors: true,
                     validation: {
                         required: {
-                            message: oc.lang.get('dashboard.color_required'),
+                            message: oc.t("Select the metric color"),
                         }
                     }
                 },
                 {
                     property: 'displayTotals',
-                    title: oc.lang.get('dashboard.prop_display_totals'),
+                    title: oc.t("Display totals"),
                     type: 'checkbox'
                 },
             ],
             validation: {
                 required: {
-                    message: oc.lang.get('dashboard.widget_metric_required'),
+                    message: oc.t("Please select metric(s)."),
                 }
             }
         });
 
         this.propVisible(filter, suppress, 'limit') && configuration.push({
-            tab: oc.lang.get('dashboard.tab_sorting_filtering'),
+            tab: oc.t("Sorting & Filtering"),
             property: 'limit',
-            title: oc.lang.get('dashboard.limit'),
-            placeholder: oc.lang.get('dashboard.limit_placeholder'),
+            title: oc.t("Limit"),
+            placeholder: oc.t("Display all records"),
             type: 'string',
             validation: {
                 integer: {
                     allowNegative: false,
-                    message: oc.lang.get('dashboard.limit_number'),
+                    message: oc.t("Enter a positive number or leave empty to display all records."),
                     min: {
                         value: 1,
-                        message: oc.lang.get('dashboard.limit_min')
+                        message: oc.t("The limit value must be at least 1")
                     }
                 }
             }
         });
 
         this.propVisible(filter, suppress, 'empty_dimension_values') && configuration.push({
-            tab: oc.lang.get('dashboard.tab_sorting_filtering'),
+            tab: oc.t("Sorting & Filtering"),
             property: 'empty_dimension_values',
-            group: oc.lang.get('dashboard.empty_values'),
-            title: oc.lang.get('dashboard.empty_values_dimension'),
+            group: oc.t("Empty values"),
+            title: oc.t("Dimension"),
             default: 'not-set',
             type: 'dropdown',
             options: {
-                'not-set': oc.lang.get('dashboard.empty_values_display_not_set'),
-                'hide': oc.lang.get('dashboard.empty_values_hide')
+                'not-set': oc.t("Display [not set]"),
+                'hide': oc.t("Hide")
             }
         });
 
         this.propVisible(filter, suppress, 'sortBy') && configuration.push({
-            tab: oc.lang.get('dashboard.tab_sorting_filtering'),
+            tab: oc.t("Sorting & Filtering"),
             property: 'sortBy',
-            group: oc.lang.get('dashboard.group_sorting'),
-            title: oc.lang.get('dashboard.sort_by'),
+            group: oc.t("Sorting"),
+            title: oc.t("Sort by"),
             type: 'dropdown',
             default: 'oc_dimension',
-            placeholder: oc.lang.get('dashboard.sort_by_placeholder'),
+            placeholder: oc.t("Select a dimension and metrics"),
             depends: ['dataSource', 'dimension', 'metrics'],
             dataCacheKeyName: 'ds-sort-by',
             dataCacheKeyPropertyNames: ['dataSource', 'dimension', 'metrics'],
             validation: {
                 required: {
-                    message: oc.lang.get('dashboard.sort_by_required'),
+                    message: oc.t("Select sorting metric or dimension"),
                 }
             }
         });
 
         this.propVisible(filter, suppress, 'sortOrder') && configuration.push({
-            tab: oc.lang.get('dashboard.tab_sorting_filtering'),
+            tab: oc.t("Sorting & Filtering"),
             property: 'sortOrder',
-            group: oc.lang.get('dashboard.group_sorting'),
-            title: oc.lang.get('dashboard.sort_order'),
+            group: oc.t("Sorting"),
+            title: oc.t("Order"),
             type: 'dropdown',
             default: 'asc',
             options: {
-                asc: oc.lang.get('dashboard.sort_asc'),
-                desc: oc.lang.get('dashboard.sort_desc')
+                asc: oc.t("Ascending"),
+                desc: oc.t("Descending")
             }
         });
 
         this.propVisible(filter, suppress, 'date_interval') && configuration.push({
-            tab: oc.lang.get('dashboard.tab_sorting_filtering'),
+            tab: oc.t("Sorting & Filtering"),
             property: 'date_interval',
-            group: oc.lang.get('dashboard.date_interval'),
-            title: oc.lang.get('dashboard.prop_date_interval'),
+            group: oc.t("Date interval"),
+            title: oc.t("Display"),
             type: 'dropdown',
             default: 'dashboard',
             options: {
-                dashboard: oc.lang.get('dashboard.date_interval_dashboard_default'),
-                year: oc.lang.get('dashboard.date_interval_this_year'),
-                quarter: oc.lang.get('dashboard.date_interval_this_quarter'),
-                month: oc.lang.get('dashboard.date_interval_this_month'),
-                week: oc.lang.get('dashboard.date_interval_this_week'),
-                hour: oc.lang.get('dashboard.date_interval_past_hour'),
-                days: oc.lang.get('dashboard.date_interval_past_days')
+                dashboard: oc.t("Dashboard interval"),
+                year: oc.t("This year"),
+                quarter: oc.t("This quarter"),
+                month: oc.t("This month"),
+                week: oc.t("This week"),
+                hour: oc.t("Past hour"),
+                days: oc.t("Past X days")
             }
         });
 
         this.propVisible(filter, suppress, 'date_interval') && configuration.push({
-            tab: oc.lang.get('dashboard.tab_sorting_filtering'),
+            tab: oc.t("Sorting & Filtering"),
             property: 'date_interval_days',
-            title: oc.lang.get('dashboard.date_interval_past_days_value'),
-            group: oc.lang.get('dashboard.date_interval'),
-            placeholder: oc.lang.get('dashboard.date_interval_past_days_placeholder'),
+            title: oc.t("Number of days"),
+            group: oc.t("Date interval"),
+            placeholder: oc.t("1 day (today) if not set"),
             type: 'string',
             visibility: {
                 source_property: 'date_interval',
@@ -229,26 +229,26 @@ class Dashboard_Classes_InspectorConfigurator
             validation: {
                 integer: {
                     allowNegative: false,
-                    message: oc.lang.get('dashboard.date_interval_past_days_invalid'),
+                    message: oc.t("Enter a positive number"),
                     min: {
                         value: 1,
-                        message: oc.lang.get('dashboard.date_interval_past_days_invalid')
+                        message: oc.t("Enter a positive number")
                     }
                 }
             }
         });
 
         this.propVisible(filter, suppress, 'auto_update') && configuration.push({
-            tab: oc.lang.get('dashboard.tab_sorting_filtering'),
+            tab: oc.t("Sorting & Filtering"),
             property: 'auto_update',
-            title: oc.lang.get('dashboard.auto_update'),
+            title: oc.t("Refresh every minute"),
             type: 'checkbox',
         });
 
         this.propVisible(filter, suppress, 'filters') && configuration.push({
-            tab: oc.lang.get('dashboard.tab_sorting_filtering'),
+            tab: oc.t("Sorting & Filtering"),
             property: 'filters',
-            title: oc.lang.get('dashboard.prop_filters'),
+            title: oc.t("Filters"),
             type: 'objectList',
             titleProperty: 'filter_attribute',
             formatItemTitle: async (item, obj, parentObj) => this.formatFilterItemTitle(item, obj, parentObj),
@@ -256,30 +256,30 @@ class Dashboard_Classes_InspectorConfigurator
             itemProperties: [
                 {
                     property: 'filter_attribute',
-                    title: oc.lang.get('dashboard.prop_filter_attribute'),
+                    title: oc.t("Attribute"),
                     type: 'dropdown',
                     dataCacheKeyName: this.filterAttributeCacheKey,
                     dataCacheKeyPropertyNames: this.filterAttributeCachePropertyNames,
                     validation: {
                         required: {
-                            message: oc.lang.get('dashboard.filter_select_attribute')
+                            message: oc.t("Select an attribute")
                         }
                     }
                 },
                 {
                     property: 'operation',
-                    title: oc.lang.get('dashboard.prop_operation'),
+                    title: oc.t("Operation"),
                     type: 'dropdown',
                     options: this.filterOperations,
                     validation: {
                         required: {
-                            message: oc.lang.get('dashboard.filter_select_operation')
+                            message: oc.t("Select an operation")
                         }
                     }
                 },
                 {
                     property: 'value_scalar',
-                    title: oc.lang.get('dashboard.prop_value'),
+                    title: oc.t("Value"),
                     type: 'string',
                     visibility: {
                         source_property: 'operation',
@@ -289,9 +289,9 @@ class Dashboard_Classes_InspectorConfigurator
                 },
                 {
                     property: 'value_array',
-                    title: oc.lang.get('dashboard.prop_values'),
+                    title: oc.t("Values"),
                     type: 'text',
-                    description: oc.lang.get('dashboard.prop_values_one_per_line'),
+                    description: oc.t("One value per line"),
                     visibility: {
                         source_property: 'operation',
                         value: 'one_of'

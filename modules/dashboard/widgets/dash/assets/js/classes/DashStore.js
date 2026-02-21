@@ -109,25 +109,25 @@ class Dashboard_Widgets_Dash_Classes_DashStore
         const result = [];
         result.push({
             type: 'indicator',
-            label: oc.lang.get('dashboard.widget_type_indicator')
+            label: oc.t("Indicator")
         },
         {
             type: 'section-title',
-            label: oc.lang.get('dashboard.widget_type_section_title'),
+            label: oc.t("Section Title"),
             fullWidth: true
         },
         {
             type: 'notice',
-            label: oc.lang.get('dashboard.widget_type_notice'),
+            label: oc.t("Text Notice"),
             fullWidth: true
         },
         {
             type: 'chart',
-            label: oc.lang.get('dashboard.widget_type_chart'),
+            label: oc.t("Chart"),
         },
         {
             type: 'table',
-            label: oc.lang.get('dashboard.widget_type_table'),
+            label: oc.t("Table"),
         });
 
         return result;
@@ -205,7 +205,7 @@ class Dashboard_Widgets_Dash_Classes_DashStore
 
     async resetLayout() {
         try {
-            await oc.confirmPromise(oc.lang.get('dashboard.reset_layout_confirm'));
+            await oc.confirmPromise(oc.t("Reset layout back to default?"));
         }
         catch (error) {
             return;
@@ -222,12 +222,12 @@ class Dashboard_Widgets_Dash_Classes_DashStore
 
         this.setInitialState(response.initialState);
 
-        oc.snackbar.show(oc.lang.get('dashboard.reset_layout_successfully'));
+        oc.snackbar.show(oc.t("The dashboard layout has been reset to default."));
     }
 
     async makeDefault() {
         try {
-            await oc.confirmPromise(oc.lang.get('dashboard.make_default_confirm'));
+            await oc.confirmPromise(oc.t("Set the current layout as the default?"));
         }
         catch (error) {
             return;
@@ -243,7 +243,7 @@ class Dashboard_Widgets_Dash_Classes_DashStore
             }
         });
 
-        oc.snackbar.show(oc.lang.get('dashboard.make_default_successfully'));
+        oc.snackbar.show(oc.t("This dashboard is now the default layout."));
     }
 
     cancelEditing() {

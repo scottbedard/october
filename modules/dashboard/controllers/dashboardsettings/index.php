@@ -11,9 +11,9 @@
                         <a
                             href="javascript:;"
                             data-request="onPurgeData"
-                            data-request-message="<?= e(trans('dashboard::lang.internal_traffic_statistics.purging')) ?>"
-                            data-request-confirm="<?= e(trans('dashboard::lang.internal_traffic_statistics.purge_data_confirm')) ?>"
-                        ><?= e(trans('dashboard::lang.internal_traffic_statistics.purge_button')) ?></a>
+                            data-request-message="<?= e(__("Purging the data...")) ?>"
+                            data-request-confirm="<?= e(__("Do you really want to purge the Internal Traffic Statistics data?")) ?>"
+                        ><?= e(__("Purge Data")) ?></a>
                     </p>
                 </div>
                 <div class="scoreboard-item title-value">

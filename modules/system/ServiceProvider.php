@@ -372,7 +372,7 @@ class ServiceProvider extends ModuleServiceProvider
     {
         return [
             \System\ReportWidgets\Status::class => [
-                'label' => 'backend::lang.dashboard.status.widget_title_default',
+                'label' => "System status",
                 'context' => 'dashboard'
             ],
         ];

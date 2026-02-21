@@ -92,18 +92,18 @@ Vue.component('dashboard-component-dashboard-widget-table', {
         },
 
         makeDefaultConfigAndData: function () {
-            Vue.set(this.widget.configuration, 'title', 'Table');
+            Vue.set(this.widget.configuration, 'title', oc.t("Table"));
             Vue.set(this.widget.configuration, 'metrics', []);
         },
 
         getDimensionText: function (text) {
             if (text === null || text === undefined) {
-                return oc.lang.get('dashboard.value_not_set');
+                return oc.t("[not set]");
             }
 
             const str = String(text);
             if (!str.length) {
-                return oc.lang.get('dashboard.value_not_set');
+                return oc.t("[not set]");
             }
 
             return str;
@@ -119,7 +119,7 @@ Vue.component('dashboard-component-dashboard-widget-table', {
             const suppress = [];
             const result = [];
             this.addTitleConfigurationProp(result, true);
-            this.addDataSourceProps(result, oc.lang.get('dashboard.tab_general'));
+            this.addDataSourceProps(result, oc.t("General"));
             this.addDataSourceConfigurationProps(result, [], suppress);
 
             const limitProp = this.findConfigurationProp(result, 'limit');
@@ -135,23 +135,23 @@ Vue.component('dashboard-component-dashboard-widget-table', {
             const metricsProp = this.findConfigurationProp(result, 'metrics');
             metricsProp.itemProperties.push({
                 property: 'displayRelativeBar',
-                title: oc.lang.get('dashboard.prop_display_relative_bar'),
+                title: oc.t("Display relative bars"),
                 type: 'checkbox'
             })
 
             this.addConfigurationPropBefore(result, 'limit', {
                 property: 'records_per_page',
-                tab: oc.lang.get('dashboard.tab_sorting_filtering'),
-                title: oc.lang.get('dashboard.prop_records_per_page'),
+                tab: oc.t("Sorting & Filtering"),
+                title: oc.t("Records per page"),
                 type: 'string',
-                placeholder: oc.lang.get('dashboard.records_per_page_placeholder'),
+                placeholder: oc.t("Leave empty to disable pagination"),
                 validation: {
                     integer: {
                         allowNegative: false,
-                        message: oc.lang.get('dashboard.records_per_page_invalid'),
+                        message: oc.t("Enter a positive number or leave empty to display all records."),
                         min: {
                             value: 1,
-                            message: oc.lang.get('dashboard.records_per_page_invalid')
+                            message: oc.t("Enter a positive number or leave empty to display all records.")
                         }
                     }
                 }
@@ -159,8 +159,8 @@ Vue.component('dashboard-component-dashboard-widget-table', {
 
             result.push({
                 property: 'dimension_fields',
-                tab: oc.lang.get('dashboard.tab_general'),
-                title: oc.lang.get('dashboard.prop_extra_table_fields'),
+                tab: oc.t("General"),
+                title: oc.t("Extra table fields"),
                 type: 'set',
                 depends: ['dataSource', 'dimension'],
                 dataCacheKeyName: 'ds-dimension-fields',

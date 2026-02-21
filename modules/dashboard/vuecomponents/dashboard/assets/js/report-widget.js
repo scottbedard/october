@@ -141,14 +141,14 @@ Vue.component('dashboard-component-dashboard-report-widget', {
                 this.menuItems.push({
                     type: 'text',
                     command: 'configure',
-                    label: oc.lang.get('dashboard.configure')
+                    label: oc.t("Configure")
                 });
             }
 
             this.menuItems.push({
                 type: 'text',
                 command: 'delete',
-                label: oc.lang.get('dashboard.delete')
+                label: oc.t("Delete")
             });
         },
         showInspectorWhenLoaded() {
@@ -171,13 +171,13 @@ Vue.component('dashboard-component-dashboard-report-widget', {
 
             oc.vueComponentHelpers.inspector.host
                 .showModal(
-                    oc.lang.get('dashboard.configure'),
+                    oc.t("Configure"),
                     dataHolder,
                     widgetImplementation.getSettingsConfiguration(),
                     'widget-configuration',
                     {
                         handlerAlias: this.store.state.alias,
-                        buttonText: oc.lang.get('dashboard.apply'),
+                        buttonText: oc.t("Apply"),
                         resizableWidth: true
                     }
                 )

@@ -405,7 +405,7 @@
         try {
             var data = JSON.parse(response);
             if (data.error) {
-                $.oc.flashMsg({ text: data.error, class: 'error' });
+                oc.flashMsg({ text: data.error, class: 'error' });
                 editor.image.hideProgressBar(true);
                 editor.image.remove();
                 editor.edit.on();

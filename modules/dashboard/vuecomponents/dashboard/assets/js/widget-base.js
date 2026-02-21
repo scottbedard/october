@@ -291,19 +291,19 @@ Vue.component('dashboard-component-dashboard-widget-base', {
         addTitleConfigurationProp: function (configuration, optional) {
             const prop = {
                 property: 'title',
-                title: oc.lang.get('dashboard.widget_title'),
+                title: oc.t("Title"),
                 type: 'string'
             };
 
             if (!optional) {
                 prop.validation = {
                     required: {
-                        message: oc.lang.get('dashboard.widget_title_required'),
+                        message: oc.t("Please provide the widget title"),
                     }
                 }
             }
             else {
-                prop.placeholder = oc.lang.get('dashboard.widget_title_optional_placeholder')
+                prop.placeholder = oc.t("Leave empty to hide the title")
             }
 
             configuration.push(prop);

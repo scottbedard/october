@@ -64,7 +64,7 @@ class Index extends WildcardController
         }
 
         $this->bodyClass = 'compact-container sidenav-responsive';
-        $this->pageTitle = 'backend::lang.dashboard.menu_label';
+        $this->pageTitle = "Dashboard";
 
         $this->syncAllDashboards();
 

@@ -11,7 +11,7 @@
             data-edit-row-button
             role="button"
             tabindex="0"
-            aria-label="Edit row"
+            aria-label="<?= __("Edit Row") ?>"
             @mousedown="onRowButtonMouseDown"
             @contextmenu.stop="onContextMenu($event)"
             @click.stop="onContextMenu($event)"

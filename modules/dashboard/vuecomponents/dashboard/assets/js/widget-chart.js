@@ -226,7 +226,7 @@ Vue.component('dashboard-component-dashboard-widget-chart', {
         },
 
         makeDefaultConfigAndData: function () {
-            Vue.set(this.widget.configuration, 'title', 'Chart');
+            Vue.set(this.widget.configuration, 'title', oc.t("Chart"));
         },
 
         getMetricConfigurationByCode: function (metricCode) {
@@ -250,25 +250,25 @@ Vue.component('dashboard-component-dashboard-widget-chart', {
 
             result.push({
                 property: 'chartType',
-                tab: oc.lang.get('dashboard.tab_general'),
-                title: oc.lang.get('dashboard.widget_chart_type'),
+                tab: oc.t("General"),
+                title: oc.t("Chart type"),
                 type: 'dropdown',
                 options: {
-                    'bar': oc.lang.get('dashboard.widget_chart_type'),
-                    'stacked-bar': oc.lang.get('dashboard.widget_chart_type_stacked_bar'),
-                    'line': oc.lang.get('dashboard.widget_chart_type_line')
+                    'bar': oc.t("Bar"),
+                    'stacked-bar': oc.t("Stacked Bar"),
+                    'line': oc.t("Line")
                 }
             });
 
             result.push({
                 property: 'barDirection',
-                tab: oc.lang.get('dashboard.tab_general'),
-                title: oc.lang.get('dashboard.widget_bar_direction'),
+                tab: oc.t("General"),
+                title: oc.t("Direction"),
                 type: 'dropdown',
                 default: 'vertical',
                 options: {
-                    vertical: oc.lang.get('dashboard.widget_bar_direction_vertical'),
-                    horizontal: oc.lang.get('dashboard.widget_bar_direction_horizontal'),
+                    vertical: oc.t("Vertical"),
+                    horizontal: oc.t("Horizontal"),
                 },
                 visibility: {
                     source_property: 'chartType',
@@ -276,7 +276,7 @@ Vue.component('dashboard-component-dashboard-widget-chart', {
                 },
             });
 
-            this.addDataSourceProps(result, oc.lang.get('dashboard.tab_general'));
+            this.addDataSourceProps(result, oc.t("General"));
             this.addDataSourceConfigurationProps(result, [], ['auto_update']);
 
             return result;
@@ -293,7 +293,7 @@ Vue.component('dashboard-component-dashboard-widget-chart', {
                 this.loadedValue,
                 this.getRequestMetrics(),
                 false, // Keep null values to create gaps in the chart
-                oc.lang.get('dashboard.value_not_set')
+                oc.t("[not set]")
             );
             this.chart.update();
         }

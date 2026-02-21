@@ -131,7 +131,7 @@ Vue.component('dashboard-component-dashboard-widget-indicator', {
 
         makeDefaultConfigAndData: function () {
             if (this.widget.configuration.title === undefined) {
-                Vue.set(this.widget.configuration, 'title', 'Indicator');
+                Vue.set(this.widget.configuration, 'title', oc.t("Indicator"));
             }
 
             if (this.widget.configuration.icon === undefined) {
@@ -139,7 +139,7 @@ Vue.component('dashboard-component-dashboard-widget-indicator', {
             }
 
             Vue.set(this.widget, 'loadedValue', {
-                oc_metric_value: 'No Value',
+                oc_metric_value: oc.t("No Value"),
                 icon_status: 'disabled'
             });
         },
@@ -163,19 +163,19 @@ Vue.component('dashboard-component-dashboard-widget-indicator', {
 
             result.push({
                 property: 'icon',
-                title: oc.lang.get('dashboard.widget_icon'),
-                tab: oc.lang.get('dashboard.tab_general'),
+                title: oc.t("Icon"),
+                tab: oc.t("General"),
                 type: 'dropdown',
                 options: oc.Modules.import('backend.phosphor-icon-list'),
                 useValuesAsIcons: true,
                 validation: {
                     required: {
-                        message: oc.lang.get('dashboard.widget_icon_required'),
+                        message: oc.t("Please select an icon"),
                     }
                 }
             });
 
-            this.addDataSourceProps(result, oc.lang.get('dashboard.tab_general'), ['indicator']);
+            this.addDataSourceProps(result, oc.t("General"), ['indicator']);
             this.addDataSourceConfigurationProps(result, ['auto_update']);
 
             const metricsCacheKey = 'ds-metrics';
@@ -183,8 +183,8 @@ Vue.component('dashboard-component-dashboard-widget-indicator', {
 
             result.push({
                 property: 'metric',
-                title: oc.lang.get('dashboard.widget_metric_value'),
-                tab: oc.lang.get('dashboard.tab_general'),
+                title: oc.t("Value"),
+                tab: oc.t("General"),
                 default: 'value',
                 type: 'dropdown',
                 dataCacheKeyName: metricsCacheKey,
@@ -196,31 +196,31 @@ Vue.component('dashboard-component-dashboard-widget-indicator', {
             result.push({
                 property: 'icon_status',
                 default: 'icon_status',
-                title: oc.lang.get('dashboard.widget_icon_status'),
-                tab: oc.lang.get('dashboard.tab_general'),
+                title: oc.t("Icon Status"),
+                tab: oc.t("General"),
                 type: 'dropdown',
                 options: {
-                    'status-info': oc.lang.get('dashboard.icon_status_info'),
-                    'status-important': oc.lang.get('dashboard.icon_status_important'),
-                    'status-success': oc.lang.get('dashboard.icon_status_success'),
-                    'status-warning': oc.lang.get('dashboard.icon_status_warning'),
-                    'status-disabled': oc.lang.get('dashboard.icon_status_disabled'),
+                    'status-info': oc.t("Information"),
+                    'status-important': oc.t("Important"),
+                    'status-success': oc.t("Success"),
+                    'status-warning': oc.t("Warning"),
+                    'status-disabled': oc.t("Disabled"),
                 },
                 visibility: metricsVisibility
             });
 
             result.push({
                 property: 'linkText',
-                title: oc.lang.get('dashboard.widget_link_text'),
-                tab: oc.lang.get('dashboard.tab_general'),
+                title: oc.t("Link Text"),
+                tab: oc.t("General"),
                 type: 'string'
             });
 
             result.push({
                 property: 'linkHref',
                 default: '',
-                title: oc.lang.get('dashboard.widget_href'),
-                tab: oc.lang.get('dashboard.tab_general'),
+                title: oc.t("Link URL"),
+                tab: oc.t("General"),
                 type: 'string',
                 visibility: linkTextVisibility,
                 no_focus_on_visible: true

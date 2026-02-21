@@ -25,7 +25,7 @@ Vue.component('dashboard-component-dashboard', {
                 });
 
                 this.store.state.editMode = false;
-                oc.snackbar.show(oc.lang.get('dashboard.updated_successfully'));
+                oc.snackbar.show(oc.t("The dashboard was successfully updated."));
             }
             catch (err) {
                 oc.alert(err.message);

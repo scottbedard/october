@@ -19,7 +19,7 @@ Vue.component('dashboard-component-dashboard-widget-sectiontitle', {
         makeDefaultConfigAndData: function () {
             const sizing = Dashboard_Classes_Sizing.instance();
 
-            Vue.set(this.widget.configuration, 'title', 'Section');
+            Vue.set(this.widget.configuration, 'title', oc.t("Section"));
             Vue.set(this.widget.configuration, 'showInterval', false);
             Vue.set(this.widget.configuration, 'width', sizing.totalColumns);
         },
@@ -27,18 +27,18 @@ Vue.component('dashboard-component-dashboard-widget-sectiontitle', {
         getSettingsConfiguration: function () {
             const result = [{
                 property: 'title',
-                title: oc.lang.get('dashboard.widget_title'),
+                title: oc.t("Title"),
                 type: 'string',
                 validation: {
                     required: {
-                        message: oc.lang.get('dashboard.widget_title_required'),
+                        message: oc.t("Please provide the widget title"),
                     }
                 }
             }];
 
             result.push({
                 property: 'showInterval',
-                title: oc.lang.get('dashboard.section_show_interval'),
+                title: oc.t("Show Date Interval"),
                 type: 'checkbox'
             });
 

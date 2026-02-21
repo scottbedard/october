@@ -48,7 +48,7 @@ class ServiceProvider extends ModuleServiceProvider
     {
         return [
             \Backend\ReportWidgets\Welcome::class => [
-                'label' => 'backend::lang.dashboard.welcome.widget_title_default',
+                'label' => "Welcome",
                 'context' => 'dashboard'
             ],
         ];
@@ -73,7 +73,7 @@ class ServiceProvider extends ModuleServiceProvider
     {
         // return [
         //     'dashboard' => [
-        //         'label' => 'backend::lang.dashboard.menu_label',
+        //         'label' => "Dashboard",
         //         'icon' => 'icon-dashboard',
         //         'iconSvg' => 'modules/backend/assets/images/dashboard-icon.svg',
         //         'url' => Backend::url('backend'),

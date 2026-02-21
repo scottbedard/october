@@ -23,7 +23,7 @@ Vue.component('dashboard-component-dashboard-widget-static', {
         },
 
         makeDefaultConfigAndData: function () {
-            let defaultTitle = 'My Custom Widget';
+            let defaultTitle = oc.t("My Custom Widget");
 
             if (this.loadedValue && this.loadedValue.properties) {
                 const titleProp = this.loadedValue.properties.find((p) => p.property === 'title');

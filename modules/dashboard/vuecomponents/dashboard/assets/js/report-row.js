@@ -31,7 +31,7 @@ Vue.component('dashboard-component-dashboard-report-row', {
                             command: 'add-widget',
                             type: widgetType.type
                         },
-                        label: oc.lang.get('dashboard.menu_item_custom')
+                        label: oc.t("Custom")
                     });
 
                     widgetTypeItems.push({
@@ -126,7 +126,7 @@ Vue.component('dashboard-component-dashboard-report-row', {
             this.menuItems.push({
                 type: 'text',
                 command: 'delete',
-                label: oc.lang.get('dashboard.menu_item_delete_row')
+                label: oc.t("Delete row")
             });
         },
 

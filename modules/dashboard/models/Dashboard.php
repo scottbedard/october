@@ -124,7 +124,7 @@ class Dashboard extends Model
         $dashboard = self::applyOwner($owner)->where('code', $field)->first();
         if (!$dashboard) {
             throw new ApplicationException(
-                Lang::get('backend::lang.dashboard.not_found_by_slug', ['slug' => $field])
+                __("Cannot find a dashboard with the specified slug: \":slug\".", ['slug' => $field])
             );
         }
 
