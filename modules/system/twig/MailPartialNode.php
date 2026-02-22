@@ -18,7 +18,7 @@ class MailPartialNode extends TwigNode
     public function __construct(array $nodes, array $paramNames, ?TwigNode $body, int $lineno)
     {
         if ($body) {
-            $nodes['body'] = $body;
+            $nodes['__body'] = $body;
         }
 
         parent::__construct($nodes, ['names' => $paramNames], $lineno);
@@ -33,10 +33,10 @@ class MailPartialNode extends TwigNode
         $compiler->write("\$systemPartialParams = [];\n");
 
         // Handle body block
-        if ($this->hasNode('body')) {
+        if ($this->hasNode('__body')) {
             $compiler
                 ->write("\$systemPartialParams['body'] = implode('', iterator_to_array((function() use (\$context, \$blocks, \$macros) {\n")
-                ->subcompile($this->getNode('body'))
+                ->subcompile($this->getNode('__body'))
                 ->write(" return; yield ''; })()));\n");
         }
 

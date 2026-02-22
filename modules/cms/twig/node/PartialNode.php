@@ -18,7 +18,7 @@ class PartialNode extends TwigNode
     public function __construct(array $nodes, ?TwigNode $body, array $options, int $lineno)
     {
         if ($body) {
-            $nodes['body'] = $body;
+            $nodes['__body'] = $body;
         }
 
         parent::__construct($nodes, ['options' => $options], $lineno);
@@ -37,10 +37,10 @@ class PartialNode extends TwigNode
         $compiler->write("\$cmsPartialParams = [];\n");
 
         // Handle body block
-        if ($this->hasNode('body')) {
+        if ($this->hasNode('__body')) {
             $compiler
                 ->write("\$cmsPartialParams['body'] = implode('', iterator_to_array((function() use (\$context, \$blocks, \$macros) {")
-                ->subcompile($this->getNode('body'))
+                ->subcompile($this->getNode('__body'))
                 ->write(" return; yield ''; })()));\n");
         }
 

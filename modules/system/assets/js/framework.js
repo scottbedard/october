@@ -561,16 +561,22 @@ var RequestBuilder = /*#__PURE__*/function () {
     key: "assignRequestData",
     value: function assignRequestData() {
       var data = {};
-      if (this.options.data) {
-        Object.assign(data, this.options.data);
-      }
+
+      // Parent elements first (lowest priority, outermost first)
+      elementParents(this.ogElement, '[data-request-data]').forEach(function (el) {
+        Object.assign(data, _util_json_parser__WEBPACK_IMPORTED_MODULE_1__.JsonParser.paramToObj('data-request-data', el.getAttribute('data-request-data')));
+      });
+
+      // Element's own data-request-data (higher priority)
       var attr = this.ogElement.getAttribute('data-request-data');
       if (attr) {
         Object.assign(data, _util_json_parser__WEBPACK_IMPORTED_MODULE_1__.JsonParser.paramToObj('data-request-data', attr));
       }
-      elementParents(this.ogElement, '[data-request-data]').reverse().forEach(function (el) {
-        Object.assign(data, _util_json_parser__WEBPACK_IMPORTED_MODULE_1__.JsonParser.paramToObj('data-request-data', el.getAttribute('data-request-data')));
-      });
+
+      // Programmatic options data (highest priority)
+      if (this.options.data) {
+        Object.assign(data, this.options.data);
+      }
       this.options.data = data;
     }
   }], [{
