@@ -9,6 +9,7 @@ use System\Models\PluginVersion;
 use System\Classes\UpdateManager;
 use System\Classes\PluginManager;
 use System\Classes\SettingsManager;
+use System\Helpers\Cache as CacheHelper;
 use System\Widgets\Changelog;
 use System\Widgets\Updater;
 use Backend\Classes\Controller;
@@ -25,6 +26,8 @@ use Exception;
  */
 class Updates extends Controller
 {
+    use \System\Controllers\Updates\HasComposerEditor;
+
     /**
      * @var array Extensions implemented by this controller.
      */
@@ -175,6 +178,16 @@ class Updates extends Controller
 
         Flash::success(Lang::get("system::lang.plugins.{$bulkAction}_success"));
         return $this->listRefresh('manage');
+    }
+
+    /**
+     * manage_onClearCache clears the application cache
+     */
+    public function manage_onClearCache()
+    {
+        CacheHelper::clear();
+
+        Flash::success(__("Cache cleared successfully."));
     }
 
     /**

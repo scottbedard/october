@@ -98,5 +98,7 @@
   "Structure has been reset": "A szerkezet visszaállításra került",
   "Content": "Tartalom",
   "Global": "Globális",
-  "Used as default entry point when previewing the record.": "Alapértelmezett belépési pontként használatos a rekord előnézetekor."
+  "Used as default entry point when previewing the record.": "Alapértelmezett belépési pontként használatos a rekord előnézetekor.",
+  "Unnamed draft": "Névtelen piszkozat",
+  "Top level": "Legmagasabb szint"
 }

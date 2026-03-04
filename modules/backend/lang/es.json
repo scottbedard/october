@@ -348,5 +348,8 @@
   "File not found": "Archivo no encontrado",
   "There was no data supplied to export": "No hay datos suministrados para exportar",
   "The PHP extension :name is not installed. Please install this library and activate the extension.": "La extensión PHP :name no está instalada. Por favor instalar esta librería y activar la extensión.",
-  "Directory :name or its subdirectories is not writable for PHP. Please set corresponding permissions for the webserver on this directory.": "Directorio :name o los subdirectorios no se puede escribir por PHP. Por favor establecer los permisos correctos para el servidor web en este directorio."
+  "Directory :name or its subdirectories is not writable for PHP. Please set corresponding permissions for the webserver on this directory.": "Directorio :name o los subdirectorios no se puede escribir por PHP. Por favor establecer los permisos correctos para el servidor web en este directorio.",
+  "Manage Roles": "Gestionar roles",
+  "Manage Groups": "Gestionar Grupos",
+  "Customize Backend": "Personalizar back-end"
 }

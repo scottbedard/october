@@ -350,5 +350,8 @@
   "Debug mode is enabled. This is not recommended for production installations.": "Der Debug-Modus ist aktiviert. Dies wird für Produktionsinstallationen nicht empfohlen.",
   "The PHP extension :name is not installed. Please install this library and activate the extension.": "Die PHP Erweiterung :name ist nicht installiert. Bitte installieren Sie diese Library und aktivieren Sie die Erweiterung.",
   "The plugin :name is a dependency but is not installed. Please install this plugin.": "Das Plugin :name hat eine Abhängigkeit die nicht installiert ist. Bitte installieren Sie alle benötigten Plugins.",
-  "Directory :name or its subdirectories is not writable for PHP. Please set corresponding permissions for the webserver on this directory.": "Verzeichnis :name oder ein Unterverzeichnis kann nicht von PHP beschrieben werden. Bitte setzen Sie die korrekten Rechte für den Webserver in diesem Verzeichnis."
+  "Directory :name or its subdirectories is not writable for PHP. Please set corresponding permissions for the webserver on this directory.": "Verzeichnis :name oder ein Unterverzeichnis kann nicht von PHP beschrieben werden. Bitte setzen Sie die korrekten Rechte für den Webserver in diesem Verzeichnis.",
+  "Manage Roles": "Rollen verwalten",
+  "Manage Groups": "Gruppen",
+  "Customize Backend": "Backend anpassen"
 }

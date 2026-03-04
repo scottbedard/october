@@ -1,7 +1,7 @@
 {
   "Manage Entries": "Gérer les entrées",
   "Create :name Entry": "Créer une nouvelle entrée :name",
-  "New :name": "Nouveau :name",
+  "New :name": "Nouveau nom",
   "Import Entries": "Importer des entrées",
   "Export Entries": "Exporter les entrées",
   "First Draft": "Premier brouillon",
@@ -98,5 +98,7 @@
   "Structure has been reset": "La structure a été réinitialisée",
   "Content": "Contenu",
   "Global": "Global",
-  "Used as default entry point when previewing the record.": "Utilisé comme point d'entrée par défaut lors de la prévisualisation de l'enregistrement."
+  "Used as default entry point when previewing the record.": "Utilisé comme point d'entrée par défaut lors de la prévisualisation de l'enregistrement.",
+  "Unnamed draft": "Brouillon sans nom",
+  "Top level": "Niveau supérieur"
 }

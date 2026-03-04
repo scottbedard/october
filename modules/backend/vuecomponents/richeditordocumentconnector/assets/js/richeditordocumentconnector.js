@@ -414,7 +414,10 @@ oc.Modules.register('backend.component.richeditor.document.connector', function 
             },
 
             triggerEditorButtonClick: function triggerEditorCommandClick($button) {
-                const ev1 = jQuery.Event('mouseup');
+                var editor = this.$textarea ? this.$textarea.data('froala.editor') : null,
+                    eventType = editor && editor.helpers.isMobile() ? 'touchend' : 'mouseup';
+
+                const ev1 = jQuery.Event(eventType);
                 ev1.which = 1;
                 $button.addClass('fr-selected').trigger(ev1).removeClass('fr-selected');
             },

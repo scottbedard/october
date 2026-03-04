@@ -348,5 +348,8 @@
   "File not found": "Файлът не е намерен",
   "There was no data supplied to export": "Няма предоставени данни за изнасяне",
   "The PHP extension :name is not installed. Please install this library and activate the extension.": "Разширението на PHP :name не е инсталирано. Моля инсталирайте тази библиотека и активирайте разширението.",
-  "Directory :name or its subdirectories is not writable for PHP. Please set corresponding permissions for the webserver on this directory.": "Директория :name или нейните поддиректории не е достъпна за писане от PHP (Няма права). Моля, задайте съответните разрешения за уеб сървъра на тази директория (папка)."
+  "Directory :name or its subdirectories is not writable for PHP. Please set corresponding permissions for the webserver on this directory.": "Директория :name или нейните поддиректории не е достъпна за писане от PHP (Няма права). Моля, задайте съответните разрешения за уеб сървъра на тази директория (папка).",
+  "Manage Roles": "Управление на ролите",
+  "Manage Groups": "Групи",
+  "Customize Backend": "Персонализирайте администраторския-панел"
 }

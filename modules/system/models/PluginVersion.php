@@ -74,6 +74,19 @@ class PluginVersion extends Model
     protected $appends = ['slug'];
 
     /**
+     * getAttribute checks for plugin detail properties that exist outside of
+     * the model attributes, since these values are not sourced from the database.
+     */
+    public function getAttribute($key)
+    {
+        if (in_array($key, ['name', 'description', 'author', 'icon', 'homepage'])) {
+            return $this->{$key};
+        }
+
+        return parent::getAttribute($key);
+    }
+
+    /**
      * afterFetch
      */
     public function afterFetch()

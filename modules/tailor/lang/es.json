@@ -1,7 +1,7 @@
 {
   "Manage Entries": "Administrar entradas",
   "Create :name Entry": "Crear :name",
-  "New :name": "New :name",
+  "New :name": "Crear :name",
   "Import Entries": "Importar entradas",
   "Export Entries": "Exportar entradas",
   "First Draft": "Primer borrador",
@@ -98,5 +98,7 @@
   "Structure has been reset": "La estructura se ha restablecido",
   "Content": "Contenido",
   "Global": "Global",
-  "Used as default entry point when previewing the record.": "Se utiliza como punto de entrada predeterminado al obtener una vista previa del registro."
+  "Used as default entry point when previewing the record.": "Se utiliza como punto de entrada predeterminado al obtener una vista previa del registro.",
+  "Unnamed draft": "Borrador sin nombre",
+  "Top level": "Nivel superior"
 }

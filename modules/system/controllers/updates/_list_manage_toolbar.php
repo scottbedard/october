@@ -49,5 +49,19 @@
                 <?php endif ?>
             </ul>
         </div>
+
+        <button
+            type="button"
+            class="btn btn-secondary oc-icon-refresh"
+            data-request="onClearCache"
+            data-request-confirm="<?= __("Are you sure you want to clear the application cache?") ?>"
+            data-stripe-load-indicator>
+            <?= __("Clear Cache") ?>
+        </button>
+
+        <?= Ui::popupButton("Edit Composer", 'onLoadComposerForm')
+            ->icon('icon-code')
+            ->secondary()
+        ?>
     </div>
 </div>

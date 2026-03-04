@@ -98,5 +98,7 @@
   "Structure has been reset": "Struktura byla resetována",
   "Content": "Obsah",
   "Global": "Globální",
-  "Used as default entry point when previewing the record.": "Používá se jako výchozí vstupní bod při prohlížení náhledu záznamu."
+  "Used as default entry point when previewing the record.": "Používá se jako výchozí vstupní bod při prohlížení náhledu záznamu.",
+  "Unnamed draft": "Nejmenovaný koncept",
+  "Top level": "Nejvyšší úroveň"
 }

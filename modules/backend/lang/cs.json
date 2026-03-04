@@ -349,5 +349,8 @@
   "There was no data supplied to export": "K exportu nebyla nalezena žádná data",
   "The PHP extension :name is not installed. Please install this library and activate the extension.": "PHP rozšíření :name není nainstalováno. Prosím nainstalujte toto rozšíření a aktivujte ho.",
   "The plugin :name is a dependency but is not installed. Please install this plugin.": "Plugin :name je vyžadován, ale není nainstalovaný. Prosím nainstalujte tento plugin.",
-  "Directory :name or its subdirectories is not writable for PHP. Please set corresponding permissions for the webserver on this directory.": "Do adresáře :name nebo jeho podadresářů nelze zapisovat z PHP. Prosím nastavte správná oprávnění."
+  "Directory :name or its subdirectories is not writable for PHP. Please set corresponding permissions for the webserver on this directory.": "Do adresáře :name nebo jeho podadresářů nelze zapisovat z PHP. Prosím nastavte správná oprávnění.",
+  "Manage Roles": "Role",
+  "Manage Groups": "Skupiny",
+  "Customize Backend": "Nastavení administrace"
 }

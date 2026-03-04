@@ -98,5 +98,7 @@
   "Structure has been reset": "Структурата е нулирана",
   "Content": "Съдържание",
   "Global": "Глобален",
-  "Used as default entry point when previewing the record.": "Използва се като входна точка по подразбиране при предварителен преглед на записа."
+  "Used as default entry point when previewing the record.": "Използва се като входна точка по подразбиране при предварителен преглед на записа.",
+  "Unnamed draft": "Чернова без име",
+  "Top level": "Най-високо ниво"
 }

@@ -82,7 +82,7 @@
   "Do you really want to purge the Internal Traffic Statistics data?": "Chiar doriți să ștergeți datele din Statisticile de trafic intern?",
   "Data retention period": "Perioada de păstrare a datelor",
   "Time zone": "Fus orar",
-  ":retention month(s)": "luni de retenție",
+  ":retention month(s)": "lună(e) de retenție",
   "Indefinite": "Nedefinit",
   "Internal Traffic Statistics data purged": "Datele statistice interne privind traficul au fost eliminate",
   "[not set]": "[nesetat]",

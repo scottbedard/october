@@ -125,7 +125,7 @@ class EditorExtension extends ExtensionBase
 
         if (
             EditorExtension::hasAccessToDocType($user, self::DOCUMENT_TYPE_THEME_BLUEPRINT) &&
-            !$documentType || $documentType === self::DOCUMENT_TYPE_THEME_BLUEPRINT
+            (!$documentType || $documentType === self::DOCUMENT_TYPE_THEME_BLUEPRINT)
         ) {
             $this->addThemeBlueprintsNavigatorNodes($tailorSection);
         }

@@ -3,6 +3,7 @@
 use System;
 use Request;
 use Editor\Classes\ApiHelpers;
+use Cms\Classes\EditorExtension;
 use October\Rain\Filesystem\Definitions as FileDefinitions;
 
 /**
@@ -15,6 +16,8 @@ trait HasExtensionAssetsCrud
      */
     protected function command_onAssetCreateDirectory()
     {
+        $this->assertDocumentTypePermissions(EditorExtension::DOCUMENT_TYPE_ASSET);
+
         $documentData = $this->getRequestDocumentData();
         $metadata = $this->getRequestMetadata();
         $this->validateRequestTheme($metadata);
@@ -30,6 +33,8 @@ trait HasExtensionAssetsCrud
      */
     protected function command_onAssetDelete()
     {
+        $this->assertDocumentTypePermissions(EditorExtension::DOCUMENT_TYPE_ASSET);
+
         $metadata = $this->getRequestMetadata();
         $this->validateRequestTheme($metadata);
 
@@ -45,6 +50,8 @@ trait HasExtensionAssetsCrud
      */
     protected function command_onAssetRename()
     {
+        $this->assertDocumentTypePermissions(EditorExtension::DOCUMENT_TYPE_ASSET);
+
         $metadata = $this->getRequestMetadata();
         $documentData = $this->getRequestDocumentData();
         $this->validateRequestTheme($metadata);
@@ -61,6 +68,8 @@ trait HasExtensionAssetsCrud
      */
     protected function command_onAssetMove()
     {
+        $this->assertDocumentTypePermissions(EditorExtension::DOCUMENT_TYPE_ASSET);
+
         $metadata = $this->getRequestMetadata();
         $documentData = $this->getRequestDocumentData();
         $this->validateRequestTheme($metadata);
@@ -75,6 +84,8 @@ trait HasExtensionAssetsCrud
      */
     protected function command_onAssetUpload()
     {
+        $this->assertDocumentTypePermissions(EditorExtension::DOCUMENT_TYPE_ASSET);
+
         $metadata = [
             'theme' => Request::input('theme')
         ];

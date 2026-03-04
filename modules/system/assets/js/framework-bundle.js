@@ -7637,7 +7637,11 @@ var controller = new _controller__WEBPACK_IMPORTED_MODULE_0__.Controller();
   },
   controller: controller,
   visit: function visit(location, options) {
-    controller.visit(location, options);
+    if (controller.isEnabled()) {
+      controller.visit(location, options);
+    } else {
+      window.location.assign(location);
+    }
   },
   clearCache: function clearCache() {
     controller.clearCache();

@@ -98,5 +98,7 @@
   "Structure has been reset": "Die Struktur wurde zurückgesetzt",
   "Content": "Inhalt",
   "Global": "Systemweit",
-  "Used as default entry point when previewing the record.": "Wird als Standardeinstiegspunkt bei der Vorschau des Datensatzes verwendet."
+  "Used as default entry point when previewing the record.": "Wird als Standardeinstiegspunkt bei der Vorschau des Datensatzes verwendet.",
+  "Unnamed draft": "Namenloser Entwurf",
+  "Top level": "Oberste Ebene"
 }
