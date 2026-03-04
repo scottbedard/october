@@ -259,11 +259,15 @@ class Relation extends FormWidgetBase
      */
     protected function makeFieldOptionsForTree($items, $nameFrom, $primaryKeyName)
     {
+        // When conditions or scopes filter the query, parent nodes may be excluded
+        // from results. Preserve these orphaned children instead of discarding them.
+        $removeOrphans = !$this->conditions && !$this->modelScope;
+
         if ($items instanceof \October\Rain\Database\TreeCollection) {
-            $items = $items->toNested();
+            $items = $items->toNested($removeOrphans);
         }
         elseif (!$items instanceof \Illuminate\Database\Eloquent\Collection) {
-            $items = $items->getNested();
+            $items = $items->get()->toNested($removeOrphans);
         }
 
         $options = [];

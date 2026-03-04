@@ -154,7 +154,7 @@ class BlueprintVerifier
     protected function validateUniqueBlueprint(Blueprint $blueprint)
     {
         $filePath = $blueprint->getFilePath();
-        $theme = $blueprint->_theme ?? null;
+        $theme = $blueprint->getDatasourceTheme();
 
         // Check handle uniqueness (all blueprints share the same namespace)
         if ($handle = $blueprint->handle) {

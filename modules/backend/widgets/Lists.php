@@ -532,10 +532,15 @@ class Lists extends WidgetBase implements ListElement
                     ? DbDongle::raw("group_concat(" . $sqlSelect . " separator ', ')")
                     : DbDongle::raw($sqlSelect);
 
-                $countQuery->select($joinSql)->reorder();
+                $countQuery->select($joinSql);
 
+                // Only strip ordering for multi-relations (group_concat),
+                // singular relations with LIMIT 1 need ordering for deterministic results
+                if ($isMultiRelation) {
+                    $countQuery->reorder();
+                }
                 // Singular relations need a limit to prevent subquery errors
-                if (!$isMultiRelation) {
+                else {
                     $countQuery->limit(1);
                 }
 
