@@ -133,7 +133,7 @@ oc.registerControl('mediafinder', class extends oc.ControlBase {
     }
 
     extendExternalToolbar() {
-        if (!this.$el.is(":visible") || !this.toolbarExtensionPoint) {
+        if (!this.$el || !this.$el.is(":visible") || !this.toolbarExtensionPoint) {
             return;
         }
 
@@ -309,6 +309,10 @@ oc.registerControl('mediafinder', class extends oc.ControlBase {
     }
 
     addItems(items) {
+        if (!this.$filesContainer) {
+            return;
+        }
+
         if (!this.config.isMulti) {
             this.$filesContainer.empty();
         }
@@ -321,6 +325,10 @@ oc.registerControl('mediafinder', class extends oc.ControlBase {
     }
 
     onClickRemoveButton(ev) {
+        if (!this.$filesContainer) {
+            return;
+        }
+
         this.$filesContainer.empty();
         this.setValue();
         this.evalIsPopulated();

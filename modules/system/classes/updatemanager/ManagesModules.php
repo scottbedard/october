@@ -130,6 +130,15 @@ trait ManagesModules
         }
 
         try {
+            // Locate version from root composer package (october/october)
+            if ($version === null) {
+                $version = ComposerManager::instance()->getRootVersion();
+            }
+        }
+        catch (Exception $ex) {
+        }
+
+        try {
             // Locate version from seed file
             if ($version === null) {
                 if (

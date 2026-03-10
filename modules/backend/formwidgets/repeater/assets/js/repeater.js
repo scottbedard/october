@@ -555,7 +555,7 @@ oc.Modules.register('backend.formwidget.repeater.base', function() {
         }
 
         extendExternalToolbar() {
-            if (!this.$el.is(":visible") || !this.toolbarExtensionPoint) {
+            if (!this.$el || !this.$el.is(":visible") || !this.toolbarExtensionPoint) {
                 return;
             }
 

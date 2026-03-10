@@ -7,10 +7,9 @@ oc.registerControl('dashwidget', class extends oc.ControlBase
         this.vueElement = this.element.querySelector('[data-vue-template]');
         this.store = this.createStore();
 
-        this.initVue();
         this.initDefaultQueryParameters();
-
         this.setIntervalRange();
+        this.initVue();
     }
 
     disconnect() {

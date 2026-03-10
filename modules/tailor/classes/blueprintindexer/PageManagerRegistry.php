@@ -168,6 +168,7 @@ trait PageManagerRegistry
             'url' => $pageUrl,
             'isActive' => $pageUrl == $url,
             'mtime' => $record->updated_at,
+            'status' => $record->status_code,
         ];
 
         if ($item->sites) {
@@ -198,6 +199,7 @@ trait PageManagerRegistry
                 'isActive' => $childUrl == $url,
                 'title' => $child->title,
                 'mtime' => $child->updated_at,
+                'status' => $child->status_code,
             ];
 
             if ($item->sites) {
