@@ -130,8 +130,9 @@ trait ManagesModules
         }
 
         try {
-            // Locate version from root composer package (october/october)
-            if ($version === null) {
+            // Locate version from root composer package (october/october),
+            // only when the build number has never been set (fresh install)
+            if ($version === null && $this->getCurrentBuildNumber() === null) {
                 $version = ComposerManager::instance()->getRootVersion();
             }
         }

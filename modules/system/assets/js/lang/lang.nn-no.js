@@ -9,7 +9,7 @@ if (!window.oc.langMessages) {
     window.oc.langMessages = {};
 }
 
-window.oc.langMessages['nn-no'] = $.extend(
+window.oc.langMessages['nn-no'] = Object.assign(
     window.oc.langMessages['nn-no'] || {},
     {
     "markdowneditor": {

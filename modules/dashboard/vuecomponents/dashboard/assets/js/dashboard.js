@@ -1,4 +1,4 @@
-Vue.component('dashboard-component-dashboard', {
+export default {
     props: {
         store: Object
     },
@@ -43,7 +43,6 @@ Vue.component('dashboard-component-dashboard', {
     },
     watch: {
     },
-    beforeDestroy: function beforeDestroy() {
-    },
-    template: '#dashboard_vuecomponents_dashboard'
-});
+    beforeUnmount: function beforeUnmount() {
+    }
+};

@@ -68,6 +68,26 @@ class Dash extends WidgetBase
     public $showInterval = true;
 
     /**
+     * @var string defaultStart specifies default start keyword: today, week, month, quarter, year
+     */
+    public $defaultStart = 'month';
+
+    /**
+     * @var string defaultEnd specifies default end keyword: today, week, month, quarter, year
+     */
+    public $defaultEnd = 'today';
+
+    /**
+     * @var string defaultInterval specifies default grouping interval: day, week, month, quarter, year
+     */
+    public $defaultInterval = 'day';
+
+    /**
+     * @var string defaultCompare specifies default compare mode: none, prev-period, prev-year
+     */
+    public $defaultCompare = 'none';
+
+    /**
      * @var bool canMakeDefault
      */
     public $canMakeDefault;
@@ -120,6 +140,10 @@ class Dash extends WidgetBase
             'isCustom',
             'manageUrl',
             'showInterval',
+            'defaultStart',
+            'defaultEnd',
+            'defaultInterval',
+            'defaultCompare',
             'canCreateAndEdit',
             'canMakeDefault',
             'canResetLayout',
@@ -152,10 +176,9 @@ class Dash extends WidgetBase
      */
     protected function loadAssets()
     {
-        $this->addJs('js/classes/DashStore.js');
-        $this->addJs('js/controls/control-dashwidget.js');
-        $this->addJs('/modules/backend/assets/js/vendor/daterangepicker/daterangepicker.js');
-        $this->addCss('/modules/backend/assets/js/vendor/daterangepicker/daterangepicker.css');
+        $this->addJs('js/controls/control-dashwidget.js', ['type' => 'module']);
+        $this->addJs('/modules/backend/assets/vendor/daterangepicker/daterangepicker.js');
+        $this->addCss('/modules/backend/assets/vendor/daterangepicker/daterangepicker.css');
     }
 
     /**
@@ -442,6 +465,10 @@ class Dash extends WidgetBase
             ],
             'manageUrl' => $this->manageUrl,
             'showInterval' => $this->showInterval,
+            'defaultStart' => $this->defaultStart,
+            'defaultEnd' => $this->defaultEnd,
+            'defaultInterval' => $this->defaultInterval,
+            'defaultCompare' => $this->defaultCompare,
             'canCreateAndEdit' => $this->canCreateAndEdit,
             'canMakeDefault' => $this->canMakeDefault,
             'canResetLayout' => $this->canResetLayout,

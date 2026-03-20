@@ -1,4 +1,7 @@
-Vue.component('dashboard-component-dashboard-widget-base', {
+import DataHelper from '../../../../assets/js/classes/data-helper.js';
+import InspectorConfigurator from '../../../../assets/js/classes/inspector-configurator.js';
+
+export default {
     props: {
         error: Boolean,
         widget: Object,
@@ -182,7 +185,7 @@ Vue.component('dashboard-component-dashboard-widget-base', {
         },
 
         formatMetricValue: function (metricCode, value) {
-            return Dashboard_Classes_DataHelper
+            return DataHelper
                 .instance()
                 .formatValue(
                     value,
@@ -213,7 +216,7 @@ Vue.component('dashboard-component-dashboard-widget-base', {
             const formattedTotals = prevPeriod ? this.metricsTotalsFormattedPrev : this.metricsTotalsFormatted;
             const formattedValue = formattedTotals ? formattedTotals[metricCode] : undefined;
 
-            return Dashboard_Classes_DataHelper
+            return DataHelper
                 .instance()
                 .formatDisplayValue(
                     total,
@@ -245,7 +248,7 @@ Vue.component('dashboard-component-dashboard-widget-base', {
             const value = record[columnName];
             const formattedValue = record[formattedColumnName];
 
-            return Dashboard_Classes_DataHelper
+            return DataHelper
                 .instance()
                 .formatDisplayValue(
                     value,
@@ -310,12 +313,12 @@ Vue.component('dashboard-component-dashboard-widget-base', {
         },
 
         addDataSourceProps: function (configuration, tab, allowedDimensionTypes) {
-            const configurator = new Dashboard_Classes_InspectorConfigurator(this.$el, this.trans, this.store);
+            const configurator = new InspectorConfigurator(this.$el, this.trans, this.store);
             configurator.defineDataSource(configuration, tab, allowedDimensionTypes);
         },
 
         addDataSourceConfigurationProps: function(configuration, filter = [], suppress = []) {
-            const configurator = new Dashboard_Classes_InspectorConfigurator(this.$el, this.trans, this.store);
+            const configurator = new InspectorConfigurator(this.$el, this.trans, this.store);
             configurator.defineDataSourceProperties(configuration, filter, suppress);
         },
 
@@ -354,4 +357,4 @@ Vue.component('dashboard-component-dashboard-widget-base', {
             }
         }
     }
-});
+};

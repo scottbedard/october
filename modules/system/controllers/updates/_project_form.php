@@ -33,8 +33,19 @@
     </div>
     <div class="modal-footer">
         <div class="px-3 pb-3">
-            <?= Ui::ajaxButton("Attach to Project", 'onAttachProject')->attachPopupLoading()->primary()->cssClass('btn-lg me-2') ?>
-            <?= Ui::button("Cancel")->dismissPopup()->secondary()->cssClass('btn-lg') ?>
+            <?= Ui::ajaxButton(
+                label: __("Attach to Project"),
+                handler: 'onAttachProject',
+                primary: true,
+                class: 'btn-lg me-2',
+                dataPopupLoadIndicator: true
+            ) ?>
+            <?= Ui::button(
+                label: __("Cancel"),
+                secondary: true,
+                class: 'btn-lg',
+                dataDismiss: 'popup'
+            ) ?>
         </div>
     </div>
     <script>

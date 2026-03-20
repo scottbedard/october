@@ -1,3 +1,6 @@
+import { ControlBase, registerControl } from 'larajax';
+import MediaManagerImageCropPopup from './mediamanager.imagecroppopup.js';
+
 /*
  * Media manager control class
  *
@@ -10,13 +13,11 @@
  * Dependencies:
  * - Scrollpad (october.scrollpad.js)
  */
-'use strict';
-
 if (oc.mediaManager === undefined) {
     oc.mediaManager = {};
 }
 
-oc.registerControl('media-manager', class extends oc.ControlBase {
+registerControl('media-manager', class extends ControlBase {
     init() {
         this.$el = $(this.element);
         this.$form = this.$el.closest('form');
@@ -966,7 +967,7 @@ oc.registerControl('media-manager', class extends oc.ControlBase {
 
         var path = selectedItems[0].getAttribute('data-path');
 
-        new oc.mediaManager.imageCropPopup(path, {
+        new MediaManagerImageCropPopup(path, {
             alias: this.config.alias,
             onDone: callback
         });

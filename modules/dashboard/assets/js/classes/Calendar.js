@@ -1,7 +1,9 @@
+'use strict';
+
 /**
- * Dashboard_Classes_Calendar
+ * Calendar class for dashboard date range picker.
  */
-class Dashboard_Classes_Calendar
+export default class Calendar
 {
     constructor(element, locale) {
         this.element = element;

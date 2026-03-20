@@ -107,7 +107,7 @@ class ServiceProvider extends ModuleServiceProvider
         $this->app->singleton('system.helper', \System\Helpers\System::class);
         $this->app->singleton('system.manifest', \System\Classes\ManifestCache::class);
         $this->app->singleton('system.preset', \System\Classes\PresetManager::class);
-        $this->app->singleton('system.ui', \System\Classes\UiManager::class);
+        $this->app->singleton('system.ui', \System\Classes\UiFactory::class);
         $this->app->singleton('system.sites', \System\Classes\SiteManager::class);
         $this->app->singleton('system.resizer', \System\Classes\ResizeImages::class);
         $this->app->singleton('system.combiner', \System\Classes\CombineAssets::class);
@@ -115,6 +115,7 @@ class ServiceProvider extends ModuleServiceProvider
         $this->app->singleton('system.updater', \System\Classes\UpdateManager::class);
         $this->app->singleton('system.versions', \System\Classes\VersionManager::class);
         $this->app->singleton('system.plugins', \System\Classes\PluginManager::class);
+        $this->app->singleton('core.translate.attribute', fn() => \System\Models\TranslateAttribute::class);
         $this->app->scoped('system.markup', \System\Classes\MarkupManager::class);
         $this->app->scoped('system.settings', \System\Classes\SettingsManager::class);
     }
@@ -218,29 +219,8 @@ class ServiceProvider extends ModuleServiceProvider
             \System\Helpers\Cache::clearInternal();
         });
 
-        // Register console commands
-        $this->registerConsoleCommand('october.up', \System\Console\OctoberUp::class);
-        $this->registerConsoleCommand('october.down', \System\Console\OctoberDown::class);
-        $this->registerConsoleCommand('october.migrate', \System\Console\OctoberMigrate::class);
-        $this->registerConsoleCommand('october.update', \System\Console\OctoberUpdate::class);
-        $this->registerConsoleCommand('october.util', \System\Console\OctoberUtil::class);
-        $this->registerConsoleCommand('october.mirror', \System\Console\OctoberMirror::class);
-        $this->registerConsoleCommand('october.fresh', \System\Console\OctoberFresh::class);
-        $this->registerConsoleCommand('october.passwd', \System\Console\OctoberPasswd::class);
-        $this->registerConsoleCommand('october.optimize', \System\Console\OctoberOptimize::class);
-        $this->registerConsoleCommand('october.about', \System\Console\OctoberAbout::class);
-
-        $this->registerConsoleCommand('plugin.install', \System\Console\PluginInstall::class);
-        $this->registerConsoleCommand('plugin.remove', \System\Console\PluginRemove::class);
-        $this->registerConsoleCommand('plugin.disable', \System\Console\PluginDisable::class);
-        $this->registerConsoleCommand('plugin.enable', \System\Console\PluginEnable::class);
-        $this->registerConsoleCommand('plugin.refresh', \System\Console\PluginRefresh::class);
-        $this->registerConsoleCommand('plugin.list', \System\Console\PluginList::class);
-        $this->registerConsoleCommand('plugin.check', \System\Console\PluginCheck::class);
-        $this->registerConsoleCommand('plugin.test', \System\Console\PluginTest::class);
-        $this->registerConsoleCommand('plugin.seed', \System\Console\PluginSeed::class);
-
-        $this->registerConsoleCommand('project.sync', \System\Console\ProjectSync::class);
+        // Auto-discover console commands
+        $this->discoverConsoleCommands('system');
     }
 
     /**
@@ -291,7 +271,7 @@ class ServiceProvider extends ModuleServiceProvider
             TwigExtension::addExtensionToTwig($twig);
             TwigSecurityPolicy::addExtensionToTwig($twig);
 
-            $twig->addTokenParser(new \System\Twig\MailPartialTokenParser);
+            $twig->addTokenParser(new \System\Twig\TokenParser\MailPartialTokenParser);
             return $twig;
         });
     }

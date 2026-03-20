@@ -291,7 +291,8 @@ class ServiceProvider extends ModuleServiceProvider
                 'attributes' => [
                     'data-control' => 'color-mode-switcher',
                     'data-lang-light-mode' => __("Light Mode"),
-                    'data-lang-dark-mode' => __("Dark Mode")
+                    'data-lang-dark-mode' => __("Dark Mode"),
+                    'data-lang-auto-mode' => __("Auto Mode")
                 ],
                 'order' => 620,
                 'context' => 'mysettings'

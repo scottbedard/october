@@ -13,6 +13,7 @@ use October\Rain\Exception\ApplicationException;
 use October\Rain\Exception\ValidationException;
 use Illuminate\Http\RedirectResponse;
 use Exception;
+use Throwable;
 
 /**
  * HasAjaxRequests
@@ -164,7 +165,7 @@ trait HasAjaxRequests
                 }
             }
         }
-        catch (Exception $ex) {
+        catch (Throwable $ex) {
             $response = ajax()->exception($ex);
         }
 

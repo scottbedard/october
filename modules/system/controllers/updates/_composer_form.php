@@ -13,11 +13,17 @@
         <?= $widget->render() ?>
     </div>
     <div class="modal-footer">
-        <?= Ui::ajaxButton("Save", 'onSaveComposer')
-            ->primary()
-            ->attachPopupLoading()
-        ?>
-        <?= Ui::button("Cancel")->dismissPopup()->secondary() ?>
+        <?= Ui::ajaxButton(
+            label: __("Save"),
+            handler: 'onSaveComposer',
+            primary: true,
+            dataPopupLoadIndicator: true
+        ) ?>
+        <?= Ui::button(
+            label: __("Cancel"),
+            secondary: true,
+            dataDismiss: 'popup'
+        ) ?>
     </div>
 
 <?= Form::close() ?>

@@ -97,10 +97,9 @@ class MediaManager extends WidgetBase
      */
     protected function loadAssets()
     {
-        $this->addCssBundle('css/mediamanager.css', 'global');
-        $this->addJsBundle('js/mediamanager.js', 'global');
-        $this->addJsBundle('js/mediamanager.imagecroppopup.js', 'global');
-        $this->addJsBundle('js/mediamanager.popup.js', 'global');
+        $this->addCss('css/mediamanager.css');
+        $this->addJs('js/mediamanager.js', ['type' => 'module']);
+        $this->addJs('js/mediamanager.popup.js', ['type' => 'module']);
     }
 
     /**

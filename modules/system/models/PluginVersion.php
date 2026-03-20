@@ -12,6 +12,8 @@ use System\Classes\PluginManager;
  */
 class PluginVersion extends Model
 {
+    use \System\Models\PluginVersion\HasDisabledContext;
+
     /**
      * @var string table associated with the model
      */

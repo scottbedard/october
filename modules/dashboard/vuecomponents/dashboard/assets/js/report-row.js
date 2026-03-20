@@ -1,4 +1,9 @@
-Vue.component('dashboard-component-dashboard-report-row', {
+import WidgetManager from '../../../../assets/js/classes/widget-manager.js';
+import Dragging from '../../../../assets/js/classes/dragging.js';
+import Sizing from '../../../../assets/js/classes/sizing.js';
+import Reordering from '../../../../assets/js/classes/reordering.js';
+
+export default {
     props: {
         row: Object,
         rows: Array,
@@ -207,18 +212,17 @@ Vue.component('dashboard-component-dashboard-report-row', {
         }
     },
     mounted: function mounted() {
-        this.widgetManager = Dashboard_Classes_WidgetManager.instance();
-        this.dashboardDragging = Dashboard_Classes_Dragging.instance();
-        this.dashboardSizing = Dashboard_Classes_Sizing.instance();
-        this.dashboardReordering = Dashboard_Classes_Reordering.instance();
+        this.widgetManager = WidgetManager.instance();
+        this.dashboardDragging = Dragging.instance();
+        this.dashboardSizing = Sizing.instance();
+        this.dashboardReordering = Reordering.instance();
     },
-    beforeDestroy: function beforeDestroy() {
+    beforeUnmount: function beforeUnmount() {
         this.widgetManager = null;
         this.dashboardDragging = null;
         this.dashboardSizing = null;
         this.dashboardReordering = null;
     },
     watch: {
-    },
-    template: '#dashboard_vuecomponents_dashboard_report_row'
-});
+    }
+};

@@ -1,4 +1,4 @@
-Vue.component('dashboard-component-dashboard-dashboard-selector', {
+export default {
     props: {
         store: Object,
         embeddedInDashboard: Boolean
@@ -124,7 +124,6 @@ Vue.component('dashboard-component-dashboard-dashboard-selector', {
     },
     watch: {
     },
-    beforeDestroy: function beforeDestroy() {
-    },
-    template: '#dashboard_vuecomponents_dashboard_dashboard_selector'
-});
+    beforeUnmount: function beforeUnmount() {
+    }
+};

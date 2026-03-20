@@ -1,9 +1,11 @@
 <?php namespace Backend\Classes;
 
 use App;
+use Site;
 use File;
 use View;
 use System;
+use Request;
 use Response;
 use Illuminate\Routing\Controller as ControllerBase;
 use October\Rain\Router\Helper as RouterHelper;
@@ -77,6 +79,9 @@ class BackendController extends ControllerBase
                 : $this->runPageNotFound();
         }
 
+        // Locate edit site
+        $this->findEditSite();
+
         // Look for App or Module controller
         $module = $params[0] ?? 'backend';
         $controller = $params[1] ?? 'index';
@@ -146,6 +151,26 @@ class BackendController extends ControllerBase
 
         // Fall back to CMS controller
         return $this->runPageNotFound();
+    }
+
+    /**
+     * findEditSite locates the edit site based on the current request
+     */
+    protected function findEditSite()
+    {
+        if (!Site::hasAnyEditSite()) {
+            return;
+        }
+
+        if ($id = get('_site_id')) {
+            Site::applyEditSiteId($id);
+        }
+        elseif ($id = Request::header('X_SITE_ID')) {
+            Site::applyEditSiteId($id);
+        }
+        elseif ($site = Site::getEditSiteFromRequest()) {
+            Site::applyEditSite($site);
+        }
     }
 
     /**

@@ -105,8 +105,8 @@ oc.registerControl('mediafinder', class extends oc.ControlBase {
             return;
         }
 
-        this.externalToolbarEventBusObj.$on('toolbarcmd', this.proxy(this.onToolbarExternalCommand));
-        this.externalToolbarEventBusObj.$on('extendapptoolbar', this.proxy(this.extendExternalToolbar));
+        this.externalToolbarEventBusObj.on('toolbarcmd', this.proxy(this.onToolbarExternalCommand));
+        this.externalToolbarEventBusObj.on('extendapptoolbar', this.proxy(this.extendExternalToolbar));
     }
 
     unmountExternalToolbarEventBusEvents() {
@@ -114,8 +114,8 @@ oc.registerControl('mediafinder', class extends oc.ControlBase {
             return;
         }
 
-        this.externalToolbarEventBusObj.$off('toolbarcmd', this.proxy(this.onToolbarExternalCommand));
-        this.externalToolbarEventBusObj.$off('extendapptoolbar', this.proxy(this.extendExternalToolbar));
+        this.externalToolbarEventBusObj.off('toolbarcmd', this.proxy(this.onToolbarExternalCommand));
+        this.externalToolbarEventBusObj.off('extendapptoolbar', this.proxy(this.extendExternalToolbar));
     }
 
     onToolbarExternalCommand(ev) {

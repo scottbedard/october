@@ -1,5 +1,7 @@
-Vue.component('dashboard-component-dashboard-widget-table', {
-    extends: Vue.options.components['dashboard-component-dashboard-widget-base'],
+import WidgetBase from './widget-base.js';
+
+export default {
+    extends: WidgetBase,
     data: function () {
         return {
             paginating: false
@@ -92,8 +94,9 @@ Vue.component('dashboard-component-dashboard-widget-table', {
         },
 
         makeDefaultConfigAndData: function () {
-            Vue.set(this.widget.configuration, 'title', oc.t("Table"));
-            Vue.set(this.widget.configuration, 'metrics', []);
+            // Vue 3: Direct assignment is reactive
+            this.widget.configuration.title = oc.t("Table");
+            this.widget.configuration.metrics = [];
         },
 
         getDimensionText: function (text) {
@@ -254,6 +257,5 @@ Vue.component('dashboard-component-dashboard-widget-table', {
                 this.paginating = false;
             }
         }
-    },
-    template: '#dashboard_vuecomponents_dashboard_widget_table'
-});
+    }
+};

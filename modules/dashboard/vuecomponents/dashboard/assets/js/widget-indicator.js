@@ -1,5 +1,10 @@
-Vue.component('dashboard-component-dashboard-widget-indicator', {
-    extends: Vue.options.components['dashboard-component-dashboard-widget-base'],
+import phosphorIconList from '../../../../../backend/assets/js/ph-icons-list.js';
+import WidgetBase from './widget-base.js';
+import { utils as inspectorUtils } from '../../../../../backend/vuecomponents/inspector/assets/js/classes/index.js';
+import { modalUtils } from '../../../../../backend/vuecomponents/modal/assets/js/classes/index.js';
+
+export default {
+    extends: WidgetBase,
     data: function () {
         return {
             loadingPopupData: false
@@ -130,18 +135,19 @@ Vue.component('dashboard-component-dashboard-widget-indicator', {
         },
 
         makeDefaultConfigAndData: function () {
+            // Vue 3: Direct assignment is reactive
             if (this.widget.configuration.title === undefined) {
-                Vue.set(this.widget.configuration, 'title', oc.t("Indicator"));
+                this.widget.configuration.title = oc.t("Indicator");
             }
 
             if (this.widget.configuration.icon === undefined) {
-                Vue.set(this.widget.configuration, 'icon', 'ph ph-sun');
+                this.widget.configuration.icon = 'ph ph-sun';
             }
 
-            Vue.set(this.widget, 'loadedValue', {
+            this.widget.loadedValue = {
                 oc_metric_value: oc.t("No Value"),
                 icon_status: 'disabled'
-            });
+            };
         },
 
         getSettingsConfiguration: function () {
@@ -150,7 +156,7 @@ Vue.component('dashboard-component-dashboard-widget-indicator', {
 
             const metricsVisibility = (obj) => {
                 return !String(obj.dimension).startsWith('indicator@') &&
-                    !oc.vueComponentHelpers.inspector.utils.isValueEmpty(obj.dimension);
+                    !inspectorUtils.isValueEmpty(obj.dimension);
             }
 
             const linkTextVisibility = (obj) => {
@@ -158,7 +164,7 @@ Vue.component('dashboard-component-dashboard-widget-indicator', {
                     return false;
                 }
 
-                return !oc.vueComponentHelpers.inspector.utils.isValueEmpty(obj.linkText);
+                return !inspectorUtils.isValueEmpty(obj.linkText);
             }
 
             result.push({
@@ -166,7 +172,7 @@ Vue.component('dashboard-component-dashboard-widget-indicator', {
                 title: oc.t("Icon"),
                 tab: oc.t("General"),
                 type: 'dropdown',
-                options: oc.Modules.import('backend.phosphor-icon-list'),
+                options: phosphorIconList,
                 useValuesAsIcons: true,
                 validation: {
                     required: {
@@ -237,7 +243,7 @@ Vue.component('dashboard-component-dashboard-widget-indicator', {
             this.loadingPopupData = false;
 
             try {
-                await oc.vueComponentHelpers.modalUtils.showBasic(
+                await modalUtils.showBasic(
                     responseData.title,
                     responseData.content
                 );
@@ -253,6 +259,5 @@ Vue.component('dashboard-component-dashboard-widget-indicator', {
                 return;
             }
         }
-    },
-    template: '#dashboard_vuecomponents_dashboard_widget_indicator'
-});
+    }
+};

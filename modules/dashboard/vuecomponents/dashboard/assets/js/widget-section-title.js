@@ -1,5 +1,8 @@
-Vue.component('dashboard-component-dashboard-widget-sectiontitle', {
-    extends: Vue.options.components['dashboard-component-dashboard-widget-base'],
+import Sizing from '../../../../assets/js/classes/sizing.js';
+import WidgetBase from './widget-base.js';
+
+export default {
+    extends: WidgetBase,
     data: function () {
         return {
         }
@@ -17,11 +20,11 @@ Vue.component('dashboard-component-dashboard-widget-sectiontitle', {
     },
     methods: {
         makeDefaultConfigAndData: function () {
-            const sizing = Dashboard_Classes_Sizing.instance();
-
-            Vue.set(this.widget.configuration, 'title', oc.t("Section"));
-            Vue.set(this.widget.configuration, 'showInterval', false);
-            Vue.set(this.widget.configuration, 'width', sizing.totalColumns);
+            const sizing = Sizing.instance();
+            // Vue 3: Direct assignment is reactive
+            this.widget.configuration.title = oc.t("Section");
+            this.widget.configuration.showInterval = false;
+            this.widget.configuration.width = sizing.totalColumns;
         },
 
         getSettingsConfiguration: function () {
@@ -44,6 +47,5 @@ Vue.component('dashboard-component-dashboard-widget-sectiontitle', {
 
             return result;
         }
-    },
-    template: '#dashboard_vuecomponents_dashboard_widget_section_title'
-});
+    }
+};

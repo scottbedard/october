@@ -203,6 +203,7 @@ final class SecurityPolicy implements SecurityPolicyInterface
             $obj instanceof \Illuminate\Database\Eloquent\Model ||
             $obj instanceof \Illuminate\Database\Eloquent\Builder ||
             $obj instanceof \Illuminate\Pagination\AbstractPaginator ||
+            $obj instanceof \Illuminate\View\ComponentAttributeBag ||
             $obj instanceof \SimpleXMLElement
         ) {
             return;

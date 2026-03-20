@@ -1,4 +1,6 @@
-Vue.component('dashboard-component-dashboard-interval-selector', {
+import Calendar from '../../../../assets/js/classes/calendar.js';
+
+export default {
     props: {
         store: Object
     },
@@ -126,7 +128,7 @@ Vue.component('dashboard-component-dashboard-interval-selector', {
         }
     },
     mounted: function onMounted() {
-        new Dashboard_Classes_Calendar(this.$refs.calendarControl, this.store.state.locale);
+        new Calendar(this.$refs.calendarControl, this.store.state.locale);
         $(this.$refs.calendarControl).on('apply.daterangepicker', this.onApplyRange);
         this.updateCalendarRange();
     },
@@ -157,7 +159,6 @@ Vue.component('dashboard-component-dashboard-interval-selector', {
             }
         }
     },
-    beforeDestroy: function beforeDestroy() {
-    },
-    template: '#dashboard_vuecomponents_dashboard_interval_selector'
-});
+    beforeUnmount: function beforeUnmount() {
+    }
+};
