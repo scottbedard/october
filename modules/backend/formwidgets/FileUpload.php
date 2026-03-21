@@ -320,7 +320,7 @@ class FileUpload extends FormWidgetBase
         $types = $this->fileTypes;
 
         if ($types === false) {
-            $definitionCode = starts_with($this->getDisplayMode(), 'image')
+            $definitionCode = str_starts_with($this->getDisplayMode(), 'image')
                 ? 'image_extensions'
                 : 'default_extensions';
 

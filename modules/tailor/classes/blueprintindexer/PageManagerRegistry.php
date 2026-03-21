@@ -108,7 +108,7 @@ trait PageManagerRegistry
      */
     public function resolvePageManagerItem($type, $item, $url, $theme): array
     {
-        if (starts_with($type, 'list-')) {
+        if (str_starts_with($type, 'list-')) {
             return $this->resolvePageManagerItemAsList($type, $item, $url, $theme);
         }
 
