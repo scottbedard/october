@@ -551,6 +551,7 @@ class Controller extends Extendable implements AjaxControllerInterface
             $response = ajax()->invalidFields($ex->errors());
         }
         catch (Throwable $ex) {
+            report($ex);
             $response = ajax()->exception($ex);
         }
 

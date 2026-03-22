@@ -297,7 +297,7 @@
       }));
     }
     getDomPatches() {
-      return this.getOps("patchDom").map(({ selector, html = "", swap = "innerHTML" }) => ({
+      return this.getOps("patchDom").map(({ selector, html = "", swap = "update" }) => ({
         selector,
         html,
         swap
@@ -554,10 +554,10 @@ window['${id}']();`;
 
   // ../../vendor/larajax/larajax/resources/src/request/dom-patcher.js
   var DomUpdateMode = {
-    replaceWith: "replace",
+    replace: "replace",
     prepend: "prepend",
     append: "append",
-    update: "innerHTML"
+    update: "update"
   };
   var DomPatcher = class {
     constructor(envelope, partialMap, options = {}) {
@@ -628,14 +628,12 @@ window['${id}']();`;
           runScriptsOnFragment(element, content);
           break;
         case "replace":
-          element.replaceWith(content);
-          runScriptsOnFragment(parentEl, content);
-          break;
         case "outerHTML":
           element.outerHTML = content;
           runScriptsOnFragment(parentEl, content);
           break;
         default:
+        case "update":
         case "innerHTML":
           element.innerHTML = content;
           runScriptsOnElement(element);
@@ -667,7 +665,7 @@ window['${id}']();`;
   function getSelectorUpdateMode(selector, el) {
     if (typeof selector === "string") {
       if (selector.charAt(0) === "!") {
-        return DomUpdateMode.replaceWith;
+        return DomUpdateMode.replace;
       }
       if (selector.charAt(0) === "@") {
         return DomUpdateMode.append;
@@ -1990,7 +1988,7 @@ window['${id}']();`;
   };
   function decorateResponse(response, statusCode, xhr) {
     if (!response || response.constructor !== {}.constructor || !response.__ajax) {
-      return response;
+      return response || {};
     }
     const { __ajax, ...data } = response, envelope = new Envelope(response, statusCode), meta = {
       env: envelope,
@@ -5725,14 +5723,15 @@ window['${id}']();`;
         Events.off(this.element, eventName, this.proxy(targetOrHandler), handlerOrOptions);
       }
       const compareArrays = (a, b) => {
-        if (a.length === b.length) {
-          for (var i = 0; i < a.length; i++) {
-            if (a[i] === b[i]) {
-              return true;
-            }
+        if (a.length !== b.length) {
+          return false;
+        }
+        for (var i = 0; i < a.length; i++) {
+          if (a[i] !== b[i]) {
+            return false;
           }
         }
-        return false;
+        return true;
       };
       for (const key in this.proxiedEvents) {
         if (compareArrays(arguments, this.proxiedEvents[key])) {

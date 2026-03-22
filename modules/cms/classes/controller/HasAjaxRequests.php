@@ -3,15 +3,12 @@
 use Lang;
 use Flash;
 use Request;
-use Response;
+use Cms\Classes\Partial;
 use Cms\Classes\CmsException;
 use Cms\Classes\PartialWatcher;
 use Cms\Classes\AjaxApiResponse;
-use Cms\Classes\Partial;
-use October\Rain\Exception\AjaxException;
 use October\Rain\Exception\ApplicationException;
 use October\Rain\Exception\ValidationException;
-use Illuminate\Http\RedirectResponse;
 use Exception;
 use Throwable;
 
@@ -166,6 +163,7 @@ trait HasAjaxRequests
             }
         }
         catch (Throwable $ex) {
+            report($ex);
             $response = ajax()->exception($ex);
         }
 

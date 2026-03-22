@@ -628,7 +628,7 @@ class FormController extends ControllerBehavior
     public function makeRedirect($context = null, $model = null, $queryParams = [])
     {
         $redirectUrl = null;
-        if (post('close') && !ends_with($context, '-close')) {
+        if (post('close') && !str_ends_with($context, '-close')) {
             $context .= '-close';
         }
 

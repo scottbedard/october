@@ -149,7 +149,10 @@ trait ReportProcessor
             ];
 
             if ($report->type === 'widget') {
-                $extraConfig['componentName'] = strtolower(str_replace('\\', '-', $report->widget));
+                $widget = $this->getReportWidget($report->reportName);
+                $extraConfig['componentName'] = $widget
+                    ? $widget->getComponentName()
+                    : strtolower(str_replace('\\', '-', $report->widget));
             }
 
             $report->configuration($extraConfig + $report->config);

@@ -290,6 +290,6 @@ class BlueprintIndexer
 
         $theme = Theme::getEditTheme() ?: Theme::getActiveTheme();
 
-        return $theme ? $theme->getDirname() : null;
+        return $theme ? $theme->getDirName() : null;
     }
 }

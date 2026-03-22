@@ -5,6 +5,7 @@ use Site;
 use Cms\Classes\Page;
 use Tailor\Classes\Blueprint\EntryBlueprint;
 use Tailor\Classes\BlueprintIndexer;
+use Exception;
 
 /**
  * PageManagerRegistry
@@ -20,9 +21,16 @@ trait PageManagerRegistry
     public function listPageManagerTypes(): array
     {
         $types = [];
+        $themeDatasource = $this->getActiveThemeDatasource();
 
         // Sections
         foreach (EntryBlueprint::listInProject() as $blueprint) {
+            // Skip blueprints from inactive themes
+            $themeCode = $blueprint->getDatasourceTheme();
+            if ($themeCode !== null && $themeDatasource && $themeCode !== $themeDatasource) {
+                continue;
+            }
+
             if ($typeCode = $this->pageManagerBlueprintToType($blueprint)) {
                 if ($blueprint->usePageFinder()) {
                     $types[$typeCode] = $blueprint->getMessage('pagefinderItemType', ":name Entry", ['name' => $blueprint->name]);
@@ -45,14 +53,21 @@ trait PageManagerRegistry
      */
     public function getPageManagerTypeInfo($type): array
     {
-        [$model, $query] = $this->pageManagerTypeToModel($type);
+        try {
+            [$model, $query] = $this->pageManagerTypeToModel($type);
+        }
+        catch (Exception $ex) {
+            report($ex);
+            return ['cmsPages' => []];
+        }
+
         if (!$model) {
-            return [];
+            return ['cmsPages' => []];
         }
 
         $result = [];
 
-        if (!starts_with($type, 'list-')) {
+        if (!str_starts_with($type, 'list-')) {
             $result['references'] = $this->listRecordOptionsForPageInfo($model, $query);
         }
 
