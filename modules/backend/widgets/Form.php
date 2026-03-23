@@ -1198,6 +1198,10 @@ class Form extends WidgetBase implements FormElement
      */
     protected function applyFiltersFromModel($applyData = null)
     {
+        if ($this->getContext() === 'translate') {
+            return;
+        }
+
         $targetModel = clone $this->model;
 
         // Apply specified data before filtering

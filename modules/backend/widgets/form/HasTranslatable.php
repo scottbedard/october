@@ -187,7 +187,7 @@ trait HasTranslatable
         $config->model = $siteModel;
         $config->alias = $this->alias . 'TranslateField' . $site->id;
         $config->arrayName = 'TranslateField';
-        $config->context = 'update';
+        $config->context = 'translate';
         $config->sessionKey = $this->getSessionKey();
         $config->isNested = true;
         $config->useTranslatable = false;
