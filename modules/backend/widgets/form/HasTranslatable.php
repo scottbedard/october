@@ -191,6 +191,7 @@ trait HasTranslatable
         $config->sessionKey = $this->getSessionKey();
         $config->isNested = true;
         $config->useTranslatable = false;
+        $config->useFilterFields = false;
         $config->fields = [
             $field->fieldName => array_except(array_merge($field->config, [
                 'type' => $field->config['widget'] ?? ($field->config['type'] ?? null),

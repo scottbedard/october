@@ -142,7 +142,12 @@ class Form extends WidgetBase implements FormElement
     /**
      * @var bool useTranslatable fields
      */
-    public $useTranslatable  = true;
+    public $useTranslatable = true;
+
+    /**
+     * @var bool useFilterFields enables the model filterFields method and events
+     */
+    public $useFilterFields = true;
 
     /**
      * @inheritDoc
@@ -165,6 +170,7 @@ class Form extends WidgetBase implements FormElement
             'surveyMode',
             'horizontalMode',
             'useTranslatable',
+            'useFilterFields',
         ]);
 
         $this->initFormWidgetsConcern();
@@ -1198,7 +1204,7 @@ class Form extends WidgetBase implements FormElement
      */
     protected function applyFiltersFromModel($applyData = null)
     {
-        if ($this->getContext() === 'translate') {
+        if (!$this->useFilterFields) {
             return;
         }
 
