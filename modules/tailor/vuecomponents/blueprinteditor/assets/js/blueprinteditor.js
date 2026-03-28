@@ -15,8 +15,6 @@ export default {
         );
 
         return {
-            documentData: {
-            },
             documentDeletedMessage: this.trans('tailor::lang.blueprint.deleted'),
             documentTitleProperty: 'fileName',
             codeEditorModelDefinitions: [defMarkup],

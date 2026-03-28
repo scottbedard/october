@@ -392,7 +392,7 @@ trait HasValueProcessor
             $fieldOptions = $formField->getOptionsFromModel(
                 $model,
                 $fieldOptions,
-                $record->toArray()
+                $record
             );
         }
 

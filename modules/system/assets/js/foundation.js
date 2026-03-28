@@ -11140,6 +11140,10 @@ API.txt for details.
         data['inspectorProperty'] = this.getPropertyPath();
         data['inspectorClassName'] = this.inspector.options.inspectorClass;
 
+        if (!data['inspectorClassName']) {
+            return;
+        }
+
         this.showLoadingIndicator();
 
         if (this.triggerGetOptions(data, callback) === false) {
@@ -11655,6 +11659,10 @@ API.txt for details.
 
         data['inspectorProperty'] = this.getPropertyPath();
         data['inspectorClassName'] = this.inspector.options.inspectorClass;
+
+        if (!data['inspectorClassName']) {
+            return;
+        }
 
         $form.request(this.inspector.getEventHandler('onInspectableGetOptions'), {
             data: data,
@@ -13233,6 +13241,10 @@ API.txt for details.
         data['inspectorProperty'] = this.getPropertyPath();
         data['inspectorClassName'] = this.inspector.options.inspectorClass;
 
+        if (!data['inspectorClassName']) {
+            return;
+        }
+
         $form.request(this.inspector.getEventHandler('onInspectableGetOptions'), {
             data: data,
             progressBar: false
@@ -14006,6 +14018,10 @@ API.txt for details.
 
         data['inspectorProperty'] = this.getPropertyPath();
         data['inspectorClassName'] = this.inspector.options.inspectorClass;
+
+        if (!data['inspectorClassName']) {
+            return;
+        }
 
         $form.request(this.inspector.getEventHandler('onInspectableGetOptions'), {
             data: data,

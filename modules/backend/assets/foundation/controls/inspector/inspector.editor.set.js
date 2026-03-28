@@ -167,6 +167,10 @@
         data['inspectorProperty'] = this.getPropertyPath();
         data['inspectorClassName'] = this.inspector.options.inspectorClass;
 
+        if (!data['inspectorClassName']) {
+            return;
+        }
+
         $form.request(this.inspector.getEventHandler('onInspectableGetOptions'), {
             data: data,
             progressBar: false

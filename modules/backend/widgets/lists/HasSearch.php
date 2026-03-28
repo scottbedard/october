@@ -44,6 +44,14 @@ trait HasSearch
     }
 
     /**
+     * getSearchTerm returns the active search term.
+     */
+    public function getSearchTerm(): ?string
+    {
+        return $this->searchTerm;
+    }
+
+    /**
      * setSearchOptions applies a search options to the list search.
      * @param array $options
      */

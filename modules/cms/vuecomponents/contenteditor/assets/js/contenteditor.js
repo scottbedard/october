@@ -13,10 +13,6 @@ export default {
         );
 
         return {
-            documentData: {
-                markup: '',
-                components: []
-            },
             documentSettingsPopupTitle: this.trans('cms::lang.editor.content'),
             documentTitleProperty: 'fileName',
             codeEditorModelDefinitions: [defMarkup],

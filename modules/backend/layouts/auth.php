@@ -19,7 +19,7 @@
             "imports": {
                 "larajax": "<?= Url::asset('modules/system/assets/js/framework.esm.js') ?>",
                 "bootstrap": "<?= $vendorPath ?>/bootstrap/bootstrap.esm.js",
-                "vue": "<?= $vendorPath ?>/vue/vue.esm.js"
+                "vue": "<?= $vendorPath ?>/vue/vue.esm<?= Config::get('app.debug') ? '' : '.prod' ?>.js"
             }
         }
         </script>
