@@ -13,6 +13,7 @@ use BackendAuth;
 use Dashboard\Models\DashboardSetting;
 use Dashboard\Models\TrafficStatisticsPageview;
 use Carbon\Carbon;
+use Throwable;
 
 /**
  * TrafficLogger logs pageviews for Internal Traffic Statistics.
@@ -91,6 +92,19 @@ class TrafficLogger
      */
     public function logPageview()
     {
+        try {
+            $this->logPageviewInternal();
+        }
+        catch (Throwable $e) {
+            traceLog($e);
+        }
+    }
+
+    /**
+     * logPageviewInternal performs the pageview logging logic.
+     */
+    protected function logPageviewInternal()
+    {
         if (!self::isEnabled()) {
             return;
         }
@@ -150,7 +164,7 @@ class TrafficLogger
         $pageview->ip = Str::substr((string) Request::ip(), 0, 255);
         $pageview->page_path = Str::substr((string) Request::path(), 0, 255);
         $pageview->referral_domain = Str::substr((string) parse_url($referrer ?: '', PHP_URL_HOST), 0, 255);
-        $pageview->ev_timestamp = gmdate('Y-m-d H:i:s', time());
+        $pageview->ev_timestamp = Carbon::now('UTC');
 
         if (Site::hasFeature('dashboard_traffic_statistics')) {
             $pageview->site_id = Site::getActiveSite()?->id;
