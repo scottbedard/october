@@ -164,7 +164,7 @@ class TrafficLogger
         $pageview->ip = Str::substr((string) Request::ip(), 0, 255);
         $pageview->page_path = Str::substr((string) Request::path(), 0, 255);
         $pageview->referral_domain = Str::substr((string) parse_url($referrer ?: '', PHP_URL_HOST), 0, 255);
-        $pageview->ev_timestamp = Carbon::now('UTC');
+        $pageview->ev_timestamp = Carbon::now();
 
         if (Site::hasFeature('dashboard_traffic_statistics')) {
             $pageview->site_id = Site::getActiveSite()?->id;
