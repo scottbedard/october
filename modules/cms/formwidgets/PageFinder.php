@@ -23,7 +23,7 @@ class PageFinder extends FormWidgetBase
     //
 
     /**
-     * @var bool singleMode only allows items to be selected that resovle to a single URL.
+     * @var bool singleMode only allows items to be selected that resolve to a single URL.
      */
     public $singleMode = false;
 

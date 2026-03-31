@@ -257,7 +257,7 @@ trait PageManagerRegistry
      */
     protected function extractItemUrlParams($item): array
     {
-        return \Cms\Models\PageLookupItem::extractUrlParams($item->attributes);
+        return \Cms\Models\PageLookupItem::extractUrlParams($item->attributes ?? []);
     }
 
     /**
