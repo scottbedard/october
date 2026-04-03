@@ -569,7 +569,7 @@ class MediaManager extends WidgetBase
             }
             else {
                 $segments = explode('/', $folder);
-                $name = str_repeat('&nbsp;', (count($segments)-1)*4).basename($folder);
+                $name = str_repeat("\xC2\xA0", (count($segments)-1)*4).basename($folder);
             }
 
             $folderList[$path] = $name;

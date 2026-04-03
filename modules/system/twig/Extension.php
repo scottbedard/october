@@ -3,6 +3,7 @@
 use App;
 use Url;
 use Event;
+use Config;
 use System;
 use Twig\Extension\AbstractExtension as TwigExtension;
 use Twig\Environment as TwigEnvironment;
@@ -160,7 +161,10 @@ class Extension extends TwigExtension
      */
     public function carbonFunction($value)
     {
-        if (App::runningInFrontend() && System::hasModule('Cms')) {
+        if (
+            (App::runningInFrontend() || Config::get('cms.timezone_force')) &&
+            System::hasModule('Cms')
+        ) {
             return \Cms::makeCarbon($value);
         }
 
