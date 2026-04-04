@@ -7837,7 +7837,9 @@ API.txt for details.
 (function($){
 
     $(document).render(function() {
-        $('[data-control="tooltip"], [data-bs-toggle="tooltip"], [data-toggle="tooltip"]').tooltip();
+        if ($.fn.tooltip) {
+            $('[data-control="tooltip"], [data-bs-toggle="tooltip"], [data-toggle="tooltip"]').tooltip();
+        }
     });
 
     addEventListener('ajax:before-update', function(event) {
