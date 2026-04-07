@@ -142,6 +142,19 @@ export default {
             this.updateDocumentLanguage();
         },
 
+        onToolbarCommand: function onToolbarCommand(command, isHotkey, ev) {
+            this.handleBasicDocumentCommands(command, isHotkey);
+
+            if (command === 'show-template-info') {
+                this.showTemplateInfo();
+            }
+
+            var connector = this.$refs.richEditorDocumentConnector || this.$refs.markdownEditor;
+            if (connector && connector.internalEventBus) {
+                connector.internalEventBus.emit('toolbarcmd', { command: command, ev: ev });
+            }
+        },
+
         onParentTabSelected: function onParentTabSelected() {
             if (this.$refs.editor) {
                 this.$nextTick(() => this.$refs.editor.layout());
