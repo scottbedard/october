@@ -16,6 +16,11 @@ class PresetManager
     protected $presets;
 
     /**
+     * @var array extenders collection of preset extender callbacks
+     */
+    protected $extenders = [];
+
+    /**
      * __construct
      */
     public function __construct()
@@ -37,7 +42,7 @@ class PresetManager
     }
 
     /**
-     * registerPreset
+     * registerPreset registers a new preset with a callback that returns the items
      */
     public function registerPreset(string $alias, callable $callback)
     {
@@ -45,7 +50,39 @@ class PresetManager
     }
 
     /**
-     * getPreset
+     * replacePreset completely replaces an existing preset with a new callback
+     */
+    public function replacePreset(string $alias, callable $callback)
+    {
+        $this->presets[$alias] = $callback;
+    }
+
+    /**
+     * extendPreset registers a callback that modifies a preset after it is resolved.
+     * The callback receives the preset items array and should return the modified array.
+     *
+     * Usage to add items:
+     *
+     *     PresetManager::instance()->extendPreset('icons', function($items) {
+     *         $items['bi-custom'] = ['custom', 'bi bi-custom'];
+     *         return $items;
+     *     });
+     *
+     * Usage to remove items:
+     *
+     *     PresetManager::instance()->extendPreset('icons', function($items) {
+     *         unset($items['oc-icon-trash']);
+     *         return $items;
+     *     });
+     *
+     */
+    public function extendPreset(string $alias, callable $callback)
+    {
+        $this->extenders[$alias][] = $callback;
+    }
+
+    /**
+     * getPreset returns the resolved preset items for a given alias
      */
     public function getPreset(string $alias): array
     {
@@ -53,15 +90,23 @@ class PresetManager
             $alias = substr($alias, 7);
         }
 
-        if ($this->hasPreset($alias)) {
-            return $this->presets[$alias]();
+        if (!$this->hasPreset($alias)) {
+            return [];
         }
 
-        return [];
+        $items = $this->presets[$alias]();
+
+        if (isset($this->extenders[$alias])) {
+            foreach ($this->extenders[$alias] as $callback) {
+                $items = $callback($items) ?: $items;
+            }
+        }
+
+        return $items;
     }
 
     /**
-     * hasPreset
+     * hasPreset checks if a preset exists by alias
      */
     public function hasPreset(string $alias): bool
     {
