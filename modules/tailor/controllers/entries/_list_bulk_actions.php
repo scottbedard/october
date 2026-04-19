@@ -33,6 +33,7 @@
             label: __("Change Status"),
             icon: 'oc-icon-angle-down',
             secondary: true,
+            caret: false,
             dataListCheckedTrigger: true
         )->slot() ?>
 

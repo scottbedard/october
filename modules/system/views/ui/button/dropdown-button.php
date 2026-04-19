@@ -17,9 +17,10 @@ elseif ($secondary) $classes[] = 'btn-secondary';
         'data-toggle' => 'dropdown',
     ])) ?>>
         <?php if ($icon): ?>
-            <i class="<?= e($icon) ?>"></i>
+            <i class="<?= e($icon) ?>"></i><?= e($label) ?>
+        <?php else: ?>
+            <?= e($label) ?>
         <?php endif ?>
-        <?= e($label) ?>
     </button>
     <ul class="dropdown-menu">
         <?= $slot ?>
