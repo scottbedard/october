@@ -228,10 +228,6 @@ class ServiceProvider extends ModuleServiceProvider
      */
     protected function registerErrorHandler()
     {
-        Event::listen('exception.beforeReport', function ($exception) {
-            (new ErrorHandler)->beforeReport($exception);
-        });
-
         Event::listen('exception.beforeRender', function ($exception, $httpCode, $request) {
             return (new ErrorHandler)->handleException($exception);
         });

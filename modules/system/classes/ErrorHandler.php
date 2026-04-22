@@ -13,7 +13,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Validation\ValidationException;
-use Illuminate\Contracts\Debug\ExceptionHandler;
+use Throwable;
 use Exception;
 
 /**
@@ -25,21 +25,23 @@ use Exception;
 class ErrorHandler extends ErrorHandlerBase
 {
     /**
-     * beforeReport allows hooking the application exception handler
+     * handleException handles all exceptions from the framework workflow, with
+     * additional handling to unwrap Twig runtime errors.
      */
-    public function beforeReport($exception)
+    public function handleException(Throwable $proposedException)
     {
-        $handler = App::make(ExceptionHandler::class);
+        if ($proposedException instanceof \Twig\Error\RuntimeError) {
+            $proposedException = $this->unwrapTwigRuntimeError($proposedException);
+        }
 
-        $handler->map(\Twig\Error\RuntimeError::class, function($e) {
-            return $this->handleTwigRuntimeError($e);
-        });
+        return parent::handleException($proposedException);
     }
 
     /**
-     * handleTwigRuntimeError maps errors that occur within Twig, usually masking Http exceptions
+     * unwrapTwigRuntimeError extracts the previous exception from Twig runtime
+     * errors, usually masking Http exceptions.
      */
-    protected function handleTwigRuntimeError($exception)
+    protected function unwrapTwigRuntimeError($exception)
     {
         if (!$previousException = $exception->getPrevious()) {
             return $exception;
@@ -57,12 +59,12 @@ class ErrorHandler extends ErrorHandlerBase
             $previousException instanceof HttpException ||
             $previousException instanceof HttpResponseException
         ) {
-            $exception = $previousException;
+            return $previousException;
         }
 
         // Convert Not Found exceptions
         if ($this->isNotFoundException($previousException)) {
-            $exception = $previousException;
+            return $previousException;
         }
 
         return $exception;

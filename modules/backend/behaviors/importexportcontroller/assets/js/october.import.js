@@ -107,7 +107,7 @@
                 name = $this.data('column-name');
 
                 var matchedColumn = fileColumns[name] || fileColumns[label];
-                if (matchedColumn) {
+                if (matchedColumn && !matchedColumn.hasClass('is-ignored')) {
                     $this.appendTo($('.import-column-bindings > ul', matchedColumn));
                     self.matchColumn($this, matchedColumn);
                 }

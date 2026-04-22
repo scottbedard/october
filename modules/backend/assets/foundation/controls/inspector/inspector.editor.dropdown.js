@@ -341,10 +341,6 @@
         data['inspectorProperty'] = this.getPropertyPath();
         data['inspectorClassName'] = this.inspector.options.inspectorClass;
 
-        if (!data['inspectorClassName']) {
-            return;
-        }
-
         this.showLoadingIndicator();
 
         if (this.triggerGetOptions(data, callback) === false) {

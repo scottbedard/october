@@ -104,7 +104,6 @@ class PageFinder extends FormWidgetBase
         $this->vars['value'] = $this->getKeyValue();
         $this->vars['field'] = $this->formField;
         $this->vars['nameValue'] = $this->getNameValue();
-        $this->vars['descriptionValue'] = $this->getDescriptionValue();
         $this->vars['singleMode'] = $this->singleMode;
         $this->vars['allowCustomUrl'] = $this->allowCustomUrl;
         $this->vars['allowedTypes'] = $this->allowedTypes;
@@ -155,28 +154,6 @@ class PageFinder extends FormWidgetBase
         }
 
         return $label;
-    }
-
-    /**
-     * getDescriptionValue
-     */
-    public function getDescriptionValue()
-    {
-        $linkUrl = (string) $this->getKeyValue();
-        if (!$linkUrl) {
-            return '';
-        }
-
-        $item = $this->getLookupItemValue();
-        if (!$item) {
-            return '';
-        }
-
-        if (str_starts_with($linkUrl, 'october://')) {
-            return $item->getPreviewUrl();
-        }
-
-        return $item->url ?? '';
     }
 
     /**
