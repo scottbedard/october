@@ -13,7 +13,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Validation\ValidationException;
-use Throwable;
+use Illuminate\Contracts\Debug\ExceptionHandler;
 use Exception;
 
 /**
@@ -25,23 +25,24 @@ use Exception;
 class ErrorHandler extends ErrorHandlerBase
 {
     /**
-     * handleException handles all exceptions from the framework workflow, with
-     * additional handling to unwrap Twig runtime errors.
+     * beforeReport allows hooking the application exception handler
      */
-    public function handleException(Throwable $proposedException)
+    public function beforeReport($exception)
     {
-        if ($proposedException instanceof \Twig\Error\RuntimeError) {
-            $proposedException = $this->unwrapTwigRuntimeError($proposedException);
-        }
+        $handler = App::make(ExceptionHandler::class);
 
-        return parent::handleException($proposedException);
+        // The map method is not part of the contract (nunomaduro/collision)
+        if (method_exists($handler, 'map')) {
+            $handler->map(\Twig\Error\RuntimeError::class, function($e) {
+                return $this->handleTwigRuntimeError($e);
+            });
+        }
     }
 
     /**
-     * unwrapTwigRuntimeError extracts the previous exception from Twig runtime
-     * errors, usually masking Http exceptions.
+     * handleTwigRuntimeError maps errors that occur within Twig, usually masking Http exceptions
      */
-    protected function unwrapTwigRuntimeError($exception)
+    protected function handleTwigRuntimeError($exception)
     {
         if (!$previousException = $exception->getPrevious()) {
             return $exception;
@@ -59,12 +60,12 @@ class ErrorHandler extends ErrorHandlerBase
             $previousException instanceof HttpException ||
             $previousException instanceof HttpResponseException
         ) {
-            return $previousException;
+            $exception = $previousException;
         }
 
         // Convert Not Found exceptions
         if ($this->isNotFoundException($previousException)) {
-            return $previousException;
+            $exception = $previousException;
         }
 
         return $exception;

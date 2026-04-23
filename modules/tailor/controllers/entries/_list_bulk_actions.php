@@ -31,7 +31,7 @@
     <?php if ($this->hasSourcePermission('publish')): ?>
         <?php Ui::dropdownButton(
             label: __("Change Status"),
-            icon: 'oc-icon-angle-down',
+            icon: 'icon-angle-down',
             secondary: true,
             caret: false,
             dataListCheckedTrigger: true
