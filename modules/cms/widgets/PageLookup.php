@@ -222,8 +222,9 @@ class PageLookup extends WidgetBase
             $model->excludedTypes = $this->getExcludedTypes();
         }
 
-        if (!$model->type) {
-            $typeOptions = $model->getTypeOptions();
+        $typeOptions = $model->getTypeOptions();
+
+        if (!$model->type || !array_key_exists($model->type, $typeOptions)) {
             $model->type = $typeOptions ? array_key_first($typeOptions) : 'url';
         }
 

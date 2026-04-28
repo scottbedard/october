@@ -104,6 +104,7 @@ class PageFinder extends FormWidgetBase
         $this->vars['value'] = $this->getKeyValue();
         $this->vars['field'] = $this->formField;
         $this->vars['nameValue'] = $this->getNameValue();
+        $this->vars['descriptionValue'] = $this->getDescriptionValue();
         $this->vars['singleMode'] = $this->singleMode;
         $this->vars['allowCustomUrl'] = $this->allowCustomUrl;
         $this->vars['allowedTypes'] = $this->allowedTypes;
@@ -146,14 +147,28 @@ class PageFinder extends FormWidgetBase
             return '';
         }
 
-        $label = $item->getReferenceLabel() ?: $item->getTypeLabel();
+        return $item->getReferenceLabel() ?: $item->getTypeLabel();
+    }
 
-        if ($item->cmsPage) {
-            $cmsPageLabel = $item->getCmsPageOptions()[$item->cmsPage] ?? $item->cmsPage;
-            $label .= ' - ' . $cmsPageLabel;
+    /**
+     * getDescriptionValue
+     */
+    public function getDescriptionValue()
+    {
+        $item = $this->getLookupItemValue();
+        if (!$item) {
+            return '';
         }
 
-        return $label;
+        if ($item->type === 'url' && $item->url) {
+            return $item->url;
+        }
+
+        if ($item->cmsPage) {
+            return $item->getCmsPageOptions()[$item->cmsPage] ?? $item->cmsPage;
+        }
+
+        return '';
     }
 
     /**
