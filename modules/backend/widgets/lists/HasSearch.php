@@ -70,7 +70,7 @@ trait HasSearch
      * getSearchableColumns returns a collection of columns which can be searched.
      * @return array
      */
-    protected function getSearchableColumns()
+    public function getSearchableColumns()
     {
         $columns = $this->getColumns();
         $searchable = [];
