@@ -51,6 +51,7 @@ registerControl('media-manager', class extends ControlBase {
             overwriteConfirm: 'Some files already exist. Do you want to replace them?',
             pathCopiedMessage: 'Copied!',
             bottomToolbar: false,
+            maxFilesize: 256,
             cropAndInsertButton: false,
             readOnly: false
         }, this.config);
@@ -756,6 +757,7 @@ registerControl('media-manager', class extends ControlBase {
             clickable: this.$el.find('[data-media-upload]').get(0),
             url: this.config.url,
             paramName: 'file_data',
+            maxFilesize: this.config.maxFilesize || 256,
             headers: {},
             timeout: 0,
             createImageThumbnails: false,

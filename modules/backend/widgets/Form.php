@@ -441,7 +441,7 @@ class Form extends WidgetBase implements FormElement
 
         // Data set differs from model
         if ($this->data !== $this->model) {
-            $this->data = (object) array_merge((array) $this->data, (array) $data);
+            $this->data = (object) array_replace((array) $this->data, (array) $data);
         }
 
         // Set field values from data source

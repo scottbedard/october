@@ -12,6 +12,7 @@
     data-path-copied-message="<?= e(trans('backend::lang.media.path_copied')) ?>"
     data-bottom-toolbar="<?= $this->bottomToolbar ? 'true' : 'false' ?>"
     data-crop-and-insert-button="<?= $this->cropAndInsertButton ? 'true' : 'false' ?>"
+    data-max-filesize="<?= $maxFilesize ?>"
     data-read-only="<?= $this->readOnly ? 'true' : 'false' ?>"
     tabindex="0"
 >

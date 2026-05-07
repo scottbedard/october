@@ -4645,7 +4645,10 @@ window['${id}']();`;
           this.delegate.viewRendered(this.newBody);
         };
         if (this.willPerformViewTransition()) {
-          document.startViewTransition(() => completeRender());
+          const transition = document.startViewTransition(() => completeRender());
+          if (typeof this.delegate.setViewTransitionFinished === "function") {
+            this.delegate.setViewTransitionFinished(transition.finished);
+          }
         } else {
           completeRender();
         }
@@ -5279,6 +5282,7 @@ window['${id}']();`;
       this.currentVisit = null;
       this.historyVisit = null;
       this.pageIsReady = false;
+      this.viewTransitionFinished = null;
       this.pageLoaded = () => {
         this.pageIsReady = true;
         this.lastRenderedLocation = this.location;
@@ -5317,6 +5321,10 @@ window['${id}']();`;
         this.scrollManager.start();
         this.started = true;
         this.enabled = this.documentIsEnabled();
+        if ("scrollRestoration" in history) {
+          this.previousScrollRestoration = history.scrollRestoration;
+          history.scrollRestoration = "manual";
+        }
       }
     }
     disable() {
@@ -5330,6 +5338,9 @@ window['${id}']();`;
         this.scrollManager.stop();
         this.stopHistory();
         this.started = false;
+        if ("scrollRestoration" in history && this.previousScrollRestoration) {
+          history.scrollRestoration = this.previousScrollRestoration;
+        }
       }
     }
     isEnabled() {
@@ -5456,6 +5467,9 @@ window['${id}']();`;
       this.lastRenderedLocation = this.currentVisit.location;
       this.notifyApplicationAfterRender();
     }
+    setViewTransitionFinished(promise) {
+      this.viewTransitionFinished = promise;
+    }
     viewTransitionEnabled() {
       return this.view.getPage().isViewTransitionEnabled();
     }
@@ -5540,7 +5554,16 @@ window['${id}']();`;
       return visit;
     }
     visitCompleted(visit) {
-      this.unmarkVisitDirection();
+      if (this.viewTransitionFinished) {
+        this.viewTransitionFinished.then(() => {
+          this.unmarkVisitDirection();
+        }).catch(() => {
+          this.unmarkVisitDirection();
+        });
+        this.viewTransitionFinished = null;
+      } else {
+        this.unmarkVisitDirection();
+      }
       this.notifyApplicationAfterPageLoad(visit.getTimingMetrics());
       if (this.pendingAssets === 0) {
         this.pageIsReady = true;
