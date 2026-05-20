@@ -203,9 +203,14 @@ trait OctoberUtilCommands
             return;
         }
 
+        $uploadsDisk = Config::get('filesystems.disks.uploads.driver', 'local');
+        if ($uploadsDisk !== 'local') {
+            $this->error('Purging uploads is only supported on the local disk');
+            return;
+        }
+
         $totalCount = 0;
-        $uploadsPath = Config::get('filesystems.disks.local.root', storage_path('app'));
-        $uploadsPath .= '/uploads';
+        $uploadsPath = Config::get('filesystems.disks.uploads.root', storage_path('app/uploads'));
 
         /*
          * Recursive function to scan the directory for files beginning

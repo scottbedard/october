@@ -40,6 +40,13 @@ class ResizeImages
     protected $storageUrl;
 
     /**
+     * @var string imageItemClass to use for a single resize request.
+     * Override in a subclass and rebind `system.resizer` to customize the resizer
+     * output (filename, partition directory, cache key, etc).
+     */
+    protected static $imageItemClass = ResizeImageItem::class;
+
+    /**
      * __construct this instance
      */
     public function __construct()
@@ -81,7 +88,7 @@ class ResizeImages
      */
     protected function prepareRequest($image, $width = null, $height = null, $options = [])
     {
-        $imageItem = (new ResizeImageItem)->fromObject($image);
+        $imageItem = (new static::$imageItemClass)->fromObject($image);
         $imageItem->toOptions($options);
         $imageItem->toDimensions($width, $height);
 
@@ -125,7 +132,7 @@ class ResizeImages
 
         $this->processImage($cacheKey);
 
-        $imageItem = (new ResizeImageItem)->fromCacheInfo($cacheKey, $cacheInfo);
+        $imageItem = (new static::$imageItemClass)->fromCacheInfo($cacheKey, $cacheInfo);
 
         return Redirect::to($this->getPublicPath($imageItem));
     }
@@ -140,7 +147,7 @@ class ResizeImages
             return;
         }
 
-        $imageItem = (new ResizeImageItem)->fromCacheInfo($cacheKey, $cacheInfo);
+        $imageItem = (new static::$imageItemClass)->fromCacheInfo($cacheKey, $cacheInfo);
 
         // Set local paths for resizer
         $tempFilename = $imageItem->getPartitionDirectory() . '_' . $imageItem->getFilename();
@@ -188,9 +195,14 @@ class ResizeImages
             if (!$this->validateExternalImageUrl($realSourcePath)) {
                 Log::warning("Blocked external image with invalid extension: {$realSourcePath}");
             }
+            elseif (!$this->validateExternalImageHost($realSourcePath)) {
+                Log::warning("Blocked external image with disallowed scheme or host: {$realSourcePath}");
+            }
             else {
                 try {
-                    $contents = file_get_contents($realSourcePath);
+                    $contents = @file_get_contents($realSourcePath, false, stream_context_create([
+                        'http' => ['timeout' => 5, 'follow_location' => 0],
+                    ]));
 
                     // Validate MIME type of fetched content
                     if ($this->validateImageContents($contents)) {
@@ -242,6 +254,58 @@ class ResizeImages
         $allowedExtensions = FileDefinitions::get('image_extensions');
 
         return in_array($extension, $allowedExtensions);
+    }
+
+    /**
+     * validateExternalImageHost rejects URLs whose scheme is not http(s) or whose
+     * host resolves to a loopback, private, link-local, or reserved address. This
+     * is a defense-in-depth check against SSRF via the external image fetcher.
+     */
+    protected function validateExternalImageHost(string $url): bool
+    {
+        $parts = parse_url($url);
+        if (!$parts || !isset($parts['scheme'], $parts['host'])) {
+            return false;
+        }
+
+        if (!in_array(strtolower($parts['scheme']), ['http', 'https'], true)) {
+            return false;
+        }
+
+        // parse_url returns IPv6 literals wrapped in brackets, e.g. [::1]
+        $host = trim($parts['host'], '[]');
+
+        // Resolve host to IP addresses and reject any that fall in a reserved range.
+        $ips = [];
+        if (filter_var($host, FILTER_VALIDATE_IP)) {
+            // Host is already an IP literal
+            $ips[] = $host;
+        }
+        else {
+            $records = @dns_get_record($host, DNS_A | DNS_AAAA);
+            if (is_array($records)) {
+                foreach ($records as $record) {
+                    $ips[] = $record['ip'] ?? $record['ipv6'] ?? null;
+                }
+            }
+        }
+
+        $ips = array_filter($ips);
+        if (empty($ips)) {
+            return false;
+        }
+
+        foreach ($ips as $ip) {
+            if (!filter_var(
+                $ip,
+                FILTER_VALIDATE_IP,
+                FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE
+            )) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**

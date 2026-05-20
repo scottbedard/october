@@ -45,7 +45,7 @@ registerControl('richeditor', class extends ControlBase {
             readOnly: false
         }, this.config);
 
-        if (this.config.editorOptions.constructor !== {}.constructor) {
+        if (!this.config.editorOptions || this.config.editorOptions.constructor !== {}.constructor) {
             this.config.editorOptions = {};
         }
     }

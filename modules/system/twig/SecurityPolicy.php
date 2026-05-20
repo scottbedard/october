@@ -34,6 +34,11 @@ final class SecurityPolicy implements SecurityPolicyInterface
             'increment', 'incrementEach', 'decrement', 'decrementEach',
             'from', 'fromRaw', 'fromSub',
             'getConnection', 'toRawSql',
+            'selectRaw', 'whereRaw', 'orWhereRaw',
+            'havingRaw', 'orHavingRaw',
+            'orderByRaw', 'groupByRaw',
+            'joinSub', 'leftJoinSub', 'rightJoinSub', 'crossJoinSub',
+            'raw', 'rawValue',
         ],
         \Illuminate\Database\Eloquent\Builder::class => [
             'insert', 'insertOrIgnore', 'insertGetId', 'insertUsing', 'insertOrIgnoreUsing',
@@ -45,6 +50,12 @@ final class SecurityPolicy implements SecurityPolicyInterface
             'fillAndInsert', 'fillAndInsertOrIgnore', 'fillAndInsertGetId',
             'touch',
             'toRawSql',
+            'selectRaw', 'whereRaw', 'orWhereRaw',
+            'havingRaw', 'orHavingRaw',
+            'orderByRaw', 'groupByRaw',
+            'fromRaw', 'fromSub',
+            'joinSub', 'leftJoinSub', 'rightJoinSub', 'crossJoinSub',
+            'raw', 'rawValue',
         ],
         \Illuminate\Database\Eloquent\Model::class => [
             'insert', 'insertOrIgnore', 'insertGetId', 'insertUsing', 'insertOrIgnoreUsing',
@@ -59,6 +70,12 @@ final class SecurityPolicy implements SecurityPolicyInterface
             'fill', 'forceFill',
             'touch',
             'getConnection', 'toRawSql',
+            'selectRaw', 'whereRaw', 'orWhereRaw',
+            'havingRaw', 'orHavingRaw',
+            'orderByRaw', 'groupByRaw',
+            'fromRaw', 'fromSub',
+            'joinSub', 'leftJoinSub', 'rightJoinSub', 'crossJoinSub',
+            'raw', 'rawValue',
         ],
     ];
 
@@ -176,7 +193,15 @@ final class SecurityPolicy implements SecurityPolicyInterface
     public function castMethodObjectToSafeObject($object)
     {
         if ($object instanceof \Illuminate\Support\Collection) {
-            return new \October\Rain\Support\SafeCollection($object);
+            return new \System\Twig\SecurityPolicy\SafeCollection($object);
+        }
+
+        if ($object instanceof \Illuminate\Session\Store) {
+            return new \System\Twig\SecurityPolicy\SafeSessionStore($object);
+        }
+
+        if ($object instanceof \Illuminate\Http\Request) {
+            return new \System\Twig\SecurityPolicy\SafeRequest($object);
         }
 
         return $object;
@@ -195,8 +220,6 @@ final class SecurityPolicy implements SecurityPolicyInterface
         if (
             $obj instanceof \Carbon\Carbon ||
             $obj instanceof \Illuminate\View\View ||
-            $obj instanceof \Illuminate\Http\Request ||
-            $obj instanceof \Illuminate\Session\Store ||
             $obj instanceof \Illuminate\Support\HtmlString ||
             $obj instanceof \Illuminate\Support\Collection ||
             $obj instanceof \Illuminate\Database\Query\Builder ||

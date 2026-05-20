@@ -4550,6 +4550,7 @@ window['${id}']();`;
     constructor(delegate) {
       this.started = false;
       this.pageLoaded = false;
+      this.currentPosition = 0;
       this.onPopState = (event) => {
         if (!this.shouldHandlePopState()) {
           return;
@@ -4559,8 +4560,10 @@ window['${id}']();`;
         }
         const { ajaxTurbo } = event.state;
         const location2 = Location.currentLocation;
-        const { restorationIdentifier } = ajaxTurbo;
-        this.delegate.historyPoppedToLocationWithRestorationIdentifier(location2, restorationIdentifier);
+        const { restorationIdentifier, position } = ajaxTurbo;
+        const direction = typeof position === "number" && position > this.currentPosition ? "forward" : "back";
+        this.currentPosition = typeof position === "number" ? position : this.currentPosition;
+        this.delegate.historyPoppedToLocationWithRestorationIdentifier(location2, restorationIdentifier, direction);
       };
       this.onPageLoad = (event) => {
         defer(() => {
@@ -4584,6 +4587,7 @@ window['${id}']();`;
       }
     }
     push(location2, restorationIdentifier) {
+      this.currentPosition++;
       this.update(history.pushState, location2, restorationIdentifier);
     }
     replace(location2, restorationIdentifier) {
@@ -4597,7 +4601,7 @@ window['${id}']();`;
       return this.pageLoaded || document.readyState == "complete";
     }
     update(method, location2, restorationIdentifier) {
-      const state = { ajaxTurbo: { restorationIdentifier } };
+      const state = { ajaxTurbo: { restorationIdentifier, position: this.currentPosition } };
       method.call(history, state, "", location2.absoluteURL);
     }
   };
@@ -5408,12 +5412,12 @@ window['${id}']();`;
       this.history.replace(this.location, this.restorationIdentifier);
     }
     // History delegate
-    historyPoppedToLocationWithRestorationIdentifier(location2, restorationIdentifier) {
+    historyPoppedToLocationWithRestorationIdentifier(location2, restorationIdentifier, direction) {
       if (this.enabled) {
         this.location = location2;
         this.restorationIdentifier = restorationIdentifier;
         const restorationData = this.getRestorationDataForIdentifier(restorationIdentifier);
-        this.startVisit(location2, "restore", { restorationIdentifier, restorationData, historyChanged: true });
+        this.startVisit(location2, "restore", { restorationIdentifier, restorationData, historyChanged: true, direction });
       } else {
         this.adapter.pageInvalidated();
       }
@@ -5473,8 +5477,10 @@ window['${id}']();`;
     viewTransitionEnabled() {
       return this.view.getPage().isViewTransitionEnabled();
     }
-    markVisitDirection(action) {
-      const direction = { advance: "forward", restore: "back" }[action] || "none";
+    markVisitDirection(action, direction) {
+      if (!direction) {
+        direction = { advance: "forward", restore: "back" }[action] || "none";
+      }
       document.documentElement.setAttribute("data-turbo-visit-direction", direction);
     }
     unmarkVisitDirection() {
@@ -5542,7 +5548,7 @@ window['${id}']();`;
       }
       this.currentVisit = this.createVisit(location2, action, properties);
       this.currentVisit.scrolled = !this.useScroll;
-      this.markVisitDirection(action);
+      this.markVisitDirection(action, properties.direction);
       this.currentVisit.start();
       this.notifyApplicationAfterVisitingLocation(location2);
     }
@@ -5792,6 +5798,15 @@ window['${id}']();`;
       if (value === "null") return null;
       if (value === "undefined") return void 0;
       if (value !== "" && !isNaN(Number(value))) return Number(value);
+      if (typeof value === "string") {
+        const first = value.charAt(0), last = value.charAt(value.length - 1);
+        if (first === "{" && last === "}" || first === "[" && last === "]") {
+          try {
+            return JSON.parse(value);
+          } catch (e) {
+          }
+        }
+      }
       return value;
     }
   };
