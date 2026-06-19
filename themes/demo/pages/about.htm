@@ -8,7 +8,7 @@ meta_title = "{{ aboutpage.title }}"
 handle = "Page\About"
 
 [resources]
-vars[activeNavLink] = 'about'
+vars[activeNavLink] = "about"
 ==
 {% put headerAfter %}
     <div class="container">
@@ -23,3 +23,7 @@ vars[activeNavLink] = 'about'
         {% partial 'blocks/' ~ str_slug(block.type) block=block %}
     {% endfor %}
 </main>
+
+<div>
+Hmmmm
+</div>
