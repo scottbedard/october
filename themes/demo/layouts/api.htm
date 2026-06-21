@@ -3,10 +3,10 @@ description = "API Layout"
 is_priority = 1
 
 [resources]
-headers[Content-Type] = 'application/json'
-headers[Access-Control-Allow-Origin] = '*'
-headers[Access-Control-Allow-Methods] = 'GET, POST, OPTIONS'
-headers[Access-Control-Allow-Headers] = 'Content-Type, Authorization'
+headers[Content-Type] = "application/json"
+headers[Access-Control-Allow-Origin] = "*"
+headers[Access-Control-Allow-Methods] = "GET, POST, OPTIONS"
+headers[Access-Control-Allow-Headers] = "Content-Type, Authorization"
 ==
 {#
     API Middleware Layout
@@ -17,6 +17,7 @@ headers[Access-Control-Allow-Headers] = 'Content-Type, Authorization'
 
     Any page using layout = "api" inherits these headers and the OPTIONS
     preflight handler below.
+    sdf
 #}
 {% if this.request.method == 'OPTIONS' %}
     {% do response(null, 204) %}

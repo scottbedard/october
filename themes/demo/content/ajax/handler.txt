@@ -4,6 +4,8 @@ function onTest()
     $value2 = input('value2');
     $operation = input('operation');
 
+    // hmmm
+
     switch ($operation) {
         case '+' : 
             $this['result'] = $value1 + $value2;

@@ -10,5 +10,5 @@
     <button type="submit">=</button>
 </form>
 
-<!-- The result -->
+<!-- The resultfffsdf -->
 <div id="result">{% partial "calcresult" %}"</div>
