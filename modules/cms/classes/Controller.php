@@ -19,6 +19,7 @@ use Cms\Twig\DebugExtension;
 use Cms\Twig\Extension as CmsTwigExtension;
 use Cms\Models\MaintenanceSetting;
 use System\Models\RequestLog;
+use System\Classes\CacheTagCollector;
 use System\Twig\Extension as SystemTwigExtension;
 use System\Twig\SecurityPolicy as TwigSecurityPolicy;
 use Larajax\Contracts\AjaxControllerInterface;
@@ -318,6 +319,10 @@ class Controller implements AjaxControllerInterface
         $this->page = $page;
         $this->layout = $layout;
         $this->pageCycled = false;
+
+        if ($this->page->isCacheable()) {
+            CacheTagCollector::instance()->setCacheable(true);
+        }
 
         // The 'this' variable is reserved for default variables.
         $this->vars['this'] = new ThisVariable([

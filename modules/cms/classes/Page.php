@@ -33,6 +33,7 @@ class Page extends CmsCompoundObject
         'title',
         'description',
         'is_hidden',
+        'cacheable',
         'meta_title',
         'meta_description',
         'meta_image',
@@ -74,6 +75,19 @@ class Page extends CmsCompoundObject
         if (!RouterHelper::validateUrl($this->getAttribute('url'))) {
             throw new ValidationException(['url' => Lang::get('cms::lang.page.invalid_url')]);
         }
+
+        // Wipe cacheable attribute from page settings when disabled
+        if (!$this->getAttribute('cacheable')) {
+            unset($this->attributes['cacheable']);
+        }
+    }
+
+    /**
+     * isCacheable returns true if the page response should include cache headers
+     */
+    public function isCacheable(): bool
+    {
+        return (bool) $this->cacheable;
     }
 
     /**

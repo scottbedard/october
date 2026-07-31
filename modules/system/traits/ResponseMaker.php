@@ -152,9 +152,8 @@ trait ResponseMaker
         if (in_array(Request::method(), ['GET', 'HEAD'])) {
             $collector = CacheTagCollector::instance();
 
-            $this->setResponseHeader('X-October-Cache-Count', $collector->count());
-
             if ($collector->isCacheable()) {
+                $this->setResponseHeader('X-October-Cache-Count', $collector->count());
                 $this->setResponseHeader('X-October-Cache-Tags', $collector->csv());
             }
         }

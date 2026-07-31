@@ -14,7 +14,7 @@ class CacheTagCollector
     /**
      * @var bool whether the current response is cacheable
      */
-    protected $cacheable = true;
+    protected $cacheable = false;
 
     /**
      * @var array tags collected for the response
@@ -27,6 +27,14 @@ class CacheTagCollector
     public static function instance(): static
     {
         return App::make('system.cacheTags');
+    }
+
+    /**
+     * setCacheable marks whether the current response may include cache headers
+     */
+    public function setCacheable(bool $cacheable = true): void
+    {
+        $this->cacheable = $cacheable;
     }
 
     /**
