@@ -1,5 +1,6 @@
 <?php namespace System\Traits;
 
+use Request;
 use Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\Response as BaseResponse;
@@ -147,6 +148,10 @@ trait ResponseMaker
      */
     public function makeResponse($contents)
     {
+        if (in_array(Request::method(), ['GET', 'HEAD'])) {
+            $this->setResponseHeader('X-October-Cache-Tags', 'Hello world');
+        }
+
         if ($this->responseOverride !== null) {
             $contents = $this->responseOverride;
         }
