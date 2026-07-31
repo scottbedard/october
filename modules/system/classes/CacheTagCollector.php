@@ -1,6 +1,7 @@
 <?php namespace System\Classes;
 
 use App;
+use Log;
 
 /**
  * CacheTagCollector accumulates cache tags for the current request response.
@@ -10,6 +11,11 @@ use App;
  */
 class CacheTagCollector
 {
+    /**
+     * @var bool whether the current response is cacheable
+     */
+    protected $cacheable = true;
+
     /**
      * @var array tags collected for the response
      */
@@ -29,17 +35,46 @@ class CacheTagCollector
     public function add(string ...$tags): void
     {
         foreach ($tags as $tag) {
-            if ($tag !== '' && !in_array($tag, $this->tags, true)) {
+            // ascii visible characters only (33–126), excluding commas
+            if ($tag === '' || !preg_match('/^[\x21-\x2B\x2D-\x7E]+$/', $tag)) {
+                Log::warning("CacheTagCollector: '{$tag}' is invalid, this response couldn't be cached.");
+                $this->cacheable = false;
+                continue;
+            }
+
+            if (!in_array($tag, $this->tags, true)) {
                 $this->tags[] = $tag;
             }
         }
     }
 
     /**
-     * all returns collected tags as a CSV string
+     * count returns the number of collected tags
      */
-    public function all(): string
+    public function count(): int
+    {
+        return count($this->tags);
+    }
+
+    /**
+     * csv returns collected tags as a CSV string
+     */
+    public function csv(): string
     {
         return implode(',', $this->tags);
+    }
+
+    /**
+     * isCacheable returns whether the current response can include cache tags
+     */
+    public function isCacheable(): bool
+    {
+        $count = $this->count();
+
+        if ($count < 1 || $count > 50) {
+            return false;
+        }
+
+        return $this->cacheable;
     }
 }

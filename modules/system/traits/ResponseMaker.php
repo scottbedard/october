@@ -150,8 +150,12 @@ trait ResponseMaker
     public function makeResponse($contents)
     {
         if (in_array(Request::method(), ['GET', 'HEAD'])) {
-            if (($cacheTags = CacheTagCollector::instance()->all()) !== '') {
-                $this->setResponseHeader('X-October-Cache-Tags', $cacheTags);
+            $collector = CacheTagCollector::instance();
+
+            $this->setResponseHeader('X-October-Cache-Count', $collector->count());
+
+            if ($collector->isCacheable()) {
+                $this->setResponseHeader('X-October-Cache-Tags', $collector->csv());
             }
         }
 
