@@ -1,15 +1,17 @@
 <?php namespace System\Classes;
 
 use App;
+use Event;
 use Log;
 
 /**
- * CacheTagCollector accumulates cache tags for the current request response.
+ * CacheTagManager accumulates cache tags for the current request response
+ * and emits invalidation events for cached responses.
  *
  * @package october\system
  * @author Alexey Bobkov, Samuel Georges
  */
-class CacheTagCollector
+class CacheTagManager
 {
     /**
      * @var bool whether the current response is cacheable
@@ -45,7 +47,7 @@ class CacheTagCollector
         foreach ($tags as $tag) {
             // ascii visible characters only (33–126), excluding commas
             if ($tag === '' || !preg_match('/^[\x21-\x2B\x2D-\x7E]+$/', $tag)) {
-                Log::warning("CacheTagCollector: '{$tag}' is invalid, this response couldn't be cached.");
+                Log::warning("CacheTagManager: '{$tag}' is invalid, this response couldn't be cached.");
                 $this->cacheable = false;
                 continue;
             }
@@ -53,6 +55,39 @@ class CacheTagCollector
             if (!in_array($tag, $this->tags, true)) {
                 $this->tags[] = $tag;
             }
+        }
+    }
+
+    /**
+     * invalidate one or more cache tags
+     */
+    public function invalidate(string ...$tags): void
+    {
+        $validTags = [];
+
+        foreach ($tags as $tag) {
+            // ascii visible characters only (33–126), excluding commas
+            if ($tag === '' || !preg_match('/^[\x21-\x2B\x2D-\x7E]+$/', $tag)) {
+                Log::warning("CacheTagManager: '{$tag}' is invalid and was not invalidated.");
+                continue;
+            }
+
+            $validTags[] = $tag;
+        }
+
+        if ($validTags) {
+            /**
+             * @event system.cacheTags.invalidate
+             * Fires when cache tags should be invalidated.
+             *
+             * Example usage:
+             *
+             *     Event::listen('system.cacheTags.invalidate', function (array $tags) {
+             *         // Purge cached responses for $tags...
+             *     });
+             *
+             */
+            Event::fire('system.cacheTags.invalidate', [$validTags], false);
         }
     }
 

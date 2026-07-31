@@ -9,7 +9,7 @@ use Cms\Classes\PartialStack;
 use Cms\Classes\CmsException;
 use Cms\Classes\ComponentPartial;
 use Cms\Classes\ComponentManager;
-use System\Classes\CacheTagCollector;
+use System\Classes\CacheTagManager;
 use System\Helpers\View as ViewHelper;
 use October\Rain\Parse\Bracket as TextParser;
 use Exception;
@@ -65,7 +65,7 @@ trait HasRenderers
      */
     protected function renderLayoutContents()
     {
-        CacheTagCollector::instance()->add('cms:layout:'.$this->layout->getBaseFileName());
+        CacheTagManager::instance()->add('cms:layout:'.$this->layout->getBaseFileName());
 
         CmsException::mask($this->layout, 400);
         $this->loader->setObject($this->layout);
@@ -80,7 +80,7 @@ trait HasRenderers
      */
     protected function renderPageContents()
     {
-        CacheTagCollector::instance()->add('cms:page:'.$this->page->getBaseFileName());
+        CacheTagManager::instance()->add('cms:page:'.$this->page->getBaseFileName());
 
         CmsException::mask($this->page, 400);
         $this->loader->setObject($this->page);
@@ -189,7 +189,7 @@ trait HasRenderers
             }
         }
 
-        CacheTagCollector::instance()->add('cms:partials:'.$partial->getBaseFileName());
+        CacheTagManager::instance()->add('cms:partials:'.$partial->getBaseFileName());
 
         // Run functions for CMS partials only (Cms\Classes\Partial)
         if ($partial instanceof Partial) {

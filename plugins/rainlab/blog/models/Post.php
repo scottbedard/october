@@ -14,6 +14,7 @@ use Cms\Classes\Controller;
 use October\Rain\Database\NestedTreeScope;
 use RainLab\Blog\Classes\TagProcessor;
 use RainLab\Blog\Models\Setting as BlogSettings;
+use System\Classes\CacheTagManager;
 use ValidationException;
 
 /**
@@ -152,6 +153,32 @@ class Post extends Model
                'published_at' => __("Please specify the published date")
             ]);
         }
+    }
+
+    /**
+     * afterSave
+     */
+    public function afterSave()
+    {
+        CacheTagManager::instance()->invalidate(
+            'rainlab:blog:posts',
+            'rainlab:blog:post',
+            'rainlab:blog:post:'.$this->slug,
+            'rainlab:blog:rss'
+        );
+    }
+
+    /**
+     * afterDelete
+     */
+    public function afterDelete()
+    {
+        CacheTagManager::instance()->invalidate(
+            'rainlab:blog:posts',
+            'rainlab:blog:post',
+            'rainlab:blog:post:'.$this->slug,
+            'rainlab:blog:rss'
+        );
     }
 
     /**

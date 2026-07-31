@@ -5,6 +5,7 @@ use Model;
 use Url;
 use Cms\Classes\Page as CmsPage;
 use Cms\Classes\Theme;
+use System\Classes\CacheTagManager;
 
 class Category extends Model
 {
@@ -55,9 +56,22 @@ class Category extends Model
         }
     }
 
+    public function afterSave()
+    {
+        CacheTagManager::instance()->invalidate(
+            'rainlab:blog:categories',
+            'rainlab:blog:posts'
+        );
+    }
+
     public function afterDelete()
     {
         $this->posts()->detach();
+
+        CacheTagManager::instance()->invalidate(
+            'rainlab:blog:categories',
+            'rainlab:blog:posts'
+        );
     }
 
     public function getPostCountAttribute()

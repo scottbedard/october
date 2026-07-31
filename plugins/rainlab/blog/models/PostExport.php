@@ -1,6 +1,7 @@
 <?php namespace RainLab\Blog\Models;
 
 use Backend\Models\ExportModel;
+use System\Classes\CacheTagManager;
 use ApplicationException;
 
 /**
@@ -47,6 +48,16 @@ class PostExport extends ExportModel
         'categories',
         'featured_image_urls'
     ];
+
+    public function afterSave()
+    {
+        CacheTagManager::instance()->invalidate(
+            'rainlab:blog:posts',
+            'rainlab:blog:post',
+            'rainlab:blog:categories',
+            'rainlab:blog:rss'
+        );
+    }
 
     public function exportData($columns, $sessionKey = null)
     {

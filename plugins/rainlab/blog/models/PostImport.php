@@ -2,6 +2,7 @@
 
 use Backend\Models\ImportModel;
 use Backend\Models\User as AuthorModel;
+use System\Classes\CacheTagManager;
 use ApplicationException;
 use Exception;
 
@@ -23,6 +24,16 @@ class PostImport extends ImportModel
     protected $authorEmailCache = [];
 
     protected $categoryNameCache = [];
+
+    public function afterSave()
+    {
+        CacheTagManager::instance()->invalidate(
+            'rainlab:blog:posts',
+            'rainlab:blog:post',
+            'rainlab:blog:categories',
+            'rainlab:blog:rss'
+        );
+    }
 
     public function getDefaultAuthorOptions()
     {
@@ -93,6 +104,13 @@ class PostImport extends ImportModel
                 $this->logError($row, $ex->getMessage());
             }
         }
+
+        CacheTagManager::instance()->invalidate(
+            'rainlab:blog:posts',
+            'rainlab:blog:post',
+            'rainlab:blog:categories',
+            'rainlab:blog:rss'
+        );
     }
 
     protected function findAuthorFromEmail($data)

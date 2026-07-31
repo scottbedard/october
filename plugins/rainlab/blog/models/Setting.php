@@ -2,6 +2,7 @@
 
 use Cms\Classes\Page as CmsPage;
 use Cms\Classes\Theme;
+use System\Classes\CacheTagManager;
 use System\Models\SettingModel;
 
 /**
@@ -42,6 +43,19 @@ class Setting extends SettingModel
     {
         $this->show_all_posts = true;
         $this->force_richeditor_editor = false;
+    }
+
+    /**
+     * afterSave
+     */
+    public function afterSave()
+    {
+        CacheTagManager::instance()->invalidate(
+            'rainlab:blog:posts',
+            'rainlab:blog:post',
+            'rainlab:blog:categories',
+            'rainlab:blog:rss'
+        );
     }
 
     /**

@@ -118,7 +118,7 @@ class ServiceProvider extends ModuleServiceProvider
         $this->app->singleton('core.translate.attribute', fn() => \System\Models\TranslateAttribute::class);
         $this->app->scoped('system.markup', \System\Classes\MarkupManager::class);
         $this->app->scoped('system.settings', \System\Classes\SettingsManager::class);
-        $this->app->scoped('system.cacheTags', \System\Classes\CacheTagCollector::class);
+        $this->app->scoped('system.cacheTags', \System\Classes\CacheTagManager::class);
     }
 
     /**

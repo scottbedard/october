@@ -74,7 +74,7 @@ class ServiceProvider extends ModuleServiceProvider
     protected function bootCacheTagEvents()
     {
         Event::listen('cms.component.addCacheTags', function ($component, array $tags) {
-            \System\Classes\CacheTagCollector::instance()->add(...$tags);
+            \System\Classes\CacheTagManager::instance()->add(...$tags);
         });
     }
 

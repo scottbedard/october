@@ -2,7 +2,7 @@
 
 use Request;
 use Response;
-use System\Classes\CacheTagCollector;
+use System\Classes\CacheTagManager;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\Response as BaseResponse;
 use Larajax\Classes\AjaxResponse;
@@ -150,7 +150,7 @@ trait ResponseMaker
     public function makeResponse($contents)
     {
         if (in_array(Request::method(), ['GET', 'HEAD'])) {
-            $collector = CacheTagCollector::instance();
+            $collector = CacheTagManager::instance();
 
             if ($collector->isCacheable()) {
                 $this->setResponseHeader('X-October-Cache-Count', $collector->count());
