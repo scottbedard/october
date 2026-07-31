@@ -157,6 +157,26 @@ abstract class ComponentBase extends Extendable implements ViewComponentInterfac
     }
 
     /**
+     * addCacheTags contributes cache tags for the current response.
+     */
+    public function addCacheTags(string ...$tags): void
+    {
+        /**
+         * @event cms.component.addCacheTags
+         * Fires when a component contributes cache tags for the response.
+         *
+         * Example usage:
+         *
+         *     public function onRender()
+         *     {
+         *         $this->addCacheTags('cms:component:demoTodo');
+         *     }
+         *
+         */
+        $this->fireSystemEvent('cms.component.addCacheTags', [$tags], false);
+    }
+
+    /**
      * renderPartial renders a requested partial in context of this component,
      * see Cms\Classes\Controller@renderPartial for usage.
      */

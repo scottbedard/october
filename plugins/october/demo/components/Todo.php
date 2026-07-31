@@ -43,6 +43,11 @@ class Todo extends ComponentBase
         }
     }
 
+    public function onRender()
+    {
+        $this->addCacheTags('cms:component:demoTodo');
+    }
+
     public function onAddItem()
     {
         $items = post('items', []);

@@ -54,6 +54,7 @@ class ServiceProvider extends ModuleServiceProvider
 
         $this->bootEditorEvents();
         $this->bootPageLookupEvents();
+        $this->bootCacheTagEvents();
     }
 
     /**
@@ -65,6 +66,16 @@ class ServiceProvider extends ModuleServiceProvider
         $this->app->singleton('cms.components', \Cms\Classes\ComponentManager::class);
         $this->app->singleton('cms.snippets', \Cms\Classes\SnippetManager::class);
         $this->app->singleton('cms.themes', \Cms\Classes\ThemeManager::class);
+    }
+
+    /**
+     * bootCacheTagEvents listens for component cache tags
+     */
+    protected function bootCacheTagEvents()
+    {
+        Event::listen('cms.component.addCacheTags', function ($component, array $tags) {
+            \System\Classes\CacheTagCollector::instance()->add(...$tags);
+        });
     }
 
     /**
