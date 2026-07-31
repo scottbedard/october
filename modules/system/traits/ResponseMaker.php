@@ -2,6 +2,7 @@
 
 use Request;
 use Response;
+use System\Classes\CacheTagCollector;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\Response as BaseResponse;
 use Larajax\Classes\AjaxResponse;
@@ -149,7 +150,9 @@ trait ResponseMaker
     public function makeResponse($contents)
     {
         if (in_array(Request::method(), ['GET', 'HEAD'])) {
-            $this->setResponseHeader('X-October-Cache-Tags', 'Hello world');
+            if (($cacheTags = CacheTagCollector::instance()->all()) !== '') {
+                $this->setResponseHeader('X-October-Cache-Tags', $cacheTags);
+            }
         }
 
         if ($this->responseOverride !== null) {
