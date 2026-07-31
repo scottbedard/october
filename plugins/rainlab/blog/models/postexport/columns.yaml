@@ -1,0 +1,19 @@
+# ===================================
+#  Column Definitions
+# ===================================
+
+columns:
+
+    id: ID
+    title: Title
+    content: Content
+    content_html: HTML Content
+    excerpt: Excerpt
+    slug: Slug
+    categories: Categories
+    author_email: Author Email
+    featured_image_urls: Featured Images
+    created_at: Created date
+    updated_at: Updated date
+    published: Published
+    published_at: Published date

@@ -1,0 +1,17 @@
+# ===================================
+#  Column Definitions
+# ===================================
+
+columns:
+
+    id: ID
+    title: Title
+    content: Content
+    excerpt: Excerpt
+    slug: Slug
+    categories: Categories
+    author_email: Author Email
+    created_at: Created date
+    updated_at: Updated date
+    published: Published
+    published_at: Published date

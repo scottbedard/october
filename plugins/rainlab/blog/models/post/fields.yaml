@@ -1,0 +1,73 @@
+# ===================================
+#  Field Definitions
+# ===================================
+
+fields:
+    title:
+        label: Title
+        span: left
+        placeholder: New post title
+
+    slug:
+        label: Slug
+        span: right
+        placeholder: new-post-slug
+        preset:
+            field: title
+            type: slug
+
+tabs:
+    fields:
+        content:
+            tab: Edit
+            type: markdown
+            cssClass: field-slim
+            span: adaptive
+            mode: split
+            sideBySide: true
+
+        categories:
+            tab: Categories
+            type: relation
+            commentAbove: Select categories the blog post belongs to
+            placeholder: "There are no categories, you should create one first!"
+
+        featured_images:
+            tab: Images
+            label: Featured Images
+            type: fileupload
+            mode: image
+            imageWidth: 200
+            imageHeight: 200
+            span: adaptive
+
+        published:
+            tab: Manage
+            label: Published
+            span: left
+            type: checkbox
+
+        user:
+            tab: Manage
+            label: Published by
+            span: right
+            type: dropdown
+            emptyOption: Current user
+
+        published_at:
+            tab: Manage
+            label: Published on
+            span: left
+            cssClass: checkbox-align
+            type: datepicker
+            mode: datetime
+            trigger:
+                action: enable
+                field: published
+                condition: checked
+
+        excerpt:
+            tab: Manage
+            label: Excerpt
+            type: textarea
+            size: small

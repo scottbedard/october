@@ -1,0 +1,21 @@
+# ===================================
+#  Field Definitions
+# ===================================
+
+fields:
+    name:
+        label: Name
+        placeholder: New category name
+        span: left
+
+    slug:
+        label: Slug
+        span: right
+        placeholder: new-category-slug
+        preset: name
+
+    description:
+        label: Description
+        size: large
+        span: full
+        type: textarea

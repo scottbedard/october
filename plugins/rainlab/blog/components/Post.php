@@ -1,0 +1,152 @@
+<?php namespace RainLab\Blog\Components;
+
+use Event;
+use BackendAuth;
+use Cms\Classes\Page;
+use Cms\Classes\ComponentBase;
+use RainLab\Blog\Models\Post as BlogPost;
+
+/**
+ * Post
+ */
+class Post extends ComponentBase
+{
+    /**
+     * @var \RainLab\Blog\Models\Post The post model used for display.
+     */
+    public $post;
+
+    /**
+     * @var string Reference to the page name for linking to categories.
+     */
+    public $categoryPage;
+
+    public function componentDetails()
+    {
+        return [
+            'name' => "Post",
+            'description' => "Displays a blog post on the page.",
+        ];
+    }
+
+    public function defineProperties()
+    {
+        return [
+            'slug' => [
+                'title' => "Post slug",
+                'description' => "Look up the blog post using the supplied slug value.",
+                'default' => '{{ :slug }}',
+                'type' => 'string',
+            ],
+            'categoryPage' => [
+                'title' => "Category page",
+                'description' => "Name of the category page file for the category links. This property is used by the default component partial.",
+                'type' => 'dropdown',
+                'default' => 'blog/category',
+            ],
+        ];
+    }
+
+    public function getCategoryPageOptions()
+    {
+        return Page::sortBy('baseFileName')->lists('baseFileName', 'baseFileName');
+    }
+
+    public function init()
+    {
+        Event::listen('cms.sitePicker.overrideParams', function ($page, $params, $currentSite, $proposedSite) {
+            $newParams = $params;
+            $oldLocale = $currentSite->hard_locale;
+            $newLocale = $proposedSite->hard_locale;
+
+            if (isset($params['slug'])) {
+                $record = BlogPost::whereTranslation('slug', $oldLocale, $params['slug'])->first();
+                if ($record) {
+                    $record->setLocale($newLocale);
+                    $newParams['slug'] = $record->slug;
+                }
+            }
+
+            return $newParams;
+        });
+    }
+
+    public function onRun()
+    {
+        $this->categoryPage = $this->page['categoryPage'] = $this->property('categoryPage');
+        $this->post = $this->page['post'] = $this->loadPost();
+        if (!$this->post) {
+            $this->setStatusCode(404);
+            return $this->controller->run('404');
+        }
+    }
+
+    public function onRender()
+    {
+        if (empty($this->post)) {
+            $this->post = $this->page['post'] = $this->loadPost();
+        }
+    }
+
+    protected function loadPost()
+    {
+        $slug = $this->property('slug');
+
+        $query = BlogPost::transWhere('slug', $slug);
+
+        if (!$this->checkEditor()) {
+            $query->isPublished();
+        }
+
+        $post = $query->first();
+
+        // Add a "url" helper attribute for linking to each category
+        if ($post && $post->exists && $post->categories->count()) {
+            $post->categories->each(function($category) {
+                $category->setUrl($this->categoryPage, $this->controller);
+            });
+        }
+
+        return $post;
+    }
+
+    public function previousPost()
+    {
+        return $this->getPostSibling(-1);
+    }
+
+    public function nextPost()
+    {
+        return $this->getPostSibling(1);
+    }
+
+    protected function getPostSibling($direction = 1)
+    {
+        if (!$this->post) {
+            return;
+        }
+
+        $method = $direction === -1 ? 'previousPost' : 'nextPost';
+
+        if (!$post = $this->post->$method()) {
+            return;
+        }
+
+        $postPage = $this->getPage()->getBaseFileName();
+
+        $post->setUrl($postPage, $this->controller);
+
+        $post->categories->each(function($category) {
+            $category->setUrl($this->categoryPage, $this->controller);
+        });
+
+        return $post;
+    }
+
+    protected function checkEditor()
+    {
+        $backendUser = BackendAuth::getUser();
+
+        return $backendUser && $backendUser->hasAccess('rainlab.blog.access_posts');
+    }
+}
