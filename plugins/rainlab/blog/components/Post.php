@@ -85,6 +85,8 @@ class Post extends ComponentBase
     {
         if (empty($this->post)) {
             $this->post = $this->page['post'] = $this->loadPost();
+
+            $this->addCacheTags('rainlab:blog:post:'.$this->post->slug);
         }
     }
 

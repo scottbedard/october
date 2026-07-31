@@ -117,6 +117,8 @@ class RssFeed extends ComponentBase
     {
         $this->prepareVars();
 
+        $this->addCacheTags('rainlab:blog:rss');
+
         $xmlFeed = $this->renderPartial('@default');
 
         return Response::make($xmlFeed, '200')->header('Content-Type', 'text/xml');

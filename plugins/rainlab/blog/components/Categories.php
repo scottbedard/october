@@ -72,6 +72,11 @@ class Categories extends ComponentBase
         $this->categories = $this->page['categories'] = $this->loadCategories();
     }
 
+    public function onRender()
+    {
+        $this->addCacheTags('rainlab:blog:categories');
+    }
+
     /**
      * Load all categories or, depending on the <displayEmpty> option, only those that have blog posts
      * @return mixed

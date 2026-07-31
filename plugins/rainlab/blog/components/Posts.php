@@ -187,6 +187,11 @@ class Posts extends ComponentBase
         }
     }
 
+    public function onRender()
+    {
+        $this->addCacheTags('rainlab:blog:posts');
+    }
+
     protected function prepareVars()
     {
         $this->pageParam = $this->page['pageParam'] = $this->paramName('pageNumber');
