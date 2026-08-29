@@ -4,16 +4,20 @@ oc.registerControl('mailformpreview', class extends oc.ControlBase {
     connect() {
         this.iframe = null;
         this.handler = this.config.handler || 'onPreviewTemplate';
+        this.pane = $(this.element).closest('.tab-pane');
 
         this.createIframe();
-        this.loadPreview();
 
-        this.boundOnSaveSuccess = this.proxy(this.onSaveSuccess);
-        $(document).on('ajaxSuccess', this.boundOnSaveSuccess);
+        this.boundOnTabShown = this.proxy(this.onTabShown);
+        $(document).on('shown.bs.tab shownLinkable.oc.tab', this.boundOnTabShown);
+
+        if (this.isPaneActive()) {
+            this.loadPreview();
+        }
     }
 
     disconnect() {
-        $(document).off('ajaxSuccess', this.boundOnSaveSuccess);
+        $(document).off('shown.bs.tab shownLinkable.oc.tab', this.boundOnTabShown);
     }
 
     createIframe() {
@@ -22,12 +26,17 @@ oc.registerControl('mailformpreview', class extends oc.ControlBase {
         this.iframe.style.border = '0';
         this.iframe.style.minHeight = '400px';
         this.iframe.setAttribute('frameborder', 0);
+        this.iframe.setAttribute('sandbox', '');
         this.iframe.onload = this.proxy(this.adjustHeight);
         this.element.appendChild(this.iframe);
     }
 
-    onSaveSuccess(event, context) {
-        if (context && context.handler && context.handler.indexOf('onSave') !== -1) {
+    isPaneActive() {
+        return !this.pane.length || this.pane.hasClass('active');
+    }
+
+    onTabShown() {
+        if (this.isPaneActive()) {
             this.loadPreview();
         }
     }
