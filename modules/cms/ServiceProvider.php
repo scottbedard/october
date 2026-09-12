@@ -115,6 +115,27 @@ class ServiceProvider extends ModuleServiceProvider
         Event::listen('cms.combiner.getCacheKey', function ($combiner, &$cacheKey) {
             $cacheKey = $cacheKey . ThemeData::getCombinerCacheKey();
         });
+
+        Event::listen('cms.template.getTemplateToolbarSettingsButtons', function ($extension, $dataHolder) {
+            if ($dataHolder->templateType !== 'page') {
+                return;
+            }
+
+            dd('hello');
+
+            $dataHolder->buttons[] = [
+                'button' => 'Hello',
+                'icon' => 'icon-magic',
+                'popupTitle' => 'My Page Settings',
+                'useViewBag' => true, // false = store in page settings instead
+                'properties' => [
+                    'myField' => [
+                        'title' => 'My Field',
+                        'type' => 'string',
+                    ],
+                ],
+            ];
+        });
     }
 
     /**
@@ -329,6 +350,43 @@ class ServiceProvider extends ModuleServiceProvider
     {
         Event::listen('editor.extension.register', function () {
             return \Cms\Classes\EditorExtension::class;
+        });
+
+        Event::listen('cms.template.extendTemplateSettingsFields', function ($extension, $dataHolder) {
+            if ($dataHolder->templateType !== 'page') {
+                return;
+            }
+
+            $dataHolder->settings[] = [
+                'description' => 'Cache the full page when possible and serve it from the edge.',
+                'property' => 'edge_caching',
+                'tab' => 'Meta',
+                'title' => 'Edge caching',
+                'type' => 'checkbox',
+            ];
+
+            $dataHolder->settings[] = [
+                'description' => 'Maximum number of minutes to cache the page for.',
+                'placeholder' => '1440',
+                'property' => 'edge_caching_ttl',
+                'tab' => 'Meta',
+                'title' => 'Cache TTL',
+                'type' => 'string',
+                'validation' => [
+                    'integer' => [
+                        'allowNegative' => false,
+                        'message' => 'Enter a whole number of minutes.',
+                        'min' => [
+                            'message' => 'Enter at least 1 minute.',
+                            'value' => 1,
+                        ],
+                    ],
+                ],
+                'visibility' => [
+                    'source_property' => 'settings.edge_caching',
+                    'value' => 1,
+                ],
+            ];
         });
     }
 
