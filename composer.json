@@ -54,6 +54,9 @@
                 "block": true,
                 "audit": "report"
             }
+        },
+        "platform": {
+            "php": "8.2.33"
         }
     },
     "autoload": {
