@@ -5,12 +5,10 @@
     "scripts": {
         "build": "node build.js"
     },
-    "devDependencies": {
+    "dependencies": {
         "esbuild": "^0.28.2",
         "less": "^4.2.0",
-        "sass": "^1.83.0"
-    },
-    "dependencies": {
+        "sass": "^1.83.0",
         "@phosphor-icons/web": "^2.1.2",
         "@popperjs/core": "^2.11.7",
         "@trevoreyre/autocomplete-vue": "^3.0.3",
