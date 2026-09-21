@@ -1317,27 +1317,25 @@
         },
         {
             "name": "doctrine/lexer",
-            "version": "3.0.1",
+            "version": "3.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/lexer.git",
-                "reference": "31ad66abc0fc9e1a1f2d9bc6a42668d2fbbcd6dd"
+                "reference": "e96fe45e92a54233726014a7cc7340abf29bb14c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/lexer/zipball/31ad66abc0fc9e1a1f2d9bc6a42668d2fbbcd6dd",
-                "reference": "31ad66abc0fc9e1a1f2d9bc6a42668d2fbbcd6dd",
+                "url": "https://api.github.com/repos/doctrine/lexer/zipball/e96fe45e92a54233726014a7cc7340abf29bb14c",
+                "reference": "e96fe45e92a54233726014a7cc7340abf29bb14c",
                 "shasum": ""
             },
             "require": {
                 "php": "^8.1"
             },
             "require-dev": {
-                "doctrine/coding-standard": "^12",
-                "phpstan/phpstan": "^1.10",
-                "phpunit/phpunit": "^10.5",
-                "psalm/plugin-phpunit": "^0.18.3",
-                "vimeo/psalm": "^5.21"
+                "doctrine/coding-standard": "^14",
+                "phpstan/phpstan": "^2",
+                "phpunit/phpunit": "^10.5.58 || ^12.5.4"
             },
             "type": "library",
             "autoload": {
@@ -1374,7 +1372,7 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/lexer/issues",
-                "source": "https://github.com/doctrine/lexer/tree/3.0.1"
+                "source": "https://github.com/doctrine/lexer/tree/3.0.2"
             },
             "funding": [
                 {
@@ -1390,7 +1388,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-02-05T11:56:58+00:00"
+            "time": "2026-06-14T20:44:06+00:00"
         },
         {
             "name": "dragonmantank/cron-expression",
@@ -2381,20 +2379,24 @@
         },
         {
             "name": "larajax/larajax",
-            "version": "v3.0.0",
+            "version": "v3.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/larajax/larajax.git",
-                "reference": "ae5f91157e3fa09decdd22444b2ac1d4a2c29686"
+                "reference": "f024a0f23b43a2f95ed83c8e7ea620e838f9e347"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/larajax/larajax/zipball/ae5f91157e3fa09decdd22444b2ac1d4a2c29686",
-                "reference": "ae5f91157e3fa09decdd22444b2ac1d4a2c29686",
+                "url": "https://api.github.com/repos/larajax/larajax/zipball/f024a0f23b43a2f95ed83c8e7ea620e838f9e347",
+                "reference": "f024a0f23b43a2f95ed83c8e7ea620e838f9e347",
                 "shasum": ""
             },
             "require": {
                 "php": "^8.1"
+            },
+            "require-dev": {
+                "illuminate/http": "^10.0|^11.0|^12.0",
+                "phpunit/phpunit": "^10.0|^11.0"
             },
             "type": "library",
             "extra": {
@@ -2426,9 +2428,9 @@
             "homepage": "https://larajax.org",
             "support": {
                 "issues": "https://github.com/larajax/larajax/issues",
-                "source": "https://github.com/larajax/larajax/tree/v3.0.0"
+                "source": "https://github.com/larajax/larajax/tree/v3.0.1"
             },
-            "time": "2026-09-05T22:36:45+00:00"
+            "time": "2026-09-19T03:47:32+00:00"
         },
         {
             "name": "laravel/framework",
@@ -2843,16 +2845,16 @@
         },
         {
             "name": "league/commonmark",
-            "version": "2.10.1",
+            "version": "2.10.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/commonmark.git",
-                "reference": "9d489ab67a02960fd8ffe624d93f751daf95439e"
+                "reference": "6efbd9c472b91db0a3350fcd601c8332c2382e1f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/commonmark/zipball/9d489ab67a02960fd8ffe624d93f751daf95439e",
-                "reference": "9d489ab67a02960fd8ffe624d93f751daf95439e",
+                "url": "https://api.github.com/repos/thephpleague/commonmark/zipball/6efbd9c472b91db0a3350fcd601c8332c2382e1f",
+                "reference": "6efbd9c472b91db0a3350fcd601c8332c2382e1f",
                 "shasum": ""
             },
             "require": {
@@ -2946,7 +2948,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-09-07T13:44:26+00:00"
+            "time": "2026-09-21T13:07:34+00:00"
         },
         {
             "name": "league/config",
@@ -4206,16 +4208,16 @@
         },
         {
             "name": "october/rain",
-            "version": "v4.4.5",
+            "version": "v4.4.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/octobercms/library.git",
-                "reference": "a00f21dcc4c089301a87d7ee89e9016aad3f180b"
+                "reference": "1f75ab6d35e7669b0f157c53d32a1b485621c117"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/octobercms/library/zipball/a00f21dcc4c089301a87d7ee89e9016aad3f180b",
-                "reference": "a00f21dcc4c089301a87d7ee89e9016aad3f180b",
+                "url": "https://api.github.com/repos/octobercms/library/zipball/1f75ab6d35e7669b0f157c53d32a1b485621c117",
+                "reference": "1f75ab6d35e7669b0f157c53d32a1b485621c117",
                 "shasum": ""
             },
             "require": {
@@ -4281,9 +4283,9 @@
                 "rain"
             ],
             "support": {
-                "source": "https://github.com/octobercms/library/tree/v4.4.5"
+                "source": "https://github.com/octobercms/library/tree/v4.4.6"
             },
-            "time": "2026-09-10T11:14:16+00:00"
+            "time": "2026-09-16T07:30:56+00:00"
         },
         {
             "name": "phpoption/phpoption",
@@ -10487,5 +10489,5 @@
         "php": "^8.2"
     },
     "platform-dev": {},
-    "plugin-api-version": "2.9.0"
+    "plugin-api-version": "2.6.0"
 }
